@@ -3,7 +3,7 @@ export const websiteInfo = {
     shortName: "KEW",
     logoLight: "/favicon.svg",
     logoDark: "/favicon.svg",
-    description: "",
+    description: "Kuliah Online Kelas Karyawan adalah perkuliahan yang dikhususkan untuk karyawan sibuk bekerja dan juga mereka yang ingin atau sedang mencari pekerjaan",
     keywords: "Kuliah Sambil Kerja, Kelas Karyawan, Kuliah Online, Kuliah Full Online, Kuliah Sambil Kerja",
 
     // Contact Information
