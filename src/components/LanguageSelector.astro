@@ -1,0 +1,168 @@
+---
+import { Globe, ChevronDown } from '@lucide/astro';
+
+export interface Props {
+  instanceId?: string;
+}
+
+const { instanceId = 'default' } = Astro.props;
+
+// Get current path
+const currentPath = Astro.url.pathname;
+
+---
+
+<div class="relative">
+  <button 
+    id={`language-toggle-${instanceId}`} 
+    class="flex cursor-pointer items-center justify-center px-3 py-2 text-sm font-medium text-gray-600 dark:text-gray-300 hover:text-blue-600 dark:hover:text-blue-400 hover:bg-blue-50 dark:hover:bg-blue-900/30 rounded-lg transition-all duration-200 sm:justify-start sm:space-x-2"
+  >
+    <Globe class="w-4 h-4" />
+    <span id={`current-language-${instanceId}`} class="hidden sm:inline">ID</span>
+    <ChevronDown class="w-3 h-3 transition-transform hidden sm:block" id={`language-arrow-${instanceId}`} />
+  </button>
+  
+  <!-- Language Dropdown -->
+  <div 
+    id={`language-dropdown-${instanceId}`} 
+    class="absolute left-0 sm:right-0 sm:left-auto top-full mt-2 w-48 bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-lg shadow-xl z-[9999] hidden"
+  >
+    <div class="py-1">
+      <button 
+        class="language-option cursor-pointer w-full text-left px-4 py-2 text-sm text-gray-700 dark:text-gray-300 hover:bg-blue-50 dark:hover:bg-blue-900/30 transition-colors flex items-center space-x-2"
+        data-lang="id"
+        data-flag="🇮🇩"
+      >
+        <span class="text-lg">🇮🇩</span>
+        <span>Bahasa Indonesia</span>
+      </button>
+      <button 
+        class="language-option cursor-pointer w-full text-left px-4 py-2 text-sm text-gray-700 dark:text-gray-300 hover:bg-blue-50 dark:hover:bg-blue-900/30 transition-colors flex items-center space-x-2"
+        data-lang="en"
+        data-flag="🇺🇸"
+      >
+        <span class="text-lg">🇺🇸</span>
+        <span>English</span>
+      </button>
+    </div>
+  </div>
+</div>
+
+<script is:inline define:vars={{ instanceId }}>
+  document.addEventListener('DOMContentLoaded', function() {
+    const languageToggle = document.getElementById(`language-toggle-${instanceId}`);
+    const languageDropdown = document.getElementById(`language-dropdown-${instanceId}`);
+    const languageArrow = document.getElementById(`language-arrow-${instanceId}`);
+    const currentLanguage = document.getElementById(`current-language-${instanceId}`);
+    const languageOptions = document.querySelectorAll(`#language-dropdown-${instanceId} .language-option`);
+
+    // Get current language based on path
+    const currentPath = window.location.pathname;
+    const currentLang = currentPath.startsWith('/en') ? 'en' : 'id';
+    
+    // Set initial language
+    function setLanguage(lang) {
+      const display = lang === 'id' ? 'ID' : 'EN';
+      
+      if (currentLanguage) {
+        currentLanguage.textContent = display;
+      }
+      localStorage.setItem('selectedLanguage', lang);
+      
+      // Update document language attribute
+      document.documentElement.lang = lang;
+      
+      // You can add more language switching logic here
+      // For example, updating text content, API calls, etc.
+      // console.log(`Language changed to: ${lang}`);
+    }
+
+    // Initialize with current language based on path
+    setLanguage(currentLang);
+
+    // Toggle dropdown
+    if (languageToggle && languageDropdown && languageArrow) {
+      languageToggle.addEventListener('click', function(e) {
+        e.preventDefault();
+        e.stopPropagation();
+        const isHidden = languageDropdown.classList.contains('hidden');
+        
+        // console.log('Language toggle clicked, isHidden:', isHidden);
+        
+        if (isHidden) {
+          languageDropdown.classList.remove('hidden');
+          if (languageArrow) {
+            languageArrow.style.transform = 'rotate(180deg)';
+          }
+          // console.log('Dropdown opened');
+        } else {
+          languageDropdown.classList.add('hidden');
+          if (languageArrow) {
+            languageArrow.style.transform = 'rotate(0deg)';
+          }
+          // console.log('Dropdown closed');
+        }
+      });
+    } else {
+      console.log('Language toggle elements not found:', {
+        languageToggle: !!languageToggle,
+        languageDropdown: !!languageDropdown,
+        languageArrow: !!languageArrow
+      });
+    }
+
+    // Handle language selection
+    languageOptions.forEach(option => {
+      option.addEventListener('click', function(e) {
+        e.preventDefault();
+        e.stopPropagation();
+        const selectedLang = this.getAttribute('data-lang');
+        // console.log('Language option clicked:', selectedLang);
+        
+        if (selectedLang) {
+          setLanguage(selectedLang);
+          
+          // Navigate to appropriate page based on language
+          const currentPath = window.location.pathname;
+          let targetPath = '';
+          
+          if (selectedLang === 'id') {
+            // For Indonesian, go to home page
+            targetPath = '/';
+          } else if (selectedLang === 'en') {
+            // For English, go to /en page
+            targetPath = '/en';
+          }
+          
+          // Only navigate if we're not already on the target page
+          if (currentPath !== targetPath) {
+            // console.log(`Navigating from ${currentPath} to ${targetPath}`);
+            window.location.href = targetPath;
+          }
+        }
+        
+        // Close dropdown
+        if (languageDropdown) {
+          languageDropdown.classList.add('hidden');
+          if (languageArrow) {
+            languageArrow.style.transform = 'rotate(0deg)';
+          }
+        }
+      });
+    });
+
+    // Close dropdown when clicking outside
+    document.addEventListener('click', function(e) {
+      const target = e.target;
+      if (target && languageToggle && languageDropdown && 
+          !languageToggle.contains(target) && !languageDropdown.contains(target)) {
+        languageDropdown.classList.add('hidden');
+        if (languageArrow) {
+          languageArrow.style.transform = 'rotate(0deg)';
+        }
+      }
+    });
+    
+    // console.log(`Language selector initialized successfully for instance: ${instanceId}`);
+  });
+</script>

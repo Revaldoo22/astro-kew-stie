@@ -1,0 +1,137 @@
+---
+// Program Studi Section Component
+const s1Programs = [
+    "S1 Manajemen (S.M.)",
+    "S1 Akuntansi (S.Ak.)",
+    "S1 Bisnis (S.Bns.)",
+    "S1 Hukum (S.H.)",
+    "S1 Teknik Sipil (S.T.)",
+    "S1 Teknik Informatika (S.Kom.)",
+    "S1 Desain Komunikasi Visual (S.Ds.)",
+    "S1 Ilmu Komputer (S.Kom.)",
+    "S1 Sistem Informasi (S.Kom.)",
+];
+
+const vokasiPrograms = [
+    "D4 Akuntansi Perpajakan (S.Tr.Ak.)",
+    "D3 Teknik Informatika (A.Md.Kom.)",
+];
+---
+
+<section class="py-16 bg-gray-50 dark:bg-gray-900">
+    <div class="max-w-screen-xl mx-auto px-4">
+        <!-- Header -->
+        <div class="text-center mb-12">
+            <div class="inline-block mb-4">
+                <span
+                    class="inline-flex items-center px-4 py-2 rounded-full text-sm font-bold bg-gradient-to-r from-[#1055C9] to-[#05339C] text-white"
+                >
+                    Program Studi
+                </span>
+            </div>
+            <h2
+                class="text-3xl md:text-4xl lg:text-5xl font-bold mb-4 text-gray-900 dark:text-white"
+            >
+                Pilih <span
+                    class="bg-gradient-to-r from-[#1055C9] to-[#05339C] bg-clip-text text-transparent"
+                    >Program Studi</span
+                > Anda
+            </h2>
+            <p
+                class="text-lg md:text-xl text-gray-600 dark:text-gray-400 max-w-3xl mx-auto"
+            >
+                Berbagai pilihan program studi terakreditasi untuk mendukung
+                karir dan passion Anda
+            </p>
+        </div>
+
+        <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
+            <!-- Fakultas Akademik -->
+            <div
+                class="group bg-white dark:bg-gray-800 rounded-2xl p-8 border border-gray-200 dark:border-gray-700 hover:border-[#1055C9] dark:hover:border-[#1055C9] transition-all duration-300"
+            >
+                <!-- Header -->
+                <div class="mb-6 pb-4 border-b-2 border-[#1055C9]">
+                    <h3
+                        class="text-2xl font-bold text-gray-900 dark:text-white"
+                    >
+                        Fakultas Akademik
+                    </h3>
+                    <p class="text-sm text-gray-600 dark:text-gray-400">
+                        Program Sarjana (S1)
+                    </p>
+                </div>
+
+                <!-- Programs List -->
+                <ul class="space-y-3">
+                    {
+                        s1Programs.map((prodi) => (
+                            <li class="flex items-start group/item">
+                                <span class="text-[#1055C9] mr-3 mt-0.5 font-bold">
+                                    •
+                                </span>
+                                <span class="text-gray-700 dark:text-gray-300 group-hover/item:text-[#1055C9] dark:group-hover/item:text-[#1055C9] transition-colors">
+                                    {prodi}
+                                </span>
+                            </li>
+                        ))
+                    }
+                </ul>
+            </div>
+
+            <!-- Fakultas Vokasi -->
+            <div
+                class="bg-white dark:bg-gray-800 rounded-2xl p-8 border border-gray-200 dark:border-gray-700 hover:border-[#1055C9] dark:hover:border-[#1055C9] transition-all duration-300"
+            >
+                <!-- Header -->
+                <div class="mb-6 pb-4 border-b-2 border-[#1055C9]">
+                    <h3
+                        class="text-2xl font-bold text-gray-900 dark:text-white"
+                    >
+                        Fakultas Vokasi
+                    </h3>
+                    <p class="text-sm text-gray-600 dark:text-gray-400">
+                        Program Diploma (D3 & D4)
+                    </p>
+                </div>
+
+                <!-- Programs List -->
+                <ul class="space-y-3 mb-6">
+                    {
+                        vokasiPrograms.map((prodi) => (
+                            <li class="flex items-start group/item">
+                                <span class="text-[#1055C9] mr-3 mt-0.5 font-bold">
+                                    •
+                                </span>
+                                <span class="text-gray-700 dark:text-gray-300 group-hover/item:text-[#1055C9] dark:group-hover/item:text-[#1055C9] transition-colors">
+                                    {prodi}
+                                </span>
+                            </li>
+                        ))
+                    }
+                </ul>
+
+                <!-- Info Box -->
+                <div
+                    class="mt-8 p-5 bg-gradient-to-br from-blue-50 to-indigo-50 dark:from-blue-900/20 dark:to-indigo-900/20 rounded-xl border-l-4 border-[#1055C9]"
+                >
+                    <h4
+                        class="text-lg font-bold text-gray-900 dark:text-white mb-4"
+                    >
+                        Persyaratan Pendaftaran
+                    </h4>
+                    <div
+                        class="space-y-2 text-sm text-gray-700 dark:text-gray-300"
+                    >
+                        <p>
+                            • Lulusan <strong>SMA/SMK/MA</strong> atau paket C sederajat
+                        </p>
+                        <p>
+                            • <strong>Tidak ada batasan usia</strong> maksimal
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>

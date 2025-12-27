@@ -1,0 +1,60 @@
+---
+// Page Header Component
+interface Props {
+    badge: string;
+    badgeIcon: string;
+    title: string;
+    titleGradient?: string;
+    description: string;
+}
+
+const { badge, badgeIcon, title, titleGradient, description } = Astro.props;
+---
+
+<div class="text-center mb-12">
+    <!-- Badge -->
+    <div class="inline-block mb-4">
+        <span
+            class="inline-flex items-center px-4 py-2 rounded-full text-sm font-bold bg-gradient-to-r from-[#1055C9] to-[#05339C] text-white"
+        >
+            <svg
+                class="w-4 h-4 mr-2"
+                fill="none"
+                stroke="currentColor"
+                viewBox="0 0 24 24"
+            >
+                <path
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                    stroke-width="2"
+                    d={badgeIcon}></path>
+            </svg>
+            {badge}
+        </span>
+    </div>
+
+    <!-- Title -->
+    <h1
+        class="text-3xl md:text-4xl lg:text-5xl font-bold mb-4 text-gray-900 dark:text-white"
+    >
+        {
+            titleGradient ? (
+                <>
+                    <span class="bg-gradient-to-r from-[#1055C9] to-[#05339C] bg-clip-text text-transparent">
+                        {titleGradient}
+                    </span>
+                    {title && ` ${title}`}
+                </>
+            ) : (
+                title
+            )
+        }
+    </h1>
+
+    <!-- Description -->
+    <p
+        class="text-lg md:text-xl text-gray-600 dark:text-gray-400 max-w-3xl mx-auto"
+    >
+        {description}
+    </p>
+</div>

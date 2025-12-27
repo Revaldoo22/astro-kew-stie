@@ -1,0 +1,414 @@
+---
+import Layout from "@layouts/Layout.astro";
+import Breadcrumb from "@components/Breadcrumb.astro";
+import CardEventContent from "@components/content/CardEventContent.astro";
+
+const { titleEvent, linkEvent, groupEvent, enEvent, limit, type, orderBy } =
+    Astro.props;
+
+const breadcrumbs = [
+    { label: "Home", href: "/" },
+    { label: titleEvent, href: `/${linkEvent}` },
+];
+
+const metaTags = {
+    title: titleEvent,
+    description:
+        "Temukan berbagai kegiatan dan event menarik yang kami selenggarakan",
+    keywords: "kegiatan, event, acara, workshop, seminar",
+    image: "",
+};
+
+// Mock data untuk event (nanti bisa diganti dengan data dari API)
+type EventStatus = "upcoming" | "ongoing" | "completed";
+
+interface EventData {
+    id: number;
+    title: string;
+    slug: string;
+    image: string;
+    description: string;
+    date: string;
+    time: string;
+    location: string;
+    category: string;
+    organizer: string;
+    price: string;
+    participants: number;
+    featured?: boolean;
+    status: EventStatus;
+}
+
+const mockEvents: EventData[] = [
+    {
+        id: 1,
+        title: "Kegiatan Inklusif Kakak–Adik Asuh SLB Negeri 1 Demak",
+        slug: "kegiatan-inklusif-kakak-adik-asuh-slb-demak",
+        image: "https://portalnews.stekom.ac.id/media/29559/unit-layanan-disabilitas-uld-universitas-sains-dan-teknologi-komputer-universitas-stekom-jalin-kerjasama-penelitian-terapan-untuk-kebekerjaan-peserta-didik-penyandang-disabilitas-bersama-slb-negeri-1-demak.jpg",
+        description:
+            "Kegiatan inklusif bertajuk Kakak–Adik Asuh di SLB 1 Demak bertujuan membangun relasi antarmurid, meningkatkan kepedulian sosial, serta mendukung pembelajaran bersama melalui berbagai aktivitas kolaboratif dan edukatif yang melibatkan siswa, guru, dan relawan.",
+        date: "1 Desember 2025",
+        time: "09:00 - 16:00 WIB",
+        location: "SLB 1 Demak",
+        category: "Kegiatan",
+        organizer: "Universitas STEKOM & Toploker.com",
+        price: "Gratis",
+        participants: 500,
+        featured: false,
+        status: "ongoing",
+    },
+    {
+        id: 2,
+        title: "Program Pendampingan Mahasiswa Difabel Kakak–Adik Asuh SLB Negeri Kendal",
+        slug: "program-pendampingan-mahasiswa-difabel-kakak-adik-asuh",
+        image: "https://portalnews.stekom.ac.id/media/29580/unit-layanan-disabilitas-uld-universitas-sains-dan-teknologi-komputer-universitas-stekom-gelar-sosialisasi-sambil-peringati-hari-disabilitas-internasional-di-slb-negeri-kendal.jpg",
+        description:
+            "Program pendampingan mahasiswa difabel melalui skema Kakak–Adik Asuh yang menghubungkan mahasiswa pendamping dengan peserta didik berkebutuhan khusus di SLB untuk mendukung proses belajar, pengembangan keterampilan, dan membangun kepercayaan diri melalui mentoring berkelanjutan.",
+        date: "5 Desember 2025",
+        time: "08:00 - 15:00 WIB",
+        location: "SLB Negeri Kendal",
+        category: "Kegiatan",
+        organizer: "Universitas STEKOM & Toploker.com",
+        price: "Gratis",
+        participants: 350,
+        featured: false,
+        status: "upcoming",
+    },
+    {
+        id: 3,
+        title: "Pelatihan Bahasa Isyarat Indonesia (BISINDO) Bank BCA",
+        slug: "pelatihan-bahasa-isyarat-indonesia-bisindo-bank-bca",
+        image: "https://portalnews.stekom.ac.id/media/31105/unit-layanan-disabilitas-uld-universitas-stekom-selenggarakan-pelatihan-bahasa-isyarat-bagi-karyawan-bca-kcp-pedurungan-untuk-mendukung-layanan-perbankan-inklusif.jpg",
+        description:
+            "Program pelatihan Bahasa Isyarat Indonesia (BISINDO) untuk karyawan perusahaan guna meningkatkan komunikasi inklusif di lingkungan kerja. Pelatihan ini telah diikuti oleh Bank BCA, Bank Permata, PT Telkom Indonesia, Unilever Indonesia, dan Shopee Indonesia sebagai upaya menciptakan workplace yang ramah bagi karyawan dengan disabilitas pendengaran.",
+        date: "12 Desember 2025",
+        time: "09:00 - 16:00 WIB",
+        location: "Bank BCA Learning Center, Jakarta",
+        category: "Kegiatan",
+        organizer: "Universitas STEKOM & Toploker.com",
+        price: "Gratis",
+        participants: 200,
+        featured: false,
+        status: "upcoming",
+    },
+];
+
+const featuredEvent =
+    mockEvents.find((event) => event.featured) || mockEvents[0];
+const upcomingEvents = mockEvents.filter(
+    (event) => event.status === "upcoming",
+);
+const allEvents = mockEvents;
+---
+
+<Layout metaTags={metaTags}>
+    <div class="min-h-screen bg-gray-50 dark:bg-gray-900">
+        <!-- Breadcrumb Section -->
+        <div
+            class="bg-white dark:bg-gray-800 border-b border-gray-200 dark:border-gray-700"
+        >
+            <div class="max-w-screen-xl mx-auto px-4 py-4">
+                <Breadcrumb breadcrumbs={breadcrumbs} />
+            </div>
+        </div>
+
+        <!-- Hero Section with Featured Event -->
+        <section class="py-12 bg-[#1055C9]">
+            <div class="max-w-screen-xl mx-auto px-4">
+                <div class="grid grid-cols-1 lg:grid-cols-2 gap-8 items-center">
+                    <div class="text-white">
+                        <div
+                            class="inline-flex items-center px-3 py-1 rounded-full text-xs font-bold bg-white uppercase text-[#1055C9] mb-4"
+                        >
+                            <span
+                                class="w-2 h-2 bg-[#1055C9] rounded-full mr-2 animate-pulse"
+                            ></span>
+                            {
+                                enEvent === 0
+                                    ? "KEGIATAN UNGGULAN"
+                                    : "FEATURED EVENT"
+                            }
+                        </div>
+                        <h1
+                            class="text-4xl lg:text-5xl font-bold mb-4 leading-tight"
+                        >
+                            {featuredEvent.title}
+                        </h1>
+                        <p class="text-xl text-blue-100 mb-6 line-clamp-3">
+                            {featuredEvent.description}
+                        </p>
+                        <div class="space-y-3 mb-6">
+                            <div
+                                class="flex items-center space-x-2 text-blue-100"
+                            >
+                                <svg
+                                    class="w-5 h-5"
+                                    fill="none"
+                                    stroke="currentColor"
+                                    viewBox="0 0 24 24"
+                                >
+                                    <path
+                                        stroke-linecap="round"
+                                        stroke-linejoin="round"
+                                        stroke-width="2"
+                                        d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"
+                                    ></path>
+                                </svg>
+                                <span
+                                    >{featuredEvent.date} • {
+                                        featuredEvent.time
+                                    }</span
+                                >
+                            </div>
+                            <div
+                                class="flex items-center space-x-2 text-blue-100"
+                            >
+                                <svg
+                                    class="w-5 h-5"
+                                    fill="none"
+                                    stroke="currentColor"
+                                    viewBox="0 0 24 24"
+                                >
+                                    <path
+                                        stroke-linecap="round"
+                                        stroke-linejoin="round"
+                                        stroke-width="2"
+                                        d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"
+                                    ></path>
+                                    <path
+                                        stroke-linecap="round"
+                                        stroke-linejoin="round"
+                                        stroke-width="2"
+                                        d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"
+                                    ></path>
+                                </svg>
+                                <span>{featuredEvent.location}</span>
+                            </div>
+                        </div>
+                        <a
+                            href={`/${linkEvent}/${featuredEvent.slug}`}
+                            class="inline-flex items-center px-6 py-3 bg-white text-blue-600 font-semibold rounded-lg hover:bg-gray-100 transition-colors duration-200"
+                        >
+                            {enEvent === 0 ? "Lihat Detail" : "View Details"}
+                            <svg
+                                class="w-4 h-4 ml-2"
+                                fill="none"
+                                stroke="currentColor"
+                                viewBox="0 0 24 24"
+                            >
+                                <path
+                                    stroke-linecap="round"
+                                    stroke-linejoin="round"
+                                    stroke-width="2"
+                                    d="M9 5l7 7-7 7"></path>
+                            </svg>
+                        </a>
+                    </div>
+                    <div class="relative">
+                        <div
+                            class="aspect-video rounded-2xl overflow-hidden shadow-2xl"
+                        >
+                            <img
+                                src={featuredEvent.image}
+                                alt={featuredEvent.title}
+                                class="w-full h-full object-cover"
+                            />
+                        </div>
+                        <div
+                            class="absolute -bottom-4 -right-4 bg-white dark:bg-gray-800 rounded-lg p-4 shadow-lg"
+                        >
+                            <div class="flex items-center space-x-2">
+                                <svg
+                                    class="w-5 h-5 text-[#1055C9]"
+                                    fill="currentColor"
+                                    viewBox="0 0 20 20"
+                                >
+                                    <path
+                                        d="M9 6a3 3 0 11-6 0 3 3 0 016 0zM17 6a3 3 0 11-6 0 3 3 0 016 0zM12.93 17c.046-.327.07-.66.07-1a6.97 6.97 0 00-1.5-4.33A5 5 0 0119 16v1h-6.07zM6 11a5 5 0 015 5v1H1v-1a5 5 0 015-5z"
+                                    ></path>
+                                </svg>
+                                <span
+                                    class="text-sm font-medium text-gray-700 dark:text-gray-300"
+                                >
+                                    {featuredEvent.participants}
+                                    {enEvent === 0 ? "Peserta" : "Participants"}
+                                </span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Main Content -->
+        <div class="max-w-screen-xl mx-auto px-4 py-8">
+            <!-- Search Bar -->
+            <div
+                class="bg-white dark:bg-gray-800 rounded-xl shadow-sm border border-gray-200 dark:border-gray-700 p-6 mb-8"
+            >
+                <label for="search" class="sr-only"
+                    >{enEvent === 0 ? "Pencarian" : "Search"}</label
+                >
+                <div class="relative">
+                    <div
+                        class="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none"
+                    >
+                        <svg
+                            class="w-5 h-5 text-[#1055C9]"
+                            fill="currentColor"
+                            viewBox="0 0 20 20"
+                        >
+                            <path
+                                fill-rule="evenodd"
+                                d="M8 4a4 4 0 100 8 4 4 0 000-8zM2 8a6 6 0 1110.89 3.476l4.817 4.817a1 1 0 01-1.414 1.414l-4.816-4.816A6 6 0 012 8z"
+                                clip-rule="evenodd"></path>
+                        </svg>
+                    </div>
+                    <input
+                        type="text"
+                        id="search"
+                        placeholder={enEvent === 0
+                            ? "Cari kegiatan atau event..."
+                            : "Search events..."}
+                        class="bg-gray-50 dark:bg-gray-700 border border-gray-300 dark:border-gray-600 text-gray-900 dark:text-white rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-transparent block w-full pl-12 pr-4 py-3 text-sm dark:placeholder-gray-400 transition-all duration-200"
+                    />
+                </div>
+            </div>
+
+            <!-- Event Stats -->
+            <!-- <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
+                <div class="bg-white dark:bg-gray-800 rounded-xl shadow-sm border border-gray-200 dark:border-gray-700 p-6">
+                    <div class="flex items-center">
+                        <div class="p-3 rounded-full bg-green-100 dark:bg-green-900 mr-4">
+                            <svg class="w-6 h-6 text-green-600 dark:text-green-300" fill="currentColor" viewBox="0 0 20 20">
+                                <path fill-rule="evenodd" d="M6 2a1 1 0 00-1 1v1H4a2 2 0 00-2 2v10a2 2 0 002 2h12a2 2 0 002-2V6a2 2 0 00-2-2h-1V3a1 1 0 10-2 0v1H7V3a1 1 0 00-1-1zm0 5a1 1 0 000 2h8a1 1 0 100-2H6z" clip-rule="evenodd"></path>
+                            </svg>
+                        </div>
+                        <div>
+                            <p class="text-2xl font-bold text-gray-900 dark:text-white">{upcomingEvents.length}</p>
+                            <p class="text-sm text-gray-600 dark:text-gray-400">{enEvent === 0 ? 'Event Mendatang' : 'Upcoming Events'}</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="bg-white dark:bg-gray-800 rounded-xl shadow-sm border border-gray-200 dark:border-gray-700 p-6">
+                    <div class="flex items-center">
+                        <div class="p-3 rounded-full bg-blue-100 dark:bg-blue-900 mr-4">
+                            <svg class="w-6 h-6 text-blue-600 dark:text-blue-300" fill="currentColor" viewBox="0 0 20 20">
+                                <path d="M9 6a3 3 0 11-6 0 3 3 0 016 0zM17 6a3 3 0 11-6 0 3 3 0 016 0zM12.93 17c.046-.327.07-.66.07-1a6.97 6.97 0 00-1.5-4.33A5 5 0 0119 16v1h-6.07zM6 11a5 5 0 015 5v1H1v-1a5 5 0 015-5z"></path>
+                            </svg>
+                        </div>
+                        <div>
+                            <p class="text-2xl font-bold text-gray-900 dark:text-white">1,230+</p>
+                            <p class="text-sm text-gray-600 dark:text-gray-400">{enEvent === 0 ? 'Total Peserta' : 'Total Participants'}</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="bg-white dark:bg-gray-800 rounded-xl shadow-sm border border-gray-200 dark:border-gray-700 p-6">
+                    <div class="flex items-center">
+                        <div class="p-3 rounded-full bg-purple-100 dark:bg-purple-900 mr-4">
+                            <svg class="w-6 h-6 text-purple-600 dark:text-purple-300" fill="currentColor" viewBox="0 0 20 20">
+                                <path d="M2 6a2 2 0 012-2h5l2 2h5a2 2 0 012 2v6a2 2 0 01-2 2H4a2 2 0 01-2-2V6z"></path>
+                            </svg>
+                        </div>
+                        <div>
+                            <p class="text-2xl font-bold text-gray-900 dark:text-white">6</p>
+                            <p class="text-sm text-gray-600 dark:text-gray-400">{enEvent === 0 ? 'Kategori Event' : 'Event Categories'}</p>
+                        </div>
+                    </div>
+                </div>
+            </div> -->
+
+            <!-- Events Grid -->
+            <div class="mb-8">
+                <div class="flex items-center justify-between mb-6">
+                    <h2
+                        class="text-2xl font-bold text-gray-900 dark:text-white flex items-center"
+                    >
+                        <svg
+                            class="w-6 h-6 text-blue-500 mr-2"
+                            fill="currentColor"
+                            viewBox="0 0 20 20"
+                        >
+                            <path
+                                fill-rule="evenodd"
+                                d="M6 2a1 1 0 00-1 1v1H4a2 2 0 00-2 2v10a2 2 0 002 2h12a2 2 0 002-2V6a2 2 0 00-2-2h-1V3a1 1 0 10-2 0v1H7V3a1 1 0 00-1-1zm0 5a1 1 0 000 2h8a1 1 0 100-2H6z"
+                                clip-rule="evenodd"></path>
+                        </svg>
+                        {enEvent === 0 ? "Semua Kegiatan" : "All Events"}
+                    </h2>
+                    <span class="text-sm text-gray-600 dark:text-gray-400">
+                        {enEvent === 0 ? "Menampilkan" : "Showing"}
+                        {allEvents.length}
+                        {enEvent === 0 ? "kegiatan" : "events"}
+                    </span>
+                </div>
+
+                <div
+                    class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6"
+                >
+                    {
+                        allEvents.map((event) => (
+                            <article class="group bg-white dark:bg-gray-800 rounded-xl shadow-sm hover:shadow-lg transition-all duration-300 overflow-hidden border border-gray-200 dark:border-gray-700">
+                                <CardEventContent event={event} />
+                            </article>
+                        ))
+                    }
+                </div>
+            </div>
+
+            <!-- Call to Action -->
+            <div
+                class="bg-gradient-to-r from-[#1055C9] to-[#b8244a] rounded-2xl p-8 text-center text-white"
+            >
+                <h3 class="text-2xl font-bold mb-3">
+                    {
+                        enEvent === 0
+                            ? "Ingin Mengadakan Event?"
+                            : "Want to Host an Event?"
+                    }
+                </h3>
+                <p class="text-blue-100 mb-6 max-w-2xl mx-auto">
+                    {
+                        enEvent === 0
+                            ? "Ajukan kegiatan atau event Anda dan mari bersama-sama membangun komunitas yang lebih inklusif"
+                            : "Submit your event and let's build a more inclusive community together"
+                    }
+                </p>
+                <a
+                    href="/hubungi-kami"
+                    class="inline-flex items-center px-6 py-3 bg-white text-[#1055C9] font-semibold rounded-lg hover:bg-gray-100 transition-colors duration-200"
+                >
+                    {enEvent === 0 ? "Hubungi Kami" : "Contact Us"}
+                    <svg
+                        class="w-4 h-4 ml-2"
+                        fill="none"
+                        stroke="currentColor"
+                        viewBox="0 0 24 24"
+                    >
+                        <path
+                            stroke-linecap="round"
+                            stroke-linejoin="round"
+                            stroke-width="2"
+                            d="M9 5l7 7-7 7"></path>
+                    </svg>
+                </a>
+            </div>
+        </div>
+    </div>
+</Layout>
+
+<style>
+    .line-clamp-2 {
+        display: -webkit-box;
+        -webkit-line-clamp: 2;
+        -webkit-box-orient: vertical;
+        overflow: hidden;
+    }
+
+    .line-clamp-3 {
+        display: -webkit-box;
+        -webkit-line-clamp: 3;
+        -webkit-box-orient: vertical;
+        overflow: hidden;
+    }
+</style>

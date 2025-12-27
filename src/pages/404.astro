@@ -1,0 +1,60 @@
+---
+import Layout from "@layouts/Layout.astro";
+import DarkModeToggle from "@components/DarkModeToggle.astro";
+import { WebsiteApi } from '@/services/index';
+
+// Utility imports
+const websiteApiService = new WebsiteApi();
+const websiteInfo = await websiteApiService.fetchInfo("0");
+
+const metaTags = {
+    title: 'Halaman Tidak Ditemukan - 404',
+    description: '',
+    keywords: '',
+    image: '',
+};
+---
+
+<Layout metaTags={metaTags}>
+    <div class="min-h-screen bg-gradient-to-br from-gray-50 to-gray-100 dark:from-gray-900 dark:to-gray-800 flex items-center justify-center px-4 py-4">
+        <div class="max-w-lg mx-auto text-center">
+            <!-- 404 Illustration -->
+            <div class="mb-8">
+                <div class="text-6xl md:text-7xl font-bold gradient-text-blue opacity-80 mb-4">
+                    404
+                </div>
+                <!-- Simple sad face -->
+                <div class="text-6xl animate-float">😔</div>
+            </div>
+
+            <!-- Error message -->
+            <div class="mb-8">
+                <h1 class="text-2xl md:text-3xl font-bold text-gray-900 dark:text-white mb-4">
+                    Oops! Halaman tidak ditemukan
+                </h1>
+                <p class="text-gray-600 dark:text-gray-300">
+                    Halaman yang Anda cari mungkin telah dipindahkan atau tidak ada.
+                </p>
+            </div>
+
+            <!-- Action buttons -->
+            <div class="flex flex-col sm:flex-row gap-4 justify-center">
+                <a 
+                    href="/" 
+                    class="bg-blue-600 hover:bg-blue-700 text-white px-6 py-3 rounded-lg transition-colors duration-200 font-medium"
+                >
+                    Kembali ke Beranda
+                </a>
+                
+                <button 
+                    onclick="history.back()"
+                    class="bg-gray-600 hover:bg-gray-700 text-white px-6 py-3 rounded-lg transition-colors duration-200 font-medium"
+                >
+                    ← Kembali
+                </button>
+            </div>
+
+        </div>
+
+    </div>
+</Layout>

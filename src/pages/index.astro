@@ -1,0 +1,34 @@
+---
+import Layout from "@layouts/Layout.astro";
+
+// Import Home Components
+import HeroSection from "@components/home/HeroSection.astro";
+import AchievementsSection from "@components/home/AchievementsSection.astro";
+import FeaturesSection from "@components/home/FeaturesSection.astro";
+import ProgramStudiSection from "@components/home/ProgramStudiSection.astro";
+import FacilitiesSection from "@components/home/FacilitiesSection.astro";
+import CTASection from "@components/home/CTASection.astro";
+
+// Utility imports
+import { WebsiteApi } from "@/services/index";
+
+// Initialize API service
+const websiteApiService = new WebsiteApi();
+const websiteInfo = await websiteApiService.fetchInfo("0");
+
+const metaTags = {
+    title: "Beranda",
+    description: "",
+    keywords: "",
+    image: "",
+};
+---
+
+<Layout metaTags={metaTags}>
+    <HeroSection />
+    <AchievementsSection />
+    <FeaturesSection />
+    <ProgramStudiSection />
+    <FacilitiesSection />
+    <CTASection />
+</Layout>

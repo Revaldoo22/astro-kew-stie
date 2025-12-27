@@ -1,0 +1,156 @@
+---
+import Layout from "@layouts/Layout.astro";
+import Breadcrumb from "@components/Breadcrumb.astro";
+import PaginationContent from "@components/content/PaginationContent.astro";
+
+const { category, enGalleryPhoto, limit } = Astro.props;
+
+// Utility imports
+import { galleryPhotoByCategoryPageService } from "@/services/index";
+
+const { galleryPhotoByCategoryList, isEmptyGalleryPhotoByCategoryList } = await galleryPhotoByCategoryPageService.fetchGalleryPhotoByCategoryPageData(Astro.url, category, limit, enGalleryPhoto);
+
+
+// Format ISO date string like '2025-10-27T02:32:57.000000Z' to Indonesian locale (e.g., '27 Okt 2025')
+const formatDateId = (iso: string): string => {
+    try {
+        const date = new Date(iso);
+        if (Number.isNaN(date.getTime())) return iso;
+        return date.toLocaleDateString('id-ID', { day: '2-digit', month: 'short', year: 'numeric' });
+    } catch {
+        return iso;
+    }
+};
+
+const breadcrumbs = [
+    { label: "Home", href: "/" },
+    { label: enGalleryPhoto === 0 ? "Galeri" : "Gallery", href: `/${enGalleryPhoto === 0 ? "galeri/foto" : "en/gallery/photo"}` },
+    { label: enGalleryPhoto === 0 ? "Foto" : "Photo", href: `/${enGalleryPhoto === 0 ? "galeri/foto" : "en/gallery/photo"}` },
+];
+
+const metaTags = {
+    title: enGalleryPhoto === 0 ? "Galeri Foto" : "Gallery Photo",
+    description: enGalleryPhoto === 0 ? "Kumpulan foto-foto kegiatan dan aktivitas terbaru." : "Collection of photos of activities and events.",
+    keywords: enGalleryPhoto === 0 ? "galeri, foto, dokumentasi, gambar, kegiatan, event" : "gallery, photo, documentation, image, activity, event",
+    image: '',
+};
+
+
+const linkGalleryPhoto = `/${enGalleryPhoto === 0 ? "galeri/foto" : "en/gallery/photo"}`;
+
+const calendarIcon = `<path fill-rule="evenodd" d="M6 2a1 1 0 00-1 1v1H4a2 2 0 00-2 2v10a2 2 0 002 2h12a2 2 0 002-2V6a2 2 0 00-2-2h-1V3a1 1 0 10-2 0v1H7V3a1 1 0 00-1-1zm0 5a1 1 0 000 2h8a1 1 0 100-2H6z" clip-rule="evenodd"></path>`;
+const imageIcon = `<path fill-rule="evenodd" d="M4 3a2 2 0 00-2 2v10a2 2 0 002 2h12a2 2 0 002-2V5a2 2 0 00-2-2H4zm12 12H4l4-8 3 6 2-4 3 6z" clip-rule="evenodd"></path>`;
+const zoomIcon = `<path d="M10 18a8 8 0 100-16 8 8 0 000 16zM12 10a2 2 0 11-4 0 2 2 0 014 0z"/><path d="M15 15l5 5"/>`;
+---
+
+<Layout metaTags={metaTags}>
+    <div class="min-h-screen">
+
+
+        <div class="bg-white dark:bg-gray-900 py-5">
+            <div class="max-w-screen-xl mx-auto px-4">
+                <!-- Breadcrumbs -->
+                <div class="mb-6">
+                    <Breadcrumb breadcrumbs={breadcrumbs} />
+                </div>
+                
+                <!-- Main Title -->
+                <h1 class="text-2xl md:text-3xl lg:text-3xl font-bold text-black dark:text-white mb-4 leading-tight">
+                    {enGalleryPhoto === 0 ? "Galeri Foto" : "Gallery Photo"}
+                </h1>
+
+                <p class="text-gray-600 dark:text-gray-300 mt-2">
+                    {enGalleryPhoto === 0 ? "Kumpulan foto-foto kegiatan dan aktivitas terbaru." : "Collection of photos of activities and events."}
+                </p>                
+                
+            </div>
+        </div>
+
+        <!-- Main Content -->
+        <div class="max-w-screen-xl mx-auto px-4 py-8">
+            <!-- Empty State -->
+            {isEmptyGalleryPhotoByCategoryList ? (
+                <div class="text-center text-gray-500 dark:text-gray-400">
+                    {enGalleryPhoto === 0 ? "Tidak ada foto yang ditemukan." : "No photos found."}
+                </div>
+            ) : (
+
+            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+                {galleryPhotoByCategoryList.gallery.map((item) => (
+                    <a href={`${linkGalleryPhoto}/${item.slug}`} class="group relative bg-white dark:bg-gray-800 rounded-lg overflow-hidden shadow-md hover:shadow-xl transition-all duration-300 cursor-pointer gallery-card flex flex-col" data-gallery-id={item.uuid}>
+                        <div class="relative overflow-hidden aspect-video">
+
+                            {/* <div class="absolute top-3 right-3 z-10 bg-black/70 backdrop-blur-sm text-white px-3 py-1.5 rounded-full text-xs font-medium flex items-center gap-1.5">
+                                <svg class="w-3.5 h-3.5" fill="currentColor" viewBox="0 0 20 20">
+                                    <Fragment set:html={imageIcon} />
+                                </svg>
+                                <span>0 {enGalleryPhoto === 0 ? "Foto" : "Photo"}</span>
+                            </div> */}
+                            
+
+                            <img 
+                                src={item.image_1024_512}
+                                alt={item.title}
+                                class="w-full h-full object-cover transform group-hover:scale-110 transition-transform duration-500"
+                                loading="lazy"
+                            />
+                            
+
+                            <div class="absolute inset-0 bg-gradient-to-t from-black/90 via-black/40 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+                                <div class="absolute inset-0 flex flex-col items-center justify-center text-white">
+                                    <button class="view-gallery-btn flex items-center gap-2 bg-white/20 backdrop-blur-md hover:bg-white/30 text-white px-6 py-3 rounded-full font-medium transition-all duration-300 transform translate-y-4 group-hover:translate-y-0">
+                                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0zM10 7v3m0 0v3m0-3h3m-3 0H7"></path>
+                                        </svg>
+                                        <span>{enGalleryPhoto === 0 ? "Lihat Galeri" : "View Gallery"}</span>
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                        
+
+                        <div class="p-4 flex flex-col flex-grow">
+                            <h3 class="text-lg font-semibold text-gray-900 dark:text-white mb-3 line-clamp-2 transition-colors duration-300">
+                                {item.title}
+                            </h3>
+                            
+
+                            <div class="mt-auto pt-2 flex items-center justify-between text-sm border-t border-gray-100 dark:border-gray-700">
+                                <div class="flex items-center text-gray-500 dark:text-gray-400">
+                                    <svg class="w-4 h-4 mr-1.5" fill="currentColor" viewBox="0 0 20 20">
+                                        <Fragment set:html={calendarIcon} />
+                                    </svg>
+                                    <span>{formatDateId(item.created_at)}</span>
+                                </div>
+                                <div class="flex items-center font-medium opacity-0 group-hover:opacity-100 transition-opacity duration-300" style="color: #1055C9;">
+                                    <span class="text-xs">{enGalleryPhoto === 0 ? "Lihat Detail" : "View Detail"}</span>
+                                    <svg class="w-4 h-4 ml-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path>
+                                    </svg>
+                                </div>
+                            </div>
+                        </div>
+                    </a>
+                ))}
+            </div>
+
+
+            <div class="mt-12">
+                <PaginationContent listData={galleryPhotoByCategoryList} isEmptyList={isEmptyGalleryPhotoByCategoryList} />                
+            </div>
+            )}
+
+        </div>
+
+    </div>
+</Layout>
+
+
+<style>
+    .line-clamp-2 {
+        display: -webkit-box;
+        -webkit-line-clamp: 2;
+        -webkit-box-orient: vertical;
+        overflow: hidden;
+    }
+</style>

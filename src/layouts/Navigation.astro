@@ -1,0 +1,410 @@
+---
+const { websiteInfo } = Astro.props;
+import { Search, Menu, BookOpen } from "@lucide/astro";
+
+// Import menu from globals
+import { menuItems, type MenuItem } from "@globals/menu";
+
+// Get current path
+const currentPath = Astro.url.pathname;
+
+// Define menu alignment - default to right
+const align_menu = "right" as "left" | "center" | "right";
+
+// Define spaceX - default to space-x-4
+const spaceX = "space-x-8";
+---
+
+<nav
+  id="navigation"
+  class="bg-white dark:bg-gray-800 border-b border-gray-200 dark:border-gray-700 py-1 sm:py-1 md:py-2 lg:py-4 transition-all duration-300"
+>
+  <div class="max-w-screen-xl mx-auto px-4">
+    <div class="flex flex-col lg:flex-row justify-between items-center">
+      <!-- Left side - Logo -->
+      <div class="flex-shrink-0 hidden lg:block">
+        <a href="/">
+          {
+            websiteInfo.logoLight ? (
+              <div class="flex items-center gap-3">
+                <img
+                  src={websiteInfo.logoLight}
+                  alt={websiteInfo.name || "Logo"}
+                  class="h-10 w-auto block dark:hidden"
+                />
+                <h1 class="text-lg font-bold whitespace-nowrap block dark:hidden">
+                  <span class="bg-gradient-to-r from-[#1055C9] to-[#05339C] bg-clip-text text-transparent">
+                    Kuliah Kelas Karyawan
+                  </span>
+                </h1>
+              </div>
+            ) : (
+              <div class="flex items-center gap-2 group block dark:hidden">
+                <div class="relative flex-shrink-0">
+                  <div class="relative bg-gradient-to-br from-[#1055C9] to-[#05339C] p-1.5 rounded-lg">
+                    <BookOpen class="w-5 h-5 text-white" />
+                  </div>
+                </div>
+                <div class="min-w-0">
+                  <h1 class="text-base font-bold whitespace-nowrap">
+                    <span class="bg-gradient-to-r from-[#1055C9] to-[#05339C] bg-clip-text text-transparent">
+                      Kuliah Kelas Karyawan
+                    </span>
+                  </h1>
+                </div>
+              </div>
+            )
+          }
+          {
+            websiteInfo.logoDark ? (
+              <div class="flex items-center gap-3 hidden dark:flex">
+                <img
+                  src={websiteInfo.logoDark}
+                  alt={websiteInfo.name || "Logo"}
+                  class="h-10 w-auto"
+                />
+                <h1 class="text-lg font-bold whitespace-nowrap text-white">
+                  Kuliah Kelas Karyawan
+                </h1>
+              </div>
+            ) : (
+              <div class="flex items-center gap-2 group hidden dark:flex">
+                <div class="bg-gradient-to-br from-[#1055C9] to-[#05339C] p-1.5 rounded-lg">
+                  <BookOpen class="w-5 h-5 text-white" />
+                </div>
+                <div class="min-w-0">
+                  <h1 class="text-base font-bold whitespace-nowrap text-white">
+                    Kuliah Kelas Karyawan
+                  </h1>
+                </div>
+              </div>
+            )
+          }
+        </a>
+      </div>
+
+      <!-- Desktop Navigation Links -->
+      <div class="flex-1 hidden lg:block">
+        <!-- Desktop Menu -->
+        {
+          menuItems.length > 0 && (
+            <div
+              class={`flex items-center ${spaceX} text-base font-medium ${
+                align_menu === "left"
+                  ? "justify-start"
+                  : align_menu === "center"
+                    ? "justify-center"
+                    : "justify-end"
+              }`}
+            >
+              {menuItems.map((item: MenuItem) =>
+                item.hasSubmenu ? (
+                  <div class="relative group">
+                    <button class="text-black uppercase dark:text-white hover:text-[#1055C9] dark:hover:text-[#1055C9] transition-colors flex items-center cursor-pointer">
+                      {item.label}
+                      <svg
+                        class="w-4 h-4 ml-1"
+                        fill="none"
+                        stroke="currentColor"
+                        viewBox="0 0 24 24"
+                      >
+                        <path
+                          stroke-linecap="round"
+                          stroke-linejoin="round"
+                          stroke-width="2"
+                          d="M19 9l-7 7-7-7"
+                        />
+                      </svg>
+                    </button>
+                    <div class="absolute top-full left-0 mt-4 w-56 bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-600 rounded-lg shadow-xl opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-300 z-50 overflow-hidden">
+                      {item.items &&
+                        item.items.map(
+                          (
+                            subItem: { label: string; href: string },
+                            index: number,
+                          ) => (
+                            <>
+                              <a
+                                href={subItem.href}
+                                class={`block px-4 py-3 text-base text-gray-700 dark:text-gray-300 hover:bg-[#1055C9]/10 dark:hover:bg-[#1055C9]/20 hover:text-[#1055C9] dark:hover:text-[#1055C9] transition-colors ${
+                                  currentPath === subItem.href
+                                    ? "bg-[#1055C9]/10 dark:bg-[#1055C9]/20 text-[#1055C9] dark:text-[#1055C9] font-semibold"
+                                    : ""
+                                } ${index === 0 ? "first:rounded-t-lg" : ""} ${index === (item.items?.length || 0) - 1 ? "last:rounded-b-lg" : ""}`}
+                              >
+                                {subItem.label}
+                              </a>
+                              {index < (item.items?.length || 0) - 1 && (
+                                <div class="border-t border-dashed border-gray-300 dark:border-gray-600 mx-4" />
+                              )}
+                            </>
+                          ),
+                        )}
+                    </div>
+                  </div>
+                ) : (
+                  <a
+                    href={item.href}
+                    class={`text-black uppercase dark:text-white hover:text-[#1055C9] dark:hover:text-[#1055C9] transition-colors relative ${
+                      currentPath === item.href ||
+                      (item.href !== "/" && currentPath.startsWith(item.href))
+                        ? "text-[#1055C9] dark:text-[#1055C9] font-bold after:absolute after:bottom-0 after:left-0 after:right-0 after:h-0.5 after:bg-[#1055C9]"
+                        : ""
+                    }`}
+                  >
+                    {item.label}
+                  </a>
+                ),
+              )}
+            </div>
+          )
+        }
+      </div>
+
+      <!-- Mobile Navigation Links -->
+      <div class="w-full lg:hidden lg:w-auto lg:flex-1">
+        {
+          menuItems.length > 0 ? (
+            <div class="w-full">
+              <button
+                id="mobile-menu-toggle"
+                class="flex items-center justify-between w-full py-3 text-base font-medium  dark:border-gray-600 bg-white dark:bg-gray-800 rounded"
+              >
+                <span class="font-bold text-lg text-left text-gray-900 dark:text-white">
+                  MENU
+                </span>
+                <div class="bg-[#1055C9] hover:bg-[#05339C] p-2 rounded transition-colors flex items-center justify-center">
+                  <Menu class="w-5 h-5 text-white" />
+                </div>
+              </button>
+              <div
+                id="mobile-menu"
+                class="max-h-0 overflow-hidden opacity-0 -translate-y-2 transition-all duration-300 ease-in-out mt-2 space-y-2 text-left"
+              >
+                {menuItems.map((item: MenuItem) =>
+                  item.hasSubmenu ? (
+                    <div class="space-y-1" data-submenu-id={item.submenuId}>
+                      <button
+                        class="flex items-center justify-between w-full py-2 text-black dark:text-gray-200 hover:text-[#1055C9] hover:px-4 dark:hover:text-[#1055C9] hover:bg-[#1055C9]/10 dark:hover:bg-gray-700 rounded-lg transition-all duration-200"
+                        onclick={`toggleMobileSubmenu('${item.submenuId}')`}
+                      >
+                        <span class="font-medium text-base uppercase">
+                          {item.label}
+                        </span>
+                        <svg
+                          id={`${item.submenuId}-arrow`}
+                          class="w-4 h-4 transition-transform duration-200"
+                          fill="none"
+                          stroke="currentColor"
+                          viewBox="0 0 24 24"
+                        >
+                          <path
+                            stroke-linecap="round"
+                            stroke-linejoin="round"
+                            stroke-width="2"
+                            d="M19 9l-7 7-7-7"
+                          />
+                        </svg>
+                      </button>
+                      <div
+                        id={`mobile-submenu-${item.submenuId}`}
+                        class="max-h-0 opacity-0 overflow-hidden transition-all duration-300 ease-in-out w-full bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-600 rounded-lg"
+                      >
+                        {item.items &&
+                          item.items.map(
+                            (
+                              subItem: { label: string; href: string },
+                              index: number,
+                            ) => (
+                              <>
+                                <a
+                                  href={subItem.href}
+                                  class={`block px-4 py-3 text-base text-gray-700 dark:text-gray-300 hover:bg-[#1055C9]/10 dark:hover:bg-gray-700 hover:text-[#1055C9] dark:hover:text-[#1055C9] transition-colors ${
+                                    currentPath === subItem.href
+                                      ? "bg-[#1055C9]/10 dark:bg-gray-700 text-[#1055C9] dark:text-[#1055C9] font-semibold"
+                                      : ""
+                                  } ${index === 0 ? "first:rounded-t-lg" : ""} ${index === (item.items?.length || 0) - 1 ? "last:rounded-b-lg" : ""}`}
+                                >
+                                  {subItem.label}
+                                </a>
+                                {index < (item.items?.length || 0) - 1 && (
+                                  <div class="border-t border-dashed border-gray-300 dark:border-gray-600 mx-4" />
+                                )}
+                              </>
+                            ),
+                          )}
+                      </div>
+                    </div>
+                  ) : (
+                    <a
+                      href={item.href}
+                      class={`block uppercase py-2 text-left text-base text-black dark:text-gray-200 hover:text-[#1055C9] dark:hover:text-[#1055C9] transition-colors ${
+                        currentPath === item.href ||
+                        (item.href !== "/" && currentPath.startsWith(item.href))
+                          ? "text-[#1055C9] dark:text-[#1055C9] font-bold bg-[#1055C9]/10 dark:bg-[#1055C9]/20 px-4 rounded-lg"
+                          : ""
+                      }`}
+                    >
+                      {item.label}
+                    </a>
+                  ),
+                )}
+              </div>
+            </div>
+          ) : null
+        }
+      </div>
+
+      <!-- Right side - Search and Menu -->
+      <div class="flex items-center space-x-4 lg:mt-0 lg:ml-8">
+        <!-- Search button - hidden on mobile -->
+        <button
+          class="hidden lg:block text-gray-600 hover:text-[#1055C9] transition-colors"
+        >
+          <Search class="w-5 h-5" />
+        </button>
+
+        <!-- Sidebar button - only visible on desktop -->
+        <!-- <button onclick="openSidebar()" class="hidden lg:block bg-[#1055C9] hover:bg-[#05339C] p-2 rounded transition-colors">
+          <Menu class="w-5 h-5 text-white" />
+        </button> -->
+      </div>
+    </div>
+  </div>
+</nav>
+
+<script>
+  // Mobile menu toggle with animation
+  function toggleMobileMenu() {
+    const mobileMenu = document.getElementById("mobile-menu");
+    if (mobileMenu) {
+      const isOpen = !mobileMenu.classList.contains("max-h-0");
+
+      if (isOpen) {
+        // Close menu with animation
+        mobileMenu.classList.add("max-h-0", "opacity-0", "-translate-y-2");
+        mobileMenu.classList.remove(
+          "max-h-[1000px]",
+          "opacity-100",
+          "translate-y-0",
+        );
+      } else {
+        // Open menu with animation
+        mobileMenu.classList.remove("max-h-0", "opacity-0", "-translate-y-2");
+        mobileMenu.classList.add(
+          "max-h-[1000px]",
+          "opacity-100",
+          "translate-y-0",
+        );
+      }
+    }
+  }
+
+  // Mobile submenu toggle with animation
+  function toggleMobileSubmenu(submenuId: string) {
+    const submenu = document.getElementById(`mobile-submenu-${submenuId}`);
+    const arrow = document.getElementById(`${submenuId}-arrow`);
+
+    // Get all submenu IDs dynamically from the actual menu items
+    const allSubmenuIds = Array.from(
+      document.querySelectorAll("[data-submenu-id]"),
+    )
+      .map((el) => el.getAttribute("data-submenu-id"))
+      .filter((id) => id !== null);
+
+    if (submenu) {
+      const isCurrentlyOpen = !submenu.classList.contains("max-h-0");
+
+      // Close all other submenus
+      allSubmenuIds.forEach((id) => {
+        if (id !== submenuId) {
+          const otherSubmenu = document.getElementById(`mobile-submenu-${id}`);
+          const otherArrow = document.getElementById(`${id}-arrow`);
+
+          if (otherSubmenu) {
+            otherSubmenu.classList.add("max-h-0", "opacity-0");
+            otherSubmenu.classList.remove("max-h-[500px]", "opacity-100");
+          }
+          if (otherArrow) {
+            otherArrow.classList.remove("rotate-180");
+          }
+        }
+      });
+
+      // Toggle current submenu with animation
+      if (isCurrentlyOpen) {
+        submenu.classList.add("max-h-0", "opacity-0");
+        submenu.classList.remove("max-h-[500px]", "opacity-100");
+        if (arrow) {
+          arrow.classList.remove("rotate-180");
+        }
+      } else {
+        submenu.classList.remove("max-h-0", "opacity-0");
+        submenu.classList.add("max-h-[500px]", "opacity-100");
+        if (arrow) {
+          arrow.classList.add("rotate-180");
+        }
+      }
+    }
+  }
+
+  // Add event listener for mobile menu toggle
+  document.addEventListener("DOMContentLoaded", function () {
+    const mobileMenuToggle = document.getElementById("mobile-menu-toggle");
+    if (mobileMenuToggle) {
+      mobileMenuToggle.addEventListener("click", toggleMobileMenu);
+    }
+  });
+
+  // Make functions globally available
+  (window as any).toggleMobileSubmenu = (submenuId: string) =>
+    toggleMobileSubmenu(submenuId);
+
+  // Fixed navigation on scroll
+  function handleScroll() {
+    const navigation = document.getElementById("navigation");
+    const navLogo = document.getElementById("nav-logo");
+
+    if (navigation) {
+      if (window.scrollY > 100) {
+        navigation.classList.add(
+          "fixed",
+          "top-0",
+          "left-0",
+          "right-0",
+          "z-50",
+          "shadow-lg",
+        );
+        navigation.classList.remove("py-1", "sm:py-1", "md:py-2", "lg:py-4");
+        navigation.classList.add("py-2");
+
+        // Hide logo when fixed
+        if (navLogo) {
+          navLogo.classList.add("hidden");
+        }
+      } else {
+        navigation.classList.remove(
+          "fixed",
+          "top-0",
+          "left-0",
+          "right-0",
+          "z-50",
+          "shadow-lg",
+        );
+        navigation.classList.remove("py-2");
+        navigation.classList.add("py-1", "sm:py-1", "md:py-2", "lg:py-4");
+
+        // Show logo when not fixed (only on desktop)
+        if (navLogo) {
+          navLogo.classList.remove("hidden");
+          navLogo.classList.add("hidden", "lg:block");
+        }
+      }
+    }
+  }
+
+  // Add scroll event listener
+  document.addEventListener("DOMContentLoaded", function () {
+    window.addEventListener("scroll", handleScroll);
+  });
+</script>

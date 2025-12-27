@@ -1,0 +1,137 @@
+---
+const { limit, group, en } = Astro.props;
+import { getRecentText } from "@/utils/helpers/textPostHelpers";
+
+// Utility imports
+import { PostApi } from "@/services/index";
+import { hasValue } from "@/utils/helpers/dataHelpers";
+import type { PostListType } from "@/types/index";
+
+// Initialize API service
+const postApiService = new PostApi();
+
+let isEmptyrecentPost = true;
+let recentPost: PostListType[] = [];
+
+const recentPostData = await postApiService.fetchRecentPosts(`?limit=${limit}`);
+
+if (hasValue(recentPostData) && recentPostData !== null) {
+    isEmptyrecentPost = false;
+    recentPost = recentPostData;
+}
+
+const textPost = getRecentText(group, en);
+---
+
+{
+    !isEmptyrecentPost && (
+        <div class="w-full sm:max-w-sm bg-white border border-gray-200 rounded-lg shadow dark:bg-gray-800 dark:border-gray-700">
+            <div class="p-6">
+                <div class="flex items-center justify-between mb-4">
+                    <h5 class="text-lg font-semibold text-gray-900 dark:text-white">
+                        {textPost.recent.title || ""}
+                    </h5>
+                    <div
+                        class="w-8 h-8 rounded-full flex items-center justify-center"
+                        style="background-color: #1055C9; opacity: 0.1;"
+                    >
+                        <svg
+                            class="w-4 h-4"
+                            style="color: #1055C9;"
+                            fill="none"
+                            stroke="currentColor"
+                            viewBox="0 0 24 24"
+                        >
+                            <path
+                                stroke-linecap="round"
+                                stroke-linejoin="round"
+                                stroke-width="2"
+                                d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"
+                            />
+                        </svg>
+                    </div>
+                </div>
+                <div class="space-y-4">
+                    {recentPost.map((article: any, index: number) => (
+                        <div class="group flex items-start space-x-3 rounded-lg hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors duration-200">
+                            <div class="relative flex-shrink-0">
+                                <img
+                                    class="w-12 h-12 rounded-lg object-cover shadow-sm"
+                                    src={
+                                        article.image_400_400
+                                            ? article.image_400_400
+                                            : `/assets/images/default/400_400.jpg`
+                                    }
+                                    alt={article.title}
+                                    loading="lazy"
+                                />
+                                <div
+                                    class="absolute -top-1 -right-1 w-4 h-4 rounded-full flex items-center justify-center"
+                                    style="background-color: #1055C9;"
+                                >
+                                    <span class="text-xs font-bold text-white">
+                                        {index + 1}
+                                    </span>
+                                </div>
+                            </div>
+                            <div class="flex-1 min-w-0">
+                                <a
+                                    href={`${textPost.recent.link}/${article.slug}`}
+                                    class="block transition-colors duration-200"
+                                    style="color: inherit;"
+                                    onmouseover="this.style.color='#1055C9'"
+                                    onmouseout="this.style.color='inherit'"
+                                >
+                                    <h6 class="text-sm font-medium text-gray-900 dark:text-white line-clamp-2 leading-tight">
+                                        {article.title}
+                                    </h6>
+                                </a>
+                                <div class="flex items-center justify-between mt-2">
+                                    <span class="text-xs text-gray-500 dark:text-gray-400">
+                                        {article.date}
+                                    </span>
+                                    <div class="flex items-center space-x-2">
+                                        <span
+                                            class="inline-flex items-center px-2 py-0.5 rounded-full text-xs font-medium text-white"
+                                            style="background-color: #1055C9;"
+                                        >
+                                            {article.categories
+                                                ? article.categories.join(", ")
+                                                : ""}
+                                        </span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    ))}
+                </div>
+                <div class="mt-4 pt-4 border-t border-gray-200 dark:border-gray-700">
+                    <a
+                        href={`/${textPost.recent.link}`}
+                        class="inline-flex items-center text-sm font-medium transition-colors duration-200"
+                        style="color: #1055C9;"
+                        onmouseover="this.style.color='#b82445'"
+                        onmouseout="this.style.color='#1055C9'"
+                    >
+                        {en === 0
+                            ? `Lihat semua ${textPost.recent.title || ""}`
+                            : `View all ${textPost.recent.title || ""}`}
+                        <svg
+                            class="w-4 h-4 ml-1"
+                            fill="none"
+                            stroke="currentColor"
+                            viewBox="0 0 24 24"
+                        >
+                            <path
+                                stroke-linecap="round"
+                                stroke-linejoin="round"
+                                stroke-width="2"
+                                d="M9 5l7 7-7 7"
+                            />
+                        </svg>
+                    </a>
+                </div>
+            </div>
+        </div>
+    )
+}

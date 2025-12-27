@@ -1,0 +1,111 @@
+---
+interface Props {
+    items: Array<{
+        question: string;
+        answer: string;
+    }>;
+}
+
+const { items } = Astro.props;
+---
+
+<div class="accordion-container space-y-4">
+    {
+        items.map((item, index) => (
+            <div class="accordion-item border border-gray-200 dark:border-gray-700 rounded-lg overflow-hidden bg-white dark:bg-gray-800">
+                <button
+                    class="accordion-trigger w-full flex justify-between items-center p-6 text-left hover:bg-gray-50 dark:hover:bg-gray-700/50 transition-colors"
+                    data-accordion-index={index}
+                    aria-expanded="false"
+                >
+                    <span class="text-lg font-semibold text-gray-900 dark:text-white pr-4">
+                        {item.question}
+                    </span>
+                    <svg
+                        class="accordion-icon w-5 h-5 text-gray-500 dark:text-gray-400 transition-transform duration-300 flex-shrink-0"
+                        fill="none"
+                        stroke="currentColor"
+                        viewBox="0 0 24 24"
+                    >
+                        <path
+                            stroke-linecap="round"
+                            stroke-linejoin="round"
+                            stroke-width="2"
+                            d="M19 9l-7 7-7-7"
+                        />
+                    </svg>
+                </button>
+                <div
+                    class="accordion-content max-h-0 overflow-hidden transition-all duration-300 ease-in-out"
+                    data-accordion-content={index}
+                >
+                    <div class="p-6 pt-0 text-gray-600 dark:text-gray-400 leading-relaxed">
+                        {item.answer}
+                    </div>
+                </div>
+            </div>
+        ))
+    }
+</div>
+
+<script>
+    document.addEventListener("DOMContentLoaded", () => {
+        const triggers = document.querySelectorAll(".accordion-trigger");
+
+        triggers.forEach((trigger) => {
+            trigger.addEventListener("click", () => {
+                const index = trigger.getAttribute("data-accordion-index");
+                const content = document.querySelector(
+                    `[data-accordion-content="${index}"]`,
+                ) as HTMLElement;
+                const icon = trigger.querySelector(
+                    ".accordion-icon",
+                ) as HTMLElement;
+                const isExpanded =
+                    trigger.getAttribute("aria-expanded") === "true";
+
+                // Close all other accordions
+                triggers.forEach((otherTrigger) => {
+                    if (otherTrigger !== trigger) {
+                        const otherIndex = otherTrigger.getAttribute(
+                            "data-accordion-index",
+                        );
+                        const otherContent = document.querySelector(
+                            `[data-accordion-content="${otherIndex}"]`,
+                        ) as HTMLElement;
+                        const otherIcon = otherTrigger.querySelector(
+                            ".accordion-icon",
+                        ) as HTMLElement;
+
+                        otherTrigger.setAttribute("aria-expanded", "false");
+                        if (otherContent) {
+                            otherContent.style.maxHeight = "0px";
+                        }
+                        if (otherIcon) {
+                            otherIcon.style.transform = "rotate(0deg)";
+                        }
+                    }
+                });
+
+                // Toggle current accordion
+                if (isExpanded) {
+                    trigger.setAttribute("aria-expanded", "false");
+                    if (content) {
+                        content.style.maxHeight = "0px";
+                    }
+                    if (icon) {
+                        icon.style.transform = "rotate(0deg)";
+                    }
+                } else {
+                    trigger.setAttribute("aria-expanded", "true");
+                    if (content) {
+                        content.style.maxHeight = content.scrollHeight + "px";
+                    }
+                    if (icon) {
+                        icon.style.transform = "rotate(180deg)";
+                    }
+                }
+            });
+        });
+    });
+</script>

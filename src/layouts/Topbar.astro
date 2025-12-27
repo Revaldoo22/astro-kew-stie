@@ -1,0 +1,343 @@
+---
+const { websiteInfo } = Astro.props;
+
+const totalPhone = websiteInfo.phone && websiteInfo.phone.split(",").length;
+
+import { Phone, CalendarDays, BookOpen } from "@lucide/astro";
+import { FaWhatsapp } from "react-icons/fa";
+import DarkModeToggle from "@components/DarkModeToggle.astro";
+import LanguageSelector from "@components/LanguageSelector.astro";
+
+const { quickAccess = false } = Astro.props;
+
+// Quick Access Links
+const quickAccessLinks = {
+  academic: [
+    { name: "PMB UNIVERSITAS STEKOM", url: "https://pmb.stekom.ac.id" },
+  ],
+  job: [
+    { name: "TOPLOKER.COM", url: "https://toploker.com" },
+    { name: "KERJAMALAM.COM", url: "https://kerjamalam.com" },
+  ],
+  blog: [
+    { name: "DISABILITAS.ID", url: "https://disabilitas.id" },
+    { name: "BERITACINTA.COM", url: "https://beritacinta.com" },
+    { name: "VOKASINEWS.ID", url: "https://vokasinews.id" },
+  ],
+};
+
+// All quick access links in one array for mobile
+const allQuickLinks = [...quickAccessLinks.academic, ...quickAccessLinks.job];
+---
+
+<!-- Mobile Topbar -->
+<div class="hidden">
+  <div
+    class="bg-white dark:bg-gray-800 shadow-lg border-b border-gray-200 dark:border-gray-700"
+  >
+    <div class="max-w-screen-xl mx-auto px-4 py-3">
+      <!-- Header Section -->
+      <!-- <div class="text-center mb-4">
+        <h2 class="text-lg font-bold text-gray-800 dark:text-white">Akses Cepat</h2>
+        <p class="text-sm text-gray-600 dark:text-gray-300">Layanan dan informasi penting</p>
+      </div> -->
+
+      <!-- Compact Icon Controls -->
+      <div class="flex items-center justify-center space-x-3">
+        <!-- Language Selector -->
+        <div
+          class="w-12 h-12 bg-white dark:bg-gray-700 rounded-xl shadow-md border border-gray-200 dark:border-gray-600 flex items-center justify-center hover:shadow-lg transition-all duration-200"
+        >
+          <LanguageSelector instanceId="mobile" />
+        </div>
+
+        <!-- Dark Mode Toggle -->
+        <div
+          class="w-12 h-12 bg-white dark:bg-gray-700 rounded-xl shadow-md border border-gray-200 dark:border-gray-600 flex items-center justify-center hover:shadow-lg transition-all duration-200"
+        >
+          <DarkModeToggle instanceId="mobile" />
+        </div>
+
+        <!-- Call Center Icon -->
+        <button
+          id="call-center-toggle"
+          class="w-12 h-12 rounded-xl shadow-md flex items-center justify-center transition-all duration-200 hover:shadow-lg"
+          style="background-color: #1055C9;"
+          onmouseover="this.style.backgroundColor='#05339C'"
+          onmouseout="this.style.backgroundColor='#1055C9'"
+          title="Call Center"
+        >
+          <Phone class="w-5 h-5 text-white" />
+        </button>
+
+        <!-- Quick Access Icon -->
+        {
+          quickAccess && (
+            <button
+              id="quick-access-toggle"
+              class="w-12 h-12 rounded-xl shadow-md flex items-center justify-center transition-all duration-200 hover:shadow-lg"
+              style="background-color: #1055C9;"
+              onmouseover="this.style.backgroundColor='#05339C'"
+              onmouseout="this.style.backgroundColor='#1055C9'"
+              title="Quick Access"
+            >
+              <BookOpen class="w-5 h-5 text-white" />
+            </button>
+          )
+        }
+      </div>
+
+      <!-- Call Center Content (Hidden by default) -->
+      <div id="call-center-content" class="hidden mt-6">
+        <div
+          class="rounded-xl p-4 border"
+          style="background-color: #f8e6ea; border-color: #1055C9;"
+        >
+          <h3
+            class="text-sm font-semibold mb-3 flex items-center"
+            style="color: #1055C9;"
+          >
+            <Phone class="w-4 h-4 mr-2" style="color: #1055C9;" />
+            Hubungi Kami
+          </h3>
+          <div class="space-y-3">
+            {
+              websiteInfo.phone &&
+                websiteInfo.phone.split(",").map((phone: string) => (
+                  <a
+                    href={`https://wa.me/${phone.replace(/^0/, "62").replace(/-/g, "")}`}
+                    class="flex items-center justify-between bg-white dark:bg-gray-800 p-3 rounded-lg border transition-colors group"
+                    style="border-color: #1055C9;"
+                  >
+                    <div class="flex items-center">
+                      <div
+                        class="w-8 h-8 rounded-full flex items-center justify-center mr-3"
+                        style="background-color: #f8e6ea;"
+                      >
+                        <Phone class="w-4 h-4" style="color: #1055C9;" />
+                      </div>
+                      <span class="text-sm font-medium text-gray-800 dark:text-gray-200">
+                        {phone}
+                      </span>
+                    </div>
+                  </a>
+                ))
+            }
+          </div>
+        </div>
+      </div>
+
+      {/* Quick Access Content (Hidden by default) */}
+      {
+        quickAccess && (
+          <div id="quick-access-content" class="hidden mt-6">
+            <div
+              class="rounded-xl p-4 border shadow-lg"
+              style="background: linear-gradient(135deg, #f8e6ea 0%, #f3e6f8 100%); border-color: #1055C9;"
+            >
+              <h3
+                class="text-sm font-semibold mb-4 flex items-center"
+                style="color: #1055C9;"
+              >
+                <BookOpen class="w-4 h-4 mr-2" style="color: #1055C9;" />
+                Akses Cepat
+              </h3>
+              <div class="grid grid-cols-2 gap-3">
+                {allQuickLinks.map((link) => (
+                  <a
+                    href={link.url}
+                    class="bg-white dark:bg-gray-700 p-4 rounded-xl border transition-all duration-200 group text-center shadow-sm hover:shadow-md transform hover:-translate-y-1"
+                    style="border-color: #1055C9;"
+                  >
+                    <div class="text-xs font-bold text-gray-700 dark:text-gray-200 group-hover:text-[#1055C9] transition-colors uppercase tracking-wide">
+                      {link.name}
+                    </div>
+                  </a>
+                ))}
+              </div>
+            </div>
+          </div>
+        )
+      }
+    </div>
+  </div>
+</div>
+
+<!-- Desktop Topbar -->
+<div class="hidden md:block">
+  <!-- Call Center Section -->
+  <div
+    class={`	bg-white dark:bg-gray-800 border-b border-gray-200 dark:border-gray-700 shadow-sm ${totalPhone > 1 ? "py-4" : "py-1"}`}
+  >
+    <div class="max-w-screen-xl mx-auto px-4">
+      <div class="flex flex-col lg:flex-row items-center justify-between">
+        <div class="flex items-center mb-2 md:mb-0 font-rubik">
+          {
+            totalPhone > 1 ? (
+              <>
+                <div
+                  class="hidden lg:flex items-center px-4 py-2 rounded-xl mr-6 w-[180px] shadow-md"
+                  style="background-color: #1055C9;"
+                >
+                  <Phone class="w-4 h-4 mr-2 text-white" />
+                  <span class="text-sm font-semibold text-white">
+                    Call Center
+                  </span>
+                </div>
+                <div class="flex flex-wrap items-center gap-2 text-sm">
+                  {websiteInfo.phone
+                    .split(",")
+                    .map((phone: string, index: number) => (
+                      <>
+                        <a
+                          href={`https://wa.me/${phone.replace(/^0/, "62").replace(/-/g, "")}`}
+                          class="text-gray-700 dark:text-gray-300 hover:text-blue-600 dark:hover:text-blue-400 transition-colors font-medium hover:bg-blue-50 dark:hover:bg-blue-900/30 px-2 py-1 rounded-lg"
+                        >
+                          {phone}
+                        </a>
+                        {index < totalPhone - 1 && (
+                          <span class="text-gray-300 dark:text-gray-600">
+                            |
+                          </span>
+                        )}
+                      </>
+                    ))}
+                </div>
+              </>
+            ) : (
+              <div class="flex items-center text-sm">
+                <Phone class="w-4 h-4 mr-2 text-blue-600 dark:text-blue-400" />
+                <span class="font-medium mr-2">Call Center : </span>
+                {websiteInfo.phone && (
+                  <a
+                    href={`https://wa.me/${websiteInfo.phone.split(",")[0].replace(/^0/, "62").replace(/-/g, "")}`}
+                    class="text-gray-700 dark:text-gray-300 hover:text-blue-600 dark:hover:text-blue-400 transition-colors font-medium"
+                  >
+                    {websiteInfo.phone.split(",")[0]}
+                  </a>
+                )}
+              </div>
+            )
+          }
+        </div>
+        <div class="flex items-center space-x-2">
+          <div
+            class="hidden md:flex items-center text-sm text-gray-600 dark:text-gray-300"
+          >
+            <CalendarDays class="w-4 h-4 mr-2 text-green-500" />
+            <span id="current-date-desktop" class="font-medium"></span>
+          </div>
+          <div class="flex items-center space-x-2">
+            <LanguageSelector instanceId="desktop" />
+            <DarkModeToggle instanceId="desktop" />
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Quick Links Section -->
+  {
+    quickAccess && (
+      <div class="bg-gradient-to-r from-[#1055C9] to-[#05339C] dark:from-[#0d4299] dark:to-[#042a7a] border-b border-gray-600/50 py-4 shadow-sm">
+        <div class="max-w-screen-xl mx-auto px-4">
+          <div class="flex flex-col lg:flex-row items-center justify-between">
+            {/* Navigation Links with better organization */}
+            <div class="flex flex-wrap gap-1 text-sm w-full lg:justify-start justify-center">
+              {Object.entries(quickAccessLinks).map(
+                ([category, links], index) => (
+                  <>
+                    <div class="flex items-center space-x-1">
+                      {links.map((link) => (
+                        <a
+                          href={link.url}
+                          class="text-white hover:text-blue-100 transition-colors duration-200 hover:bg-white/15 px-3 py-1 rounded-lg"
+                        >
+                          {link.name}
+                        </a>
+                      ))}
+                    </div>
+                    {index < Object.keys(quickAccessLinks).length - 1 && (
+                      <div class="hidden lg:block w-px h-6 bg-white/30 my-auto" />
+                    )}
+                  </>
+                ),
+              )}
+            </div>
+          </div>
+        </div>
+      </div>
+    )
+  }
+</div>
+
+<script>
+  // Mobile toggle functionality with exclusive opening
+  document.addEventListener("DOMContentLoaded", function () {
+    // Get all elements
+    const callCenterToggle = document.getElementById("call-center-toggle");
+    const callCenterContent = document.getElementById("call-center-content");
+
+    const quickAccessToggle = document.getElementById("quick-access-toggle");
+    const quickAccessContent = document.getElementById("quick-access-content");
+
+    // Function to close all content
+    function closeAllContent() {
+      if (callCenterContent) {
+        callCenterContent.classList.add("hidden");
+      }
+      if (quickAccessContent) {
+        quickAccessContent.classList.add("hidden");
+      }
+    }
+
+    // Call Center Toggle
+    if (callCenterToggle && callCenterContent) {
+      callCenterToggle.addEventListener("click", function () {
+        const isHidden = callCenterContent.classList.contains("hidden");
+
+        if (isHidden) {
+          // Close other content first
+          closeAllContent();
+          // Open this content
+          callCenterContent.classList.remove("hidden");
+        } else {
+          // Close this content
+          callCenterContent.classList.add("hidden");
+        }
+      });
+    }
+
+    // Quick Access Toggle
+    if (quickAccessToggle && quickAccessContent) {
+      quickAccessToggle.addEventListener("click", function () {
+        const isHidden = quickAccessContent.classList.contains("hidden");
+
+        if (isHidden) {
+          // Close other content first
+          closeAllContent();
+          // Open this content
+          quickAccessContent.classList.remove("hidden");
+        } else {
+          // Close this content
+          quickAccessContent.classList.add("hidden");
+        }
+      });
+    }
+
+    // Set current date for desktop
+    const currentDate = new Date();
+    const options: Intl.DateTimeFormatOptions = {
+      day: "numeric",
+      month: "long",
+      year: "numeric",
+    };
+    const formattedDate = currentDate
+      .toLocaleDateString("id-ID", options)
+      .toUpperCase();
+    const dateElement = document.getElementById("current-date-desktop");
+    if (dateElement) {
+      dateElement.textContent = formattedDate;
+    }
+  });
+</script>

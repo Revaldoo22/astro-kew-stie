@@ -1,0 +1,99 @@
+---
+import "../styles/global.css";
+import Topbar from "./Topbar.astro";
+import Header from "./Header.astro";
+import Navigation from "./Navigation.astro";
+import Sidebar from "./Sidebar.astro";
+import Footer from "./Footer.astro";
+import { websiteInfo } from "@globals/info";
+
+const { metaTags } = Astro.props;
+
+const titlePage = metaTags.title ? `${metaTags.title} - ${websiteInfo.name}` : websiteInfo.name;
+const descriptionPage = metaTags.description ? metaTags.description : websiteInfo.description;
+const keywordsPage = metaTags.keywords ? metaTags.keywords : websiteInfo.keywords;
+const imagePage = metaTags.image ? metaTags.image : websiteInfo.logoLight;
+
+console.log('metaTags:', metaTags);
+console.log('titlePage:', titlePage);
+console.log('descriptionPage:', descriptionPage);
+console.log('keywordsPage:', keywordsPage);
+console.log('imagePage:', imagePage);
+
+---
+<!doctype html>
+<html lang="en">
+	<head>
+		<meta charset="UTF-8" />
+		<meta http-equiv="x-ua-compatible" content="ie=edge">
+		<meta name="viewport" content="width=device-width, initial-scale=1">
+		<link rel="icon" type="image/png" href="/favicon.svg" />
+		<meta name="generator" content={Astro.generator} />
+		
+		<title>{titlePage}</title>
+		<meta name="description" content={descriptionPage || ''} />
+		<meta name="keywords" content={keywordsPage || ''} />	
+
+		<!-- For Facebook -->
+		<meta property="og:title" content={titlePage || ''} />
+		<meta property="og:type" content="article" />
+		<meta property="og:description" content={descriptionPage || ''} />
+		<meta property="og:image" content={imagePage || ''} />
+		<meta name="format-detection" content="telephone=no">
+		<!-- For Twitter -->
+		<meta name="Twitter:card" content="summary" />
+		<meta name="Twitter:title" content={titlePage || ''} />
+		<meta name="Twitter:description" content={descriptionPage || ''} />
+		<meta name="Twitter:image" content={imagePage || ''} />
+
+		<script src="https://cdn.tailwindcss.com"></script>
+		<script src="https://unpkg.com/flowbite@1.8.1/dist/flowbite.min.js"></script>
+		<script is:inline>
+			// On page load or when changing themes, best to add inline in `head` to avoid FOUC
+			(function() {
+				try {
+					const theme = localStorage.getItem('color-theme');
+					const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+					
+					// console.log('Theme from localStorage:', theme);
+					// console.log('Prefers dark:', prefersDark);
+					
+					if (theme === 'dark' || (!theme && prefersDark)) {
+						document.documentElement.classList.add('dark');
+						document.documentElement.setAttribute('data-theme', 'dark');
+						// console.log('Applied dark theme');
+					} else {
+						document.documentElement.classList.remove('dark');
+						document.documentElement.setAttribute('data-theme', 'light');
+						// console.log('Applied light theme');
+					}
+					
+					// Store current theme state globally for other scripts
+					window.currentTheme = document.documentElement.classList.contains('dark') ? 'dark' : 'light';
+				} catch (error) {
+					console.error('Error initializing theme:', error);
+				}
+			})();
+		</script>
+	</head>
+	<body class="relative font-source-sans-pro bg-white dark:bg-gray-900 text-gray-900 dark:text-white transition-colors duration-200">
+		<Topbar quickAccess={true} websiteInfo={websiteInfo} />
+		<Header websiteInfo={websiteInfo} />
+		<Navigation websiteInfo={websiteInfo} />
+		<!-- <Sidebar websiteInfo={websiteInfo} /> -->
+		<main class="relative z-30">
+			<slot />
+		</main>
+		<Footer websiteInfo={websiteInfo} />
+	</body>
+</html>
+
+
+<style>
+	html,
+	body {
+		margin: 0;
+		width: 100%;
+		height: 100%;
+	}
+</style>

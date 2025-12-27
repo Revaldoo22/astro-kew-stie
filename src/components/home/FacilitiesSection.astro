@@ -1,0 +1,102 @@
+---
+// Facilities Section Component
+const facilities = [
+    {
+        title: "Webinar Internasional",
+        description: "Webinar rutin skala internasional untuk memperluas wawasan global",
+    },
+    {
+        title: "Webinar Nasional",
+        description: "Webinar rutin skala nasional dengan pembicara terkemuka",
+    },
+    {
+        title: "Webinar Kewirausahaan",
+        description: "Program kewirausahaan untuk mengembangkan jiwa bisnis",
+    },
+    {
+        title: "Job Placement & Job Fair",
+        description: "Layanan penempatan kerja sebelum lulus dan job fair rutin",
+    },
+    {
+        title: "Keanggotaan TopLoker.com VVIP",
+        description: "Akses eksklusif VVIP gratis selamanya ke platform pencarian kerja",
+    },
+    {
+        title: "Konsultasi Psikologi",
+        description: "Layanan konseling untuk mendukung mahasiswa kuliah sambil bekerja",
+    },
+];
+---
+
+<section class="py-16 bg-white dark:bg-gray-800">
+    <div class="max-w-screen-xl mx-auto px-4">
+        <!-- Header -->
+        <div class="text-center mb-12">
+            <div class="inline-block mb-4">
+                <span class="inline-flex items-center px-4 py-2 rounded-full text-sm font-bold bg-gradient-to-r from-[#1055C9] to-[#05339C] text-white">
+                    Fasilitas & Layanan
+                </span>
+            </div>
+            <h2 class="text-3xl md:text-4xl lg:text-5xl font-bold mb-4 text-gray-900 dark:text-white">
+                Fasilitas Penunjang <span class="bg-gradient-to-r from-[#1055C9] to-[#05339C] bg-clip-text text-transparent">Karir & Usaha</span>
+            </h2>
+            <p class="text-lg md:text-xl text-gray-600 dark:text-gray-400 max-w-3xl mx-auto">
+                Berbagai fasilitas dan layanan untuk mendukung kesuksesan Anda di dunia kerja dan bisnis
+            </p>
+        </div>
+
+        <!-- Facilities Grid -->
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-12">
+            {facilities.map((facility) => (
+                <div class="group bg-white dark:bg-gray-800 rounded-2xl p-6 border border-gray-200 dark:border-gray-700 hover:border-[#1055C9] dark:hover:border-[#1055C9] transition-all duration-300 hover:-translate-y-1">
+                    <!-- Content -->
+                    <h3 class="text-lg font-bold mb-2 text-gray-900 dark:text-white group-hover:text-[#1055C9] dark:group-hover:text-[#1055C9] transition-colors">
+                        {facility.title}
+                    </h3>
+                    <p class="text-gray-600 dark:text-gray-400 text-sm leading-relaxed">
+                        {facility.description}
+                    </p>
+                </div>
+            ))}
+        </div>
+
+        <!-- TopLoker Highlight -->
+        <div class="bg-gradient-to-br from-blue-50 to-indigo-50 dark:from-gray-900 dark:to-gray-800 rounded-2xl p-8 md:p-10 border-2 border-[#1055C9] dark:border-[#1055C9] relative overflow-hidden">
+            <!-- Decorative elements -->
+            <div class="absolute top-0 right-0 w-64 h-64 bg-gradient-to-br from-[#1055C9]/10 to-[#05339C]/10 rounded-full blur-3xl -mr-32 -mt-32"></div>
+            <div class="absolute bottom-0 left-0 w-64 h-64 bg-gradient-to-tr from-[#1055C9]/10 to-[#05339C]/10 rounded-full blur-3xl -ml-32 -mb-32"></div>
+            
+            <div class="relative">
+                <div class="flex items-start mb-4">
+                    <!-- <div class="bg-gradient-to-br from-[#1055C9] to-[#05339C] w-14 h-14 rounded-xl flex items-center justify-center mr-4 flex-shrink-0">
+                        <svg class="w-7 h-7 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 3v4M3 5h4M6 17v4m-2-2h4m5-16l2.286 6.857L21 12l-5.714 2.143L13 21l-2.286-6.857L5 12l5.714-2.143L13 3z"></path>
+                        </svg>
+                    </div> -->
+                    <div>
+                        <h3 class="text-2xl md:text-3xl font-bold mb-2 text-gray-900 dark:text-white">
+                            Keanggotaan Eksklusif VVIP di TopLoker.com
+                        </h3>
+                        <div class="inline-flex items-center px-3 py-1 rounded-full bg-gradient-to-r from-[#1055C9] to-[#05339C] text-white text-sm font-semibold mb-3">
+                            <svg class="w-4 h-4 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4M7.835 4.697a3.42 3.42 0 001.946-.806 3.42 3.42 0 014.438 0 3.42 3.42 0 001.946.806 3.42 3.42 0 013.138 3.138 3.42 3.42 0 00.806 1.946 3.42 3.42 0 010 4.438 3.42 3.42 0 00-.806 1.946 3.42 3.42 0 01-3.138 3.138 3.42 3.42 0 00-1.946.806 3.42 3.42 0 01-4.438 0 3.42 3.42 0 00-1.946-.806 3.42 3.42 0 01-3.138-3.138 3.42 3.42 0 00-.806-1.946 3.42 3.42 0 010-4.438 3.42 3.42 0 00.806-1.946 3.42 3.42 0 013.138-3.138z"></path>
+                            </svg>
+                            Juara 1 StartUp4Industri 2022
+                        </div>
+                    </div>
+                </div>
+                
+                <p class="text-gray-700 dark:text-gray-300 mb-6 leading-relaxed">
+                    Mahasiswa STEKOM mendapatkan keanggotaan eksklusif <strong class="text-[#1055C9]">VVIP di TopLoker.com</strong> secara <strong>gratis selamanya</strong>, membantu meningkatkan peluang karier mereka. Platform pencarian kerja yang mendapat penghargaan dari Kementrian Perindustrian.
+                </p>
+                
+                <div class="inline-flex items-center bg-gradient-to-r from-[#1055C9] to-[#05339C] text-white px-8 py-4 rounded-xl font-bold text-lg shadow-lg hover:shadow-xl transition-shadow">
+                    <svg class="w-6 h-6 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4"></path>
+                    </svg>
+                    100.000++ Perusahaan Menanti
+                </div>
+            </div>
+        </div>
+    </div>
+</section>

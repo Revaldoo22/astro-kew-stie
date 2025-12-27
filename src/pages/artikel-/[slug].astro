@@ -1,0 +1,17 @@
+---
+import SlugContent from "@components/content/SlugContent.astro";
+
+const titlePost = "Artikel";
+const linkPost = "artikel";
+const groupPost = "article";
+const enPost = 0;   
+const slugContent = Astro.params.slug || "";
+
+---
+<SlugContent 
+    titlePost={titlePost} 
+    linkPost={linkPost} 
+    groupPost={groupPost} 
+    enPost={enPost} 
+    slugContent={slugContent} 
+/>

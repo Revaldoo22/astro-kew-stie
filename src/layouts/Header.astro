@@ -1,0 +1,90 @@
+---
+const { websiteInfo } = Astro.props;
+---
+
+<div
+  class="bg-gradient-to-r from-white via-gray-50 to-white dark:from-gray-800 dark:via-gray-900 dark:to-gray-800 border-b border-gray-200 dark:border-gray-700 py-6 shadow-sm lg:hidden"
+>
+  <div class="max-w-screen-xl mx-auto px-4">
+    <div
+      class="flex flex-col md:flex-row justify-between items-center space-y-4 md:space-y-0"
+    >
+      <!-- Left side - Enhanced Logo -->
+      <div class="flex items-center space-x-6">
+        {
+          !websiteInfo.logoLight ? (
+            <h1 class="text-2xl font-bold text-gray-900 block dark:hidden">
+              {websiteInfo.name}
+            </h1>
+          ) : (
+            <div class="flex items-center gap-3">
+              <img
+                src={websiteInfo.logoLight}
+                alt={websiteInfo.name || "Logo"}
+                class="max-h-[30px] block dark:hidden"
+              />
+              <h1 class="text-xl font-bold whitespace-nowrap block dark:hidden">
+                <span class="bg-gradient-to-r from-[#1055C9] to-[#05339C] bg-clip-text text-transparent">
+                  Kuliah Kelas Karyawan
+                </span>
+              </h1>
+            </div>
+          )
+        }
+        {
+          !websiteInfo.logoDark ? (
+            <h1 class="text-2xl font-bold text-white hidden dark:block">
+              {websiteInfo.name}
+            </h1>
+          ) : (
+            <div class="flex items-center gap-3 hidden dark:flex">
+              <img
+                src={websiteInfo.logoDark}
+                alt={websiteInfo.name || "Logo"}
+                class="max-h-[30px]"
+              />
+              <h1 class="text-xl font-bold whitespace-nowrap text-white">
+                Kuliah Kelas Karyawan
+              </h1>
+            </div>
+          )
+        }
+      </div>
+
+      <!-- Right side - Enhanced Search and Actions -->
+      <div class="flex items-center space-x-4 w-full md:w-auto">
+        <!-- Enhanced Search Bar -->
+        <div class="relative w-full md:w-80">
+          <div
+            class="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none"
+          >
+            <svg
+              class="w-5 h-5 text-gray-400 dark:text-gray-500"
+              fill="none"
+              stroke="currentColor"
+              viewBox="0 0 24 24"
+            >
+              <path
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                stroke-width="2"
+                d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path>
+            </svg>
+          </div>
+          <input
+            type="text"
+            placeholder="Cari informasi, layanan, atau bantuan..."
+            class="w-full pl-12 pr-20 py-3 border-2 border-gray-200 dark:border-gray-600 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200 bg-white dark:bg-gray-800 text-gray-900 dark:text-white placeholder-gray-500 dark:placeholder-gray-400 shadow-sm hover:shadow-md"
+          />
+          <div class="absolute inset-y-0 right-0 pr-3 flex items-center">
+            <button
+              class="bg-[#1055C9] hover:bg-[#05339C] text-white px-4 py-1.5 rounded-lg text-sm font-medium transition-colors"
+            >
+              Cari
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

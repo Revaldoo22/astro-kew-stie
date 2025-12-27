@@ -1,0 +1,25 @@
+{
+  "compilerOptions": {
+      "target": "ESNext",
+      "module": "ESNext",
+      "moduleResolution": "bundler",
+      "baseUrl": "./src",
+      "paths": {
+        "@/types/*": ["types/*"],
+        "@/schemas/*": ["schemas/*"],
+        "@/utils/*": ["_utils/*"],
+        "@/services/*": ["services/*"],
+        "@components/*": ["components/*"],
+        "@layouts/*": ["layouts/*"],
+        "@globals/*": ["_globals/*"]
+      },
+      "strict": true,
+      "noUnusedLocals": false,
+      "noUnusedParameters": false,
+      "noEmitOnError": false,
+      "skipLibCheck": true,
+      "esModuleInterop": true,
+  },
+  "include": ["src/**/*"],
+  "exclude": ["node_modules"]
+}

@@ -1,0 +1,522 @@
+---
+import Layout from "@layouts/Layout.astro";
+import Breadcrumb from "@components/Breadcrumb.astro";
+import Accordion from "@components/ui/Accordion.astro";
+import PageHeader from "@components/PageHeader.astro";
+
+const breadcrumbs = [
+    { label: "Home", href: "/" },
+    { label: "Biaya Kelas Karyawan", href: "/biaya-kelas-karyawan" },
+];
+
+const metaTags = {
+    title: "Biaya Kelas Karyawan",
+    description:
+        "Informasi lengkap biaya kuliah kelas karyawan dengan berbagai program studi dan fasilitas terbaik",
+    keywords:
+        "biaya kuliah karyawan, biaya kelas karyawan, kuliah sambil kerja",
+    image: "",
+};
+
+// Biaya Awal
+const initialFees = [
+    { name: "Daftar", amount: "Rp 150.000", note: "1x sampai LULUS" },
+    { name: "SPS", amount: "Rp 242.000", note: "1x sampai LULUS" },
+    {
+        name: "JAS, KTA, NIM & KTM Digital",
+        amount: "Rp 398.000",
+        note: "1x sampai LULUS",
+    },
+    { name: "URPS", amount: "Rp 198.000", note: "untuk 6 bulan kedepan" },
+];
+
+// Data Pilihan Biaya Kuliah
+const programs = [
+    {
+        name: "Pilihan A",
+        spi: "Rp 6.998.000",
+        monthly: "Rp 498.000",
+        period: "per bulan",
+        popular: false,
+        badge: "Hemat Bulanan",
+        features: [
+            "SPI: Rp 6.998.000 (1x sampai lulus)",
+            "Cicilan: Rp 498.000/bulan",
+            "Bisa dicicil 6 bulan awal",
+            "Sudah termasuk SKS",
+            "Ujian UTS & UAS",
+            "Kuliah Sabtu & Minggu",
+        ],
+    },
+    {
+        name: "Pilihan B",
+        spi: "Rp 4.998.000",
+        monthly: "Rp 548.000",
+        period: "per bulan",
+        popular: true,
+        badge: "Paling Populer",
+        features: [
+            "SPI: Rp 4.998.000 (1x sampai lulus)",
+            "Cicilan: Rp 548.000/bulan",
+            "Bisa dicicil 6 bulan awal",
+            "Sudah termasuk SKS",
+            "Ujian UTS & UAS",
+            "Kuliah Sabtu & Minggu",
+        ],
+    },
+    {
+        name: "Pilihan C",
+        spi: "Rp 2.998.000",
+        monthly: "Rp 598.000",
+        period: "per bulan",
+        popular: false,
+        badge: "Seimbang",
+        features: [
+            "SPI: Rp 2.998.000 (1x sampai lulus)",
+            "Cicilan: Rp 598.000/bulan",
+            "Bisa dicicil 6 bulan awal",
+            "Sudah termasuk SKS",
+            "Ujian UTS & UAS",
+            "Kuliah Sabtu & Minggu",
+        ],
+    },
+    {
+        name: "Pilihan D",
+        spi: "Rp 1.498.000",
+        monthly: "Rp 648.000",
+        period: "per bulan",
+        popular: false,
+        badge: "Fleksibel",
+        features: [
+            "SPI: Rp 1.498.000 (1x sampai lulus)",
+            "Cicilan: Rp 648.000/bulan",
+            "Bisa dicicil 6 bulan awal",
+            "Sudah termasuk SKS",
+            "Ujian UTS & UAS",
+            "Kuliah Sabtu & Minggu",
+        ],
+    },
+    {
+        name: "Pilihan E",
+        spi: "GRATIS SPI",
+        monthly: "Rp 698.000",
+        period: "per bulan",
+        popular: false,
+        badge: "Tanpa SPI",
+        features: [
+            "SPI: GRATIS",
+            "Cicilan: Rp 698.000/bulan",
+            "Tanpa uang pangkal",
+            "Sudah termasuk SKS",
+            "Ujian UTS & UAS",
+            "Kuliah Sabtu & Minggu",
+        ],
+    },
+];
+
+// FAQ Data
+const faqItems = [
+    {
+        question: "Apa itu SPI dan UKPS?",
+        answer: "SPI (Sumbangan Pengembangan Sistem / Uang Pangkal / Uang Gedung) adalah biaya yang dibayar hanya 1x sampai lulus dan bisa dicicil 6 bulan awal. UKPS (Uang Kuliah per Semester) sudah termasuk SKS, Ujian UTS, & UAS.",
+    },
+    {
+        question: "Apakah biaya awal bisa dicicil?",
+        answer: "Ya, total biaya awal Rp 988.000 bisa dibayar dulu Rp 150.000 untuk pendaftaran, setelahnya dapat dicicil.",
+    },
+    {
+        question: "Bagaimana cara memilih pilihan biaya yang tepat?",
+        answer: "Pilihlah biaya kuliah sesuai keinginan dengan cicilan sesuai kondisi sekarang. Jika ingin cicilan bulanan lebih ringan, pilih opsi A. Jika ingin tanpa SPI, pilih opsi E.",
+    },
+    {
+        question: "Berapa lama durasi kuliah kelas karyawan?",
+        answer: "Program S1 Kelas Karyawan dapat diselesaikan dalam 4 tahun (8 semester) dengan jadwal kuliah di akhir pekan (Sabtu & Minggu).",
+    },
+    {
+        question: "Apakah ijazah kelas karyawan berbeda dengan kelas reguler?",
+        answer: "Tidak, ijazah yang diterima sama dengan kelas reguler dan diakui secara nasional oleh Kementerian Pendidikan dan Kebudayaan.",
+    },
+];
+---
+
+<Layout metaTags={metaTags}>
+    <div class="min-h-screen bg-gray-50 dark:bg-gray-900">
+        <!-- Breadcrumb Section -->
+        <div
+            class="bg-white dark:bg-gray-800 border-b border-gray-200 dark:border-gray-700"
+        >
+            <div class="max-w-screen-xl mx-auto px-4 py-4">
+                <Breadcrumb breadcrumbs={breadcrumbs} />
+            </div>
+        </div>
+
+        <!-- Main Content -->
+        <div class="max-w-screen-xl mx-auto px-4 py-12">
+            <PageHeader
+                badge="Informasi Biaya"
+                badgeIcon="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z"
+                title="Biaya"
+                titleGradient="Kelas Karyawan"
+                description="Investasi terbaik untuk masa depan karir Anda dengan biaya terjangkau dan sistem pembayaran yang fleksibel"
+            />
+
+            <div
+                class="bg-gradient-to-br from-[#1055C9] to-[#05339C] rounded-2xl shadow-2xl p-8 md:p-12 mb-16 text-white"
+            >
+                <div class="text-center mb-8">
+                    <h2 class="text-3xl md:text-4xl font-bold mb-3">
+                        Biaya Awal
+                    </h2>
+                    <p class="text-lg opacity-90">
+                        Untuk SEMUA JURUSAN DAN JALUR PENDAFTARAN
+                    </p>
+                    <p class="text-sm opacity-75 mt-2">
+                        (dibayar sekali saja diawal selama jadi mahasiswa)
+                    </p>
+                </div>
+
+                <div
+                    class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8"
+                >
+                    {
+                        initialFees.map((fee) => (
+                            <div class="bg-white/10 backdrop-blur-sm rounded-xl p-6 border border-white/20">
+                                <h4 class="font-semibold text-lg mb-2">
+                                    {fee.name}
+                                </h4>
+                                <p class="text-2xl font-bold mb-2">
+                                    {fee.amount}
+                                </p>
+                                <p class="text-sm opacity-75">{fee.note}</p>
+                            </div>
+                        ))
+                    }
+                </div>
+
+                <div
+                    class="bg-white/20 backdrop-blur-sm rounded-xl p-6 border border-white/30 text-center"
+                >
+                    <p class="text-xl font-semibold mb-2">
+                        Total Biaya Awal: <span class="text-3xl font-bold"
+                            >Rp 988.000</span
+                        >
+                    </p>
+                    <p class="text-sm opacity-90">
+                        Bisa bayar dulu Rp 150.000 pendaftaran, setelahnya dapat
+                        dicicil
+                    </p>
+                </div>
+            </div>
+
+            <div class="text-center mb-8">
+                <h2
+                    class="text-3xl md:text-4xl font-bold mb-4 text-gray-900 dark:text-white"
+                >
+                    Pilihan Biaya Kuliah
+                </h2>
+                <p class="text-lg text-gray-600 dark:text-gray-400">
+                    Semua Program Studi - Pilih sesuai kemampuan Anda
+                </p>
+            </div>
+
+            <div
+                class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-5 gap-6 mb-16"
+            >
+                {
+                    programs.map((program) => (
+                        <div
+                            class={`relative bg-white dark:bg-gray-800 rounded-2xl shadow-lg border-2 ${program.popular ? "border-[#1055C9] scale-105" : "border-gray-200 dark:border-gray-700"} overflow-hidden transition-all duration-300 hover:shadow-2xl hover:-translate-y-2`}
+                        >
+                            {program.popular && (
+                                <div class="absolute top-0 right-0 bg-[#1055C9] text-white px-4 py-1 text-sm font-semibold rounded-bl-lg z-10">
+                                    {program.badge}
+                                </div>
+                            )}
+                            {!program.popular && program.badge && (
+                                <div class="absolute top-0 right-0 bg-gray-600 dark:bg-gray-700 text-white px-4 py-1 text-sm font-semibold rounded-bl-lg z-10">
+                                    {program.badge}
+                                </div>
+                            )}
+
+                            <div class="p-6">
+                                <h3 class="text-2xl font-bold mb-4 text-gray-900 dark:text-white text-center">
+                                    {program.name}
+                                </h3>
+
+                                <div class="mb-4 text-center">
+                                    <p class="text-sm text-gray-600 dark:text-gray-400 mb-1">
+                                        SPI
+                                    </p>
+                                    <p class="text-2xl font-bold text-gray-900 dark:text-white">
+                                        {program.spi}
+                                    </p>
+                                    <p class="text-xs text-gray-500 dark:text-gray-500 mt-1">
+                                        1x sampai lulus
+                                    </p>
+                                </div>
+
+                                <div class="border-t border-gray-200 dark:border-gray-700 my-4" />
+
+                                <div class="mb-6 text-center">
+                                    <p class="text-sm text-gray-600 dark:text-gray-400 mb-1">
+                                        Cicilan Bulanan
+                                    </p>
+                                    <p class="text-3xl font-bold text-[#1055C9]">
+                                        {program.monthly}
+                                    </p>
+                                    <p class="text-sm text-gray-600 dark:text-gray-400 mt-1">
+                                        {program.period}
+                                    </p>
+                                </div>
+
+                                <ul class="space-y-2 mb-6">
+                                    {program.features.map((feature) => (
+                                        <li class="flex items-start text-sm">
+                                            <svg
+                                                class="w-4 h-4 text-green-500 mr-2 flex-shrink-0 mt-0.5"
+                                                fill="none"
+                                                stroke="currentColor"
+                                                viewBox="0 0 24 24"
+                                            >
+                                                <path
+                                                    stroke-linecap="round"
+                                                    stroke-linejoin="round"
+                                                    stroke-width="2"
+                                                    d="M5 13l4 4L19 7"
+                                                />
+                                            </svg>
+                                            <span class="text-gray-700 dark:text-gray-300">
+                                                {feature}
+                                            </span>
+                                        </li>
+                                    ))}
+                                </ul>
+
+                                <a
+                                    href="/hubungi-kami"
+                                    class={`block w-full text-center py-3 px-4 rounded-lg font-semibold transition-all duration-300 text-sm ${
+                                        program.popular
+                                            ? "bg-[#1055C9] hover:bg-[#05339C] text-white shadow-md hover:shadow-lg"
+                                            : "bg-gray-100 hover:bg-gray-200 dark:bg-gray-700 dark:hover:bg-gray-600 text-gray-900 dark:text-white"
+                                    }`}
+                                >
+                                    Pilih Paket
+                                </a>
+                            </div>
+                        </div>
+                    ))
+                }
+            </div>
+
+            <!-- Metode Pembayaran -->
+            <div class="max-w-4xl mx-auto mb-16">
+                <div
+                    class="bg-white dark:bg-gray-800 rounded-xl shadow-lg p-8 border border-gray-200 dark:border-gray-700"
+                >
+                    <h2
+                        class="text-2xl font-bold mb-6 text-gray-900 dark:text-white flex items-center justify-center"
+                    >
+                        <svg
+                            class="w-6 h-6 text-[#1055C9] mr-3"
+                            fill="none"
+                            stroke="currentColor"
+                            viewBox="0 0 24 24"
+                        >
+                            <path
+                                stroke-linecap="round"
+                                stroke-linejoin="round"
+                                stroke-width="2"
+                                d="M3 10h18M7 15h1m4 0h1m-7 4h12a3 3 0 003-3V8a3 3 0 00-3-3H6a3 3 0 00-3 3v8a3 3 0 003 3z"
+                            ></path>
+                        </svg>
+                        Metode Pembayaran
+                    </h2>
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                        <div class="flex items-start">
+                            <div
+                                class="flex-shrink-0 w-10 h-10 bg-[#1055C9]/10 rounded-full flex items-center justify-center mr-4"
+                            >
+                                <svg
+                                    class="w-5 h-5 text-[#1055C9]"
+                                    fill="none"
+                                    stroke="currentColor"
+                                    viewBox="0 0 24 24"
+                                >
+                                    <path
+                                        stroke-linecap="round"
+                                        stroke-linejoin="round"
+                                        stroke-width="2"
+                                        d="M5 13l4 4L19 7"></path>
+                                </svg>
+                            </div>
+                            <div>
+                                <h4
+                                    class="font-semibold text-gray-900 dark:text-white mb-1"
+                                >
+                                    Transfer Bank
+                                </h4>
+                                <p
+                                    class="text-sm text-gray-600 dark:text-gray-400"
+                                >
+                                    BCA, Mandiri, BNI, BRI
+                                </p>
+                            </div>
+                        </div>
+                        <div class="flex items-start">
+                            <div
+                                class="flex-shrink-0 w-10 h-10 bg-[#1055C9]/10 rounded-full flex items-center justify-center mr-4"
+                            >
+                                <svg
+                                    class="w-5 h-5 text-[#1055C9]"
+                                    fill="none"
+                                    stroke="currentColor"
+                                    viewBox="0 0 24 24"
+                                >
+                                    <path
+                                        stroke-linecap="round"
+                                        stroke-linejoin="round"
+                                        stroke-width="2"
+                                        d="M5 13l4 4L19 7"></path>
+                                </svg>
+                            </div>
+                            <div>
+                                <h4
+                                    class="font-semibold text-gray-900 dark:text-white mb-1"
+                                >
+                                    Cicilan
+                                </h4>
+                                <p
+                                    class="text-sm text-gray-600 dark:text-gray-400"
+                                >
+                                    SPI bisa dicicil 6 bulan awal
+                                </p>
+                            </div>
+                        </div>
+                        <div class="flex items-start">
+                            <div
+                                class="flex-shrink-0 w-10 h-10 bg-[#1055C9]/10 rounded-full flex items-center justify-center mr-4"
+                            >
+                                <svg
+                                    class="w-5 h-5 text-[#1055C9]"
+                                    fill="none"
+                                    stroke="currentColor"
+                                    viewBox="0 0 24 24"
+                                >
+                                    <path
+                                        stroke-linecap="round"
+                                        stroke-linejoin="round"
+                                        stroke-width="2"
+                                        d="M5 13l4 4L19 7"></path>
+                                </svg>
+                            </div>
+                            <div>
+                                <h4
+                                    class="font-semibold text-gray-900 dark:text-white mb-1"
+                                >
+                                    Virtual Account
+                                </h4>
+                                <p
+                                    class="text-sm text-gray-600 dark:text-gray-400"
+                                >
+                                    Pembayaran otomatis via VA
+                                </p>
+                            </div>
+                        </div>
+                        <div class="flex items-start">
+                            <div
+                                class="flex-shrink-0 w-10 h-10 bg-[#1055C9]/10 rounded-full flex items-center justify-center mr-4"
+                            >
+                                <svg
+                                    class="w-5 h-5 text-[#1055C9]"
+                                    fill="none"
+                                    stroke="currentColor"
+                                    viewBox="0 0 24 24"
+                                >
+                                    <path
+                                        stroke-linecap="round"
+                                        stroke-linejoin="round"
+                                        stroke-width="2"
+                                        d="M5 13l4 4L19 7"></path>
+                                </svg>
+                            </div>
+                            <div>
+                                <h4
+                                    class="font-semibold text-gray-900 dark:text-white mb-1"
+                                >
+                                    Pembayaran Langsung
+                                </h4>
+                                <p
+                                    class="text-sm text-gray-600 dark:text-gray-400"
+                                >
+                                    Tunai di kantor kampus
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- FAQ Section -->
+            <div class="mb-16">
+                <h2
+                    class="text-3xl font-bold mb-8 text-center text-gray-900 dark:text-white"
+                >
+                    Pertanyaan yang Sering Diajukan
+                </h2>
+                <div class="max-w-3xl mx-auto">
+                    <Accordion items={faqItems} />
+                </div>
+            </div>
+
+            <!-- CTA Section -->
+            <div
+                class="bg-gradient-to-r from-[#1055C9] to-[#05339C] rounded-2xl shadow-2xl p-12 text-center text-white"
+            >
+                <h2 class="text-3xl md:text-4xl font-bold mb-4">
+                    Siap Memulai Perjalanan Pendidikan Anda?
+                </h2>
+                <p class="text-lg mb-8 opacity-90 max-w-2xl mx-auto">
+                    Jangan tunda lagi! Hubungi kami sekarang untuk mendapatkan
+                    informasi lebih lanjut dan konsultasi gratis.
+                </p>
+                <div class="flex flex-col sm:flex-row gap-4 justify-center">
+                    <a
+                        href="/hubungi-kami"
+                        class="inline-flex items-center justify-center bg-white text-[#1055C9] hover:bg-gray-100 px-8 py-4 rounded-lg font-semibold transition-all duration-300 shadow-lg hover:shadow-xl"
+                    >
+                        <svg
+                            class="w-5 h-5 mr-2"
+                            fill="none"
+                            stroke="currentColor"
+                            viewBox="0 0 24 24"
+                        >
+                            <path
+                                stroke-linecap="round"
+                                stroke-linejoin="round"
+                                stroke-width="2"
+                                d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z"
+                            ></path>
+                        </svg>
+                        Hubungi Kami
+                    </a>
+                    <a
+                        href="https://wa.me/6281234567890"
+                        target="_blank"
+                        class="inline-flex items-center justify-center bg-transparent border-2 border-white text-white hover:bg-white hover:text-[#1055C9] px-8 py-4 rounded-lg font-semibold transition-all duration-300"
+                    >
+                        <svg
+                            class="w-5 h-5 mr-2"
+                            fill="currentColor"
+                            viewBox="0 0 24 24"
+                        >
+                            <path
+                                d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413Z"
+                            ></path>
+                        </svg>
+                        Chat WhatsApp
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+</Layout>
