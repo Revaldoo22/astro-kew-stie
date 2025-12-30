@@ -43,8 +43,6 @@ const brochureLink = websiteInfo.brosur.pmb;
                     type="text"
                     id="fullName"
                     name="fullName"
-                    required
-                    minlength="5"
                     class="w-full px-3 py-2 text-sm border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-[#1055C9] focus:border-transparent dark:bg-gray-700 dark:text-white transition-all"
                     placeholder="Masukkan nama lengkap (min. 5 karakter)"
                 />
@@ -61,10 +59,9 @@ const brochureLink = websiteInfo.brosur.pmb;
                     Email <span class="text-red-500">*</span>
                 </label>
                 <input
-                    type="email"
+                    type="text"
                     id="email"
                     name="email"
-                    required
                     class="w-full px-3 py-2 text-sm border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-[#1055C9] focus:border-transparent dark:bg-gray-700 dark:text-white transition-all"
                     placeholder="email@example.com"
                 />
@@ -81,13 +78,11 @@ const brochureLink = websiteInfo.brosur.pmb;
                     No HP Anda <span class="text-red-500">*</span>
                 </label>
                 <input
-                    type="tel"
+                    type="text"
                     id="phone"
                     name="phone"
-                    required
-                    pattern="^(62|08)\d{10,}$"
                     class="w-full px-3 py-2 text-sm border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-[#1055C9] focus:border-transparent dark:bg-gray-700 dark:text-white transition-all"
-                    placeholder="62xxx atau 08xxx (min. 12 digit)"
+                    placeholder="Contoh: 6281234567890 atau 081234567890"
                 />
                 <p id="phone-error" class="hidden text-xs text-red-500 mt-1">
                 </p>
@@ -104,8 +99,6 @@ const brochureLink = websiteInfo.brosur.pmb;
                 <textarea
                     id="address"
                     name="address"
-                    required
-                    minlength="10"
                     rows="2"
                     class="w-full px-3 py-2 text-sm border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-[#1055C9] focus:border-transparent dark:bg-gray-700 dark:text-white transition-all resize-none"
                     placeholder="Masukkan alamat lengkap (min. 10 karakter)"
@@ -125,7 +118,6 @@ const brochureLink = websiteInfo.brosur.pmb;
                 <select
                     id="studyProgram"
                     name="studyProgram"
-                    required
                     class="w-full px-3 py-2 text-sm border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-[#1055C9] focus:border-transparent dark:bg-gray-700 dark:text-white transition-all appearance-none bg-no-repeat bg-right pr-8"
                     style="background-image: url('data:image/svg+xml;charset=UTF-8,%3csvg xmlns=%27http://www.w3.org/2000/svg%27 viewBox=%270 0 24 24%27 fill=%27none%27 stroke=%27currentColor%27 stroke-width=%272%27 stroke-linecap=%27round%27 stroke-linejoin=%27round%27%3e%3cpolyline points=%276 9 12 15 18 9%27%3e%3c/polyline%3e%3c/svg%3e'); background-size: 1.2em;"
                 >
@@ -136,6 +128,11 @@ const brochureLink = websiteInfo.brosur.pmb;
                         ))
                     }
                 </select>
+                <p
+                    id="studyProgram-error"
+                    class="hidden text-xs text-red-500 mt-1"
+                >
+                </p>
             </div>
 
             <!-- Minat Metode Perkuliahan -->
@@ -149,7 +146,6 @@ const brochureLink = websiteInfo.brosur.pmb;
                 <select
                     id="studyMethod"
                     name="studyMethod"
-                    required
                     class="w-full px-3 py-2 text-sm border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-[#1055C9] focus:border-transparent dark:bg-gray-700 dark:text-white transition-all appearance-none bg-no-repeat bg-right pr-8"
                     style="background-image: url('data:image/svg+xml;charset=UTF-8,%3csvg xmlns=%27http://www.w3.org/2000/svg%27 viewBox=%270 0 24 24%27 fill=%27none%27 stroke=%27currentColor%27 stroke-width=%272%27 stroke-linecap=%27round%27 stroke-linejoin=%27round%27%3e%3cpolyline points=%276 9 12 15 18 9%27%3e%3c/polyline%3e%3c/svg%3e'); background-size: 1.2em;"
                 >
@@ -160,6 +156,11 @@ const brochureLink = websiteInfo.brosur.pmb;
                         ))
                     }
                 </select>
+                <p
+                    id="studyMethod-error"
+                    class="hidden text-xs text-red-500 mt-1"
+                >
+                </p>
             </div>
 
             <!-- Submit Button -->
@@ -273,12 +274,20 @@ const brochureLink = websiteInfo.brosur.pmb;
         const addressInput = document.getElementById(
             "address",
         ) as HTMLTextAreaElement;
+        const studyProgramSelect = document.getElementById(
+            "studyProgram",
+        ) as HTMLSelectElement;
+        const studyMethodSelect = document.getElementById(
+            "studyMethod",
+        ) as HTMLSelectElement;
 
         // Get error message elements
         const fullNameError = document.getElementById("fullName-error");
         const emailError = document.getElementById("email-error");
         const phoneError = document.getElementById("phone-error");
         const addressError = document.getElementById("address-error");
+        const studyProgramError = document.getElementById("studyProgram-error");
+        const studyMethodError = document.getElementById("studyMethod-error");
 
         console.log("Script loaded, form:", form, "modal:", modal);
 
@@ -311,6 +320,58 @@ const brochureLink = websiteInfo.brosur.pmb;
             return true;
         }
 
+        function validateEmail(): boolean {
+            const value = emailInput.value.trim();
+
+            // Check if empty
+            if (value.length === 0) {
+                showError(emailInput, emailError, "Email harus diisi");
+                return false;
+            }
+
+            // Check email format
+            const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+            if (!emailRegex.test(value)) {
+                showError(emailInput, emailError, "Format email tidak valid");
+                return false;
+            }
+
+            clearError(emailInput, emailError);
+            return true;
+        }
+
+        function validateStudyProgram(): boolean {
+            const value = studyProgramSelect.value;
+
+            if (!value || value === "") {
+                showError(
+                    studyProgramSelect,
+                    studyProgramError,
+                    "Pilih jurusan terlebih dahulu",
+                );
+                return false;
+            }
+
+            clearError(studyProgramSelect, studyProgramError);
+            return true;
+        }
+
+        function validateStudyMethod(): boolean {
+            const value = studyMethodSelect.value;
+
+            if (!value || value === "") {
+                showError(
+                    studyMethodSelect,
+                    studyMethodError,
+                    "Pilih metode perkuliahan terlebih dahulu",
+                );
+                return false;
+            }
+
+            clearError(studyMethodSelect, studyMethodError);
+            return true;
+        }
+
         function validatePhone(): boolean {
             const value = phoneInput.value.trim();
 
@@ -334,12 +395,23 @@ const brochureLink = websiteInfo.brosur.pmb;
                 return false;
             }
 
-            // Check minimum length (12 digits)
-            if (value.length < 12) {
+            // Check minimum length based on prefix
+            // Format 62: min 11 digits (62 + 9 digits) - e.g., 62812345678
+            // Format 08: min 10 digits (08 + 8 digits) - e.g., 0812345678
+            if (value.startsWith("62") && value.length < 11) {
                 showError(
                     phoneInput,
                     phoneError,
-                    "Nomor HP harus minimal 12 digit",
+                    "Nomor HP dengan awalan 62 harus minimal 11 digit",
+                );
+                return false;
+            }
+
+            if (value.startsWith("08") && value.length < 10) {
+                showError(
+                    phoneInput,
+                    phoneError,
+                    "Nomor HP dengan awalan 08 harus minimal 10 digit",
                 );
                 return false;
             }
@@ -349,7 +421,7 @@ const brochureLink = websiteInfo.brosur.pmb;
         }
 
         function showError(
-            input: HTMLInputElement | HTMLTextAreaElement,
+            input: HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement,
             errorElement: HTMLElement | null,
             message: string,
         ) {
@@ -362,7 +434,7 @@ const brochureLink = websiteInfo.brosur.pmb;
         }
 
         function clearError(
-            input: HTMLInputElement | HTMLTextAreaElement,
+            input: HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement,
             errorElement: HTMLElement | null,
         ) {
             input.classList.remove("border-red-500", "dark:border-red-500");
@@ -388,11 +460,14 @@ const brochureLink = websiteInfo.brosur.pmb;
             phoneInput.addEventListener("input", () => {
                 // Clear error as user types if validation passes
                 const value = phoneInput.value.trim();
-                if (
-                    value.length >= 12 &&
+                const isValidFormat =
                     /^\d+$/.test(value) &&
-                    (value.startsWith("62") || value.startsWith("08"))
-                ) {
+                    (value.startsWith("62") || value.startsWith("08"));
+                const isValidLength =
+                    (value.startsWith("62") && value.length >= 11) ||
+                    (value.startsWith("08") && value.length >= 10);
+
+                if (isValidFormat && isValidLength) {
                     clearError(phoneInput, phoneError);
                 }
             });
@@ -407,6 +482,25 @@ const brochureLink = websiteInfo.brosur.pmb;
             });
         }
 
+        if (emailInput) {
+            emailInput.addEventListener("blur", validateEmail);
+            emailInput.addEventListener("input", () => {
+                const value = emailInput.value.trim();
+                const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+                if (value.length > 0 && emailRegex.test(value)) {
+                    clearError(emailInput, emailError);
+                }
+            });
+        }
+
+        if (studyProgramSelect) {
+            studyProgramSelect.addEventListener("change", validateStudyProgram);
+        }
+
+        if (studyMethodSelect) {
+            studyMethodSelect.addEventListener("change", validateStudyMethod);
+        }
+
         if (form && modal) {
             form.addEventListener("submit", async (e) => {
                 e.preventDefault();
@@ -414,10 +508,20 @@ const brochureLink = websiteInfo.brosur.pmb;
 
                 // Validate all fields
                 const isFullNameValid = validateFullName();
+                const isEmailValid = validateEmail();
                 const isPhoneValid = validatePhone();
                 const isAddressValid = validateAddress();
+                const isStudyProgramValid = validateStudyProgram();
+                const isStudyMethodValid = validateStudyMethod();
 
-                if (!isFullNameValid || !isPhoneValid || !isAddressValid) {
+                if (
+                    !isFullNameValid ||
+                    !isEmailValid ||
+                    !isPhoneValid ||
+                    !isAddressValid ||
+                    !isStudyProgramValid ||
+                    !isStudyMethodValid
+                ) {
                     console.log("Validation failed");
                     return;
                 }
@@ -440,6 +544,8 @@ const brochureLink = websiteInfo.brosur.pmb;
                 clearError(emailInput, emailError);
                 clearError(phoneInput, phoneError);
                 clearError(addressInput, addressError);
+                clearError(studyProgramSelect, studyProgramError);
+                clearError(studyMethodSelect, studyMethodError);
             });
         } else {
             console.error("Form or modal not found!", { form, modal });
