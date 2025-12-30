@@ -35,5 +35,10 @@ export const websiteInfo = {
         instagram: "#",
         twitter: "#",
         linkedin: "#"
+    },
+
+    //brossur
+    brosur: {
+        pmb: "https://drive.google.com/drive/folders/1yV9JBKU9qRZijStcP0TiElitVmz5Z6Sn",
     }
 };

@@ -2,23 +2,6 @@
 const { websiteInfo } = Astro.props;
 import { MapPin, Phone, Mail, Heart, ArrowUp } from "@lucide/astro";
 
-// Utility imports
-import { PostApi } from "@/services/index";
-import { hasValue } from "@/utils/helpers/dataHelpers";
-import type { CategoryType } from "@/types/index";
-
-// Initialize API service
-const postApiService = new PostApi();
-
-let isEmptyListCategoryPost = true;
-let listCategoryPost: CategoryType[] = [];
-
-const listCategoryPostData = await postApiService.fetchListCategories();
-
-if (hasValue(listCategoryPostData) && listCategoryPostData !== null) {
-  isEmptyListCategoryPost = false;
-  listCategoryPost = listCategoryPostData;
-}
 
 // Quick Links
 const quickLinks = [

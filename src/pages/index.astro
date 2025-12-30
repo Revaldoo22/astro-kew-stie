@@ -9,13 +9,6 @@ import ProgramStudiSection from "@components/home/ProgramStudiSection.astro";
 import FacilitiesSection from "@components/home/FacilitiesSection.astro";
 import CTASection from "@components/home/CTASection.astro";
 
-// Utility imports
-import { WebsiteApi } from "@/services/index";
-
-// Initialize API service
-const websiteApiService = new WebsiteApi();
-const websiteInfo = await websiteApiService.fetchInfo("0");
-
 const metaTags = {
     title: "Beranda",
     description:

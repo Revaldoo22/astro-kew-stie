@@ -1,11 +1,5 @@
 ---
 import Layout from "@layouts/Layout.astro";
-import DarkModeToggle from "@components/DarkModeToggle.astro";
-import { WebsiteApi } from '@/services/index';
-
-// Utility imports
-const websiteApiService = new WebsiteApi();
-const websiteInfo = await websiteApiService.fetchInfo("0");
 
 const metaTags = {
     title: 'Halaman Tidak Ditemukan - 404',
