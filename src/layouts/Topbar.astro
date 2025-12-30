@@ -10,7 +10,12 @@ import LanguageSelector from "@components/LanguageSelector.astro";
 const { quickAccess = false } = Astro.props;
 
 // Quick Access Links
-const quickAccessLinks = {
+interface QuickLink {
+  name: string;
+  url: string;
+}
+
+const quickAccessLinks: Record<string, QuickLink[]> = {
   academic: [
     { name: "PMB UNIVERSITAS STEKOM", url: "https://pmb.stekom.ac.id" },
   ],
@@ -26,7 +31,10 @@ const quickAccessLinks = {
 };
 
 // All quick access links in one array for mobile
-const allQuickLinks = [...quickAccessLinks.academic, ...quickAccessLinks.job];
+const allQuickLinks: QuickLink[] = [
+  ...quickAccessLinks.academic,
+  ...quickAccessLinks.job,
+];
 ---
 
 <!-- Mobile Topbar -->

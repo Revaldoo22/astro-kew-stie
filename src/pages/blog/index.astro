@@ -4,7 +4,6 @@ import Breadcrumb from "@components/Breadcrumb.astro";
 import { websiteInfo } from "@globals/info";
 import { BlogApi } from "@/services/blogApi";
 import PaginationContent from "@components/content/PaginationContent.astro";
-import BrochureRequestForm from "@components/blog/BrochureRequestForm.astro";
 
 const breadcrumbs = [
     { label: "Home", href: "/" },
@@ -289,10 +288,7 @@ console.log('paginationData', paginationData);
 
                     <!-- Right Column: Categories Sidebar -->
                     <aside class="lg:col-span-3">
-                        <div class="sticky top-4 space-y-6">
-                            <!-- Brochure Request Form -->
-                            <BrochureRequestForm />
-                            
+                        <div class="sticky top-4">
                             <!-- Categories Card -->
                             <div class="bg-white dark:bg-gray-800 rounded-xl shadow-md border border-gray-200 dark:border-gray-700 overflow-hidden">
                                 <!-- Header -->
