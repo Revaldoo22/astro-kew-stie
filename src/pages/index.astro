@@ -1,29 +1,29 @@
 ---
 import Layout from "@layouts/Layout.astro";
 
-// Import Home Components
-import HeroSection from "@components/home/HeroSection.astro";
-import AchievementsSection from "@components/home/AchievementsSection.astro";
-import FeaturesSection from "@components/home/FeaturesSection.astro";
+// Import New Promo-Focused Home Components
+import PromoHeroSection from "@components/home/PromoHeroSection.astro";
+import AboutSection from "@components/home/AboutSection.astro";
+import BiayaKuliahSection from "@components/home/BiayaKuliahSection.astro";
 import ProgramStudiSection from "@components/home/ProgramStudiSection.astro";
-import FacilitiesSection from "@components/home/FacilitiesSection.astro";
-import CTASection from "@components/home/CTASection.astro";
+import LokasiKampusSection from "@components/home/LokasiKampusSection.astro";
+import PromoTableSection from "@components/home/PromoTableSection.astro";
 
 const metaTags = {
-    title: "Beranda",
+    title: "Kuliah Kelas Karyawan - Daftar Hanya 150 Ribu | STEKOM",
     description:
-        "Kuliah Online Kelas Karyawan adalah perkuliahan yang dikhususkan untuk karyawan sibuk bekerja dan juga mereka yang ingin atau sedang mencari pekerjaan",
+        "PROMO TERBATAS! Daftar kuliah kelas karyawan hanya 150 ribu. Kuliah cepat lulus bisa tanpa skripsi. Gratis SPI 7 juta untuk jurusan pilihan. Kuliah sambil kerja dengan jadwal fleksibel.",
     keywords:
-        "Kuliah Sambil Kerja, Kelas Karyawan, Kuliah Online, Kuliah Full Online, Kuliah Sambil Kerja",
+        "Kuliah Sambil Kerja, Kelas Karyawan, Kuliah Online, Kuliah Full Online, Promo Kuliah, Daftar 150 Ribu, Gratis SPI, Kuliah Tanpa Skripsi",
     image: "",
 };
 ---
 
 <Layout metaTags={metaTags}>
-    <HeroSection />
-    <AchievementsSection />
-    <FeaturesSection />
+    <PromoHeroSection />
+    <AboutSection />
+    <BiayaKuliahSection />
     <ProgramStudiSection />
-    <FacilitiesSection />
-    <CTASection />
+    <LokasiKampusSection />
+    <PromoTableSection />
 </Layout>
