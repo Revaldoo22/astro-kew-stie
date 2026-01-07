@@ -9,9 +9,15 @@ import { websiteInfo } from "@globals/info";
 
 const { metaTags } = Astro.props;
 
-const titlePage = metaTags.title ? `${metaTags.title} - ${websiteInfo.name}` : websiteInfo.name;
-const descriptionPage = metaTags.description ? metaTags.description : websiteInfo.description;
-const keywordsPage = metaTags.keywords ? metaTags.keywords : websiteInfo.keywords;
+const titlePage = metaTags.title
+	? `${metaTags.title} - ${websiteInfo.name}`
+	: websiteInfo.name;
+const descriptionPage = metaTags.description
+	? metaTags.description
+	: websiteInfo.description;
+const keywordsPage = metaTags.keywords
+	? metaTags.keywords
+	: websiteInfo.keywords;
 const imagePage = metaTags.image ? metaTags.image : websiteInfo.logoLight;
 
 // console.log('metaTags:', metaTags);
@@ -19,64 +25,114 @@ const imagePage = metaTags.image ? metaTags.image : websiteInfo.logoLight;
 // console.log('descriptionPage:', descriptionPage);
 // console.log('keywordsPage:', keywordsPage);
 // console.log('imagePage:', imagePage);
-
 ---
+
 <!doctype html>
 <html lang="en">
 	<head>
 		<meta charset="UTF-8" />
-		<meta http-equiv="x-ua-compatible" content="ie=edge">
-		<meta name="viewport" content="width=device-width, initial-scale=1">
+		<meta http-equiv="x-ua-compatible" content="ie=edge" />
+		<meta name="viewport" content="width=device-width, initial-scale=1" />
 		<link rel="icon" type="image/png" href="/favicon.svg" />
 		<meta name="generator" content={Astro.generator} />
-		
+
 		<title>{titlePage}</title>
-		<meta name="description" content={descriptionPage || ''} />
-		<meta name="keywords" content={keywordsPage || ''} />	
+		<meta name="description" content={descriptionPage || ""} />
+		<meta name="keywords" content={keywordsPage || ""} />
 
 		<!-- For Facebook -->
-		<meta property="og:title" content={titlePage || ''} />
+		<meta property="og:title" content={titlePage || ""} />
 		<meta property="og:type" content="article" />
-		<meta property="og:description" content={descriptionPage || ''} />
-		<meta property="og:image" content={imagePage || ''} />
-		<meta name="format-detection" content="telephone=no">
+		<meta property="og:description" content={descriptionPage || ""} />
+		<meta property="og:image" content={imagePage || ""} />
+		<meta name="format-detection" content="telephone=no" />
 		<!-- For Twitter -->
 		<meta name="Twitter:card" content="summary" />
-		<meta name="Twitter:title" content={titlePage || ''} />
-		<meta name="Twitter:description" content={descriptionPage || ''} />
-		<meta name="Twitter:image" content={imagePage || ''} />
+		<meta name="Twitter:title" content={titlePage || ""} />
+		<meta name="Twitter:description" content={descriptionPage || ""} />
+		<meta name="Twitter:image" content={imagePage || ""} />
 
 		<script src="https://cdn.tailwindcss.com"></script>
-		<script src="https://unpkg.com/flowbite@1.8.1/dist/flowbite.min.js"></script>
+		<script src="https://unpkg.com/flowbite@1.8.1/dist/flowbite.min.js"
+		></script>
 		<script is:inline>
 			// On page load or when changing themes, best to add inline in `head` to avoid FOUC
-			(function() {
+			(function () {
 				try {
-					const theme = localStorage.getItem('color-theme');
-					const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
-					
+					const theme = localStorage.getItem("color-theme");
+					const prefersDark = window.matchMedia(
+						"(prefers-color-scheme: dark)",
+					).matches;
+
 					// console.log('Theme from localStorage:', theme);
 					// console.log('Prefers dark:', prefersDark);
-					
-					if (theme === 'dark' || (!theme && prefersDark)) {
-						document.documentElement.classList.add('dark');
-						document.documentElement.setAttribute('data-theme', 'dark');
+
+					if (theme === "dark" || (!theme && prefersDark)) {
+						document.documentElement.classList.add("dark");
+						document.documentElement.setAttribute(
+							"data-theme",
+							"dark",
+						);
 						// console.log('Applied dark theme');
 					} else {
-						document.documentElement.classList.remove('dark');
-						document.documentElement.setAttribute('data-theme', 'light');
+						document.documentElement.classList.remove("dark");
+						document.documentElement.setAttribute(
+							"data-theme",
+							"light",
+						);
 						// console.log('Applied light theme');
 					}
-					
+
 					// Store current theme state globally for other scripts
-					window.currentTheme = document.documentElement.classList.contains('dark') ? 'dark' : 'light';
+					window.currentTheme =
+						document.documentElement.classList.contains("dark")
+							? "dark"
+							: "light";
 				} catch (error) {
-					console.error('Error initializing theme:', error);
+					console.error("Error initializing theme:", error);
 				}
 			})();
 		</script>
+		<!-- Meta Pixel Code -->
+		<script is:inline>
+			!(function (f, b, e, v, n, t, s) {
+				if (f.fbq) return;
+				n = f.fbq = function () {
+					n.callMethod
+						? n.callMethod.apply(n, arguments)
+						: n.queue.push(arguments);
+				};
+				if (!f._fbq) f._fbq = n;
+				n.push = n;
+				n.loaded = !0;
+				n.version = "2.0";
+				n.queue = [];
+				t = b.createElement(e);
+				t.async = !0;
+				t.src = v;
+				s = b.getElementsByTagName(e)[0];
+				s.parentNode.insertBefore(t, s);
+			})(
+				window,
+				document,
+				"script",
+				"https://connect.facebook.net/en_US/fbevents.js",
+			);
+			fbq("init", "1402784261236554");
+			fbq("track", "PageView");
+		</script>
+		<noscript
+			><img
+				height="1"
+				width="1"
+				style="display:none"
+				src="https://www.facebook.com/tr?id=1402784261236554&ev=PageView&noscript=1"
+			/></noscript
+		>
 	</head>
-	<body class="relative font-source-sans-pro bg-white dark:bg-gray-900 text-gray-900 dark:text-white transition-colors duration-200">
+	<body
+		class="relative font-source-sans-pro bg-white dark:bg-gray-900 text-gray-900 dark:text-white transition-colors duration-200"
+	>
 		<Topbar quickAccess={true} websiteInfo={websiteInfo} />
 		<Header websiteInfo={websiteInfo} />
 		<Navigation websiteInfo={websiteInfo} />
@@ -87,7 +143,6 @@ const imagePage = metaTags.image ? metaTags.image : websiteInfo.logoLight;
 		<Footer websiteInfo={websiteInfo} />
 	</body>
 </html>
-
 
 <style>
 	html,
