@@ -52,10 +52,8 @@ const imagePage = metaTags.image ? metaTags.image : websiteInfo.logoLight;
 		<meta name="Twitter:description" content={descriptionPage || ""} />
 		<meta name="Twitter:image" content={imagePage || ""} />
 
-		<script is:inline src="https://cdn.tailwindcss.com"></script>
-		<script
-			is:inline
-			src="https://unpkg.com/flowbite@1.8.1/dist/flowbite.min.js"
+		<script src="https://cdn.tailwindcss.com"></script>
+		<script src="https://unpkg.com/flowbite@1.8.1/dist/flowbite.min.js"
 		></script>
 		<script is:inline>
 			// On page load or when changing themes, best to add inline in `head` to avoid FOUC
@@ -190,14 +188,14 @@ const imagePage = metaTags.image ? metaTags.image : websiteInfo.logoLight;
 			})(window, document, "ttq");
 		</script>
 		<!-- TikTok Pixel Code End -->
-		<noscript
-			><img
+		<noscript>
+			<img
 				height="1"
 				width="1"
 				style="display:none"
 				src="https://www.facebook.com/tr?id=1402784261236554&ev=PageView&noscript=1"
-			/></noscript
-		>
+			/>
+		</noscript>
 	</head>
 	<body
 		class="relative font-source-sans-pro bg-white dark:bg-gray-900 text-gray-900 dark:text-white transition-colors duration-200"
