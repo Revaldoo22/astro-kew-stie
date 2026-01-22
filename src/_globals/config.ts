@@ -14,7 +14,7 @@
  * API Key for SEO Master API authentication
  * Used for authorized access to SEO Master project content system
  */
-export const API_KEY_SEO_MASTER = "f1ba789e7c06f38dcbb58d31d18a567ee63af0ddc41eac7181ae0d7a3953bd48"; // Replace with actual API key
+export const API_KEY_SEO_MASTER = "6fc35ed055bee7b49f9e5dc260fc9177690ec186c38581104600cdefe9fe5cac"; // Replace with actual API key
 
 /**
  * Organization UUID for SEO Master identification

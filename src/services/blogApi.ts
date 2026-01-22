@@ -44,10 +44,10 @@ interface ProjectsListResponse {
 class BlogApi extends FetchData {
 
   /**
-   * Fetch the latest project from organization
-   * @returns Latest project ID or null
+   * Fetch all projects from organization
+   * @returns Array of projects or null
    */
-  async fetchLatestProject(): Promise<string | null> {
+  async fetchAllProjects(): Promise<Project[] | null> {
     const endpoint = `public/organizations/${ORGANIZATION_UUID_SEO_MASTER}/projects`;
 
     const data = await this.fetchData(API_KEY_SEO_MASTER, endpoint);
@@ -65,10 +65,9 @@ class BlogApi extends FetchData {
     }
 
     if (hasValue(data) && data?.data && data.data.length > 0) {
-      // Return the first (latest) project ID
-      const latestProject = data.data[0] as Project;
-      console.log('Latest project:', latestProject);
-      return latestProject.id;
+      const projects = data.data as Project[];
+      console.log(`Fetched ${projects.length} projects from organization`);
+      return projects;
     }
 
     return null;
@@ -86,46 +85,87 @@ class BlogApi extends FetchData {
     limit: number = 10,
     status: string = "published"
   ): Promise<ProjectsResponse | null> {
-    // Fetch the latest project ID dynamically
-    const projectId = await this.fetchLatestProject();
+    // Fetch all projects once
+    const projects = await this.fetchAllProjects();
 
-    if (!projectId) {
-      console.warn("No project ID available");
+    if (!projects || projects.length === 0) {
+      console.warn("No projects available");
       return null;
     }
 
-    const endpoint = `public/projects/${projectId}/contents?status=${status}&page=${page}&limit=${limit}`;
+    console.log('All projects:', projects.map(p => ({ id: p.id, name: p.name, createdAt: p.createdAt })));
 
-    const data = await this.fetchData(API_KEY_SEO_MASTER, endpoint);
+    // Sort projects by createdAt descending (latest first)
+    const sortedProjects = [...projects].sort((a, b) => {
+      const dateA = new Date(a.createdAt).getTime();
+      const dateB = new Date(b.createdAt).getTime();
+      return dateB - dateA; // Descending order (newest first)
+    });
 
-    // Handle rate limit response
-    if (data === "limit") {
-      console.warn("API rate limit reached");
-      return null;
+    console.log('Sorted projects:', sortedProjects.map(p => ({ id: p.id, name: p.name, createdAt: p.createdAt })));
+
+    // Priority order:
+    // 1. LAST project (latest based on createdAt) - tried first
+    // 2. FIRST project (first in original array) - only if #1 returns empty/null data
+    const latestProject = sortedProjects[0];
+    const firstProject = projects[0];
+
+    console.log('Latest project (by createdAt):', { id: latestProject.id, name: latestProject.name, createdAt: latestProject.createdAt });
+    console.log('First project (original order):', { id: firstProject.id, name: firstProject.name, createdAt: firstProject.createdAt });
+
+    const projectsToTry = [latestProject];
+
+    // Only add first project if it's different from latest
+    if (latestProject.id !== firstProject.id) {
+      projectsToTry.push(firstProject);
+    } else {
+      // If they're the same, try the last project in the original array as fallback
+      const lastProjectInArray = projects[projects.length - 1];
+      console.log('Latest === First, using last project in array as fallback:', { id: lastProjectInArray.id, name: lastProjectInArray.name });
+      projectsToTry.push(lastProjectInArray);
     }
 
-    // Handle null or invalid response
-    if (!data) {
-      console.warn("No data returned from API");
-      return null;
+    console.log('Projects to try (in order):', projectsToTry.map(p => ({ id: p.id, name: p.name, createdAt: p.createdAt })));
+
+    // Try each project sequentially until we get valid data
+    for (const project of projectsToTry) {
+      console.log(`Trying project: ${project.name} (${project.id})`);
+
+      const endpoint = `public/projects/${project.id}/contents?status=${status}&page=${page}&limit=${limit}`;
+      const data = await this.fetchData(API_KEY_SEO_MASTER, endpoint);
+
+      console.log(`Data from project ${project.name}:`, data);
+
+      // Handle rate limit response
+      if (data === "limit") {
+        console.warn("API rate limit reached");
+        continue; // Try next project
+      }
+
+      // Check if we got valid data with actual content
+      if (data && hasValue(data) && data?.data && data.data.length > 0) {
+        // Map the data array to ProjectContent type
+        const mappedData = data.data.map((item: any) =>
+          mapData<ProjectContent>(item, projectSchema) as ProjectContent
+        );
+
+        console.log(`✅ Successfully fetched ${mappedData.length} items from project: ${project.name}`);
+
+        return {
+          data: mappedData,
+          total: data.total || 0,
+          page: data.page || page,
+          limit: data.limit || limit,
+          totalPages: data.totalPages || 0
+        };
+      }
+
+      // If data is empty or null, log and try next project
+      console.warn(`⚠️ Project ${project.name} returned empty or null data, trying next project...`);
     }
 
-    // Now TypeScript knows data is ApiResponse type
-    if (hasValue(data)) {
-      // Map the data array to ProjectContent type
-      const mappedData = data?.data?.map((item: any) =>
-        mapData<ProjectContent>(item, projectSchema) as ProjectContent
-      ) || [];
-      console.log('mappedData blog', mappedData);
-      return {
-        data: mappedData,
-        total: data?.total || 0,
-        page: data?.page || page,
-        limit: data?.limit || limit,
-        totalPages: data?.totalPages || 0
-      };
-    }
-
+    // If all projects failed to return data
+    console.warn("No data returned from any project");
     return null;
   }
 

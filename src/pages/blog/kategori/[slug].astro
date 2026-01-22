@@ -6,8 +6,8 @@ import { BlogApi } from "@/services/blogApi";
 import PaginationContent from "@components/content/PaginationContent.astro";
 import BrochureRequestForm from "@components/blog/BrochureRequestForm.astro";
 
-// Get category uuid from URL
-const { uuid } = Astro.params;
+// Get category slug from URL
+const { slug } = Astro.params;
 
 // Get page from URL query params
 const url = new URL(Astro.request.url);
@@ -17,7 +17,7 @@ const currentPage = parseInt(url.searchParams.get("page") || "1");
 const blogApi = new BlogApi();
 const categoriesResponse = await blogApi.fetchCategories();
 const categories = categoriesResponse?.data || [];
-const currentCategory = categories.find(cat => cat.id === uuid);
+const currentCategory = categories.find(cat => cat.slug === slug);
 
 // If category not found, redirect to blog
 if (!currentCategory) {
@@ -27,10 +27,10 @@ if (!currentCategory) {
 // Page 1: 10 items (1 featured + 9 grid), Page 2+: 9 items (grid only)
 const itemsPerPage = currentPage === 1 ? 10 : 9;
 
-console.log('Current Category:', currentCategory.id);
+console.log('Current Category:', currentCategory.slug);
 
 // Fetch blog posts by category
-const projectsResponse = await blogApi.fetchProjectsByCategory(currentCategory.id, currentPage, itemsPerPage, "published");
+const projectsResponse = await blogApi.fetchProjectsByCategory(currentCategory.slug, currentPage, itemsPerPage, "published");
 const posts = projectsResponse?.data || [];
 const totalPosts = projectsResponse?.total || 0;
 
@@ -44,7 +44,7 @@ const paginationData = {
 const breadcrumbs = [
     { label: "Home", href: "/" },
     { label: "Blog", href: "/blog" },
-    { label: currentCategory.name, href: `/blog/kategori/${uuid}` },
+    { label: currentCategory.name, href: `/blog/kategori/${slug}` },
 ];
 
 const metaTags = {
@@ -153,7 +153,7 @@ console.log('Pagination:', paginationData);
                             <!-- CTA Button -->
                             <div>
                                 <a
-                                    href={`/blog/${posts[0].id}`}
+                                    href={`/blog/${posts[0].slug}`}
                                     class="inline-flex items-center px-6 py-3 bg-white text-blue-600 font-bold rounded-lg hover:bg-blue-50 transition-all duration-300 shadow-lg hover:shadow-xl hover:scale-105"
                                 >
                                     Baca Selengkapnya
@@ -290,7 +290,7 @@ console.log('Pagination:', paginationData);
                                                 </div>
 
                                                 <a
-                                                    href={`/blog/${post.id}`}
+                                                    href={`/blog/${post.slug}`}
                                                     class="inline-flex items-center text-blue-600 dark:text-blue-400 hover:text-blue-700 dark:hover:text-blue-300 font-semibold text-sm transition-colors group/link"
                                                 >
                                                     Baca
@@ -320,7 +320,7 @@ console.log('Pagination:', paginationData);
                             <PaginationContent 
                                 listData={paginationData}
                                 isEmptyList={posts.length === 0}
-                                baseUrl={`/blog/kategori/${uuid}`}
+                                baseUrl={`/blog/kategori/${slug}`}
                             />
                         </div>
                     </div>
@@ -349,9 +349,9 @@ console.log('Pagination:', paginationData);
                                         <div class="space-y-1">
                                             {categories.map((category) => (
                                                 <a
-                                                    href={`/blog/kategori/${category.id}`}
+                                                    href={`/blog/kategori/${category.slug}`}
                                                     class={`flex items-center justify-between px-4 py-3 rounded-lg transition-colors group ${
-                                                        category.id === uuid 
+                                                        category.slug === slug 
                                                             ? 'bg-blue-50 dark:bg-blue-900/20' 
                                                             : 'hover:bg-gray-50 dark:hover:bg-gray-700/50'
                                                     }`}
@@ -362,7 +362,7 @@ console.log('Pagination:', paginationData);
                                                             style={`background-color: ${category.color}`}
                                                         ></div>
                                                         <span class={`font-medium ${
-                                                            category.id === uuid
+                                                            category.slug === slug
                                                                 ? 'text-blue-600 dark:text-blue-400'
                                                                 : 'text-gray-700 dark:text-gray-300 group-hover:text-gray-900 dark:group-hover:text-white'
                                                         }`}>
@@ -370,7 +370,7 @@ console.log('Pagination:', paginationData);
                                                         </span>
                                                     </div>
                                                     <svg class={`w-4 h-4 transition-colors ${
-                                                        category.id === uuid
+                                                        category.slug === slug
                                                             ? 'text-blue-600 dark:text-blue-400'
                                                             : 'text-gray-400 group-hover:text-gray-600 dark:group-hover:text-gray-300'
                                                     }`} fill="none" stroke="currentColor" viewBox="0 0 24 24">

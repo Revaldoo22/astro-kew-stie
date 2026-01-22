@@ -25,6 +25,7 @@ const currentPage = parseInt(url.searchParams.get("page") || "1");
 // Page 1: 10 items (1 featured + 9 grid), Page 2+: 9 items (grid only)
 const itemsPerPage = currentPage === 1 ? 10 : 9;
 
+
 // Fetch blog posts
 const blogApi = new BlogApi();
 const projectsResponse = await blogApi.fetchProjects(currentPage, itemsPerPage, "published");
@@ -115,7 +116,7 @@ console.log('paginationData', paginationData);
                             <!-- CTA Button -->
                             <div>
                                 <a
-                                    href={`/blog/${posts[0].id}`}
+                                    href={`/blog/${posts[0].slug}`}
                                     class="inline-flex items-center px-6 py-3 bg-white text-blue-600 font-bold rounded-lg hover:bg-blue-50 transition-all duration-300 shadow-lg hover:shadow-xl hover:scale-105"
                                 >
                                     Baca Selengkapnya
@@ -252,7 +253,7 @@ console.log('paginationData', paginationData);
                                                 </div>
 
                                                 <a
-                                                    href={`/blog/${post.id}`}
+                                                    href={`/blog/${post.slug}`}
                                                     class="inline-flex items-center text-blue-600 dark:text-blue-400 hover:text-blue-700 dark:hover:text-blue-300 font-semibold text-sm transition-colors group/link"
                                                 >
                                                     Baca
@@ -311,7 +312,7 @@ console.log('paginationData', paginationData);
                                         <div class="space-y-1">
                                             {categories.map((category) => (
                                                 <a
-                                                    href={`/blog/kategori/${category.id}`}
+                                                    href={`/blog/kategori/${category.slug}`}
                                                     class="flex items-center justify-between px-4 py-3 rounded-lg hover:bg-gray-50 dark:hover:bg-gray-700/50 transition-colors group"
                                                 >
                                                     <div class="flex items-center gap-3">
