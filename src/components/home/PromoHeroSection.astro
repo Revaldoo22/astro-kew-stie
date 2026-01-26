@@ -1,5 +1,6 @@
 ---
 // Promo Hero Section with Instagram Embed and Countdown
+import { websiteInfo } from "../../_globals/info";
 ---
 
 <section
@@ -11,8 +12,16 @@
         <!-- Header Title -->
         <div class="text-center mb-12">
             <h1 class="text-3xl md:text-4xl lg:text-5xl font-bold">
-                Kuliah Kelas Karyawan
+                Kuliah Kelas Karyawan | Univ STEKOM
             </h1>
+            <p class="mt-4">
+                Kuliah Kelas Karyawan adalah program pendidikan tinggi bagi
+                karyawan atau pekerja, kelas karyawan merupakan perkuliahan
+                dengan jadwal atau Waktu yang fleksibel, jadwal kelas karyawan
+                yaitu sore, malam, atau pada akhir pekan, dan kelas karyawan
+                ialah solusi untuk yang ingin berkuliah tanpa mengganggu jam
+                kerja.
+            </p>
         </div>
 
         <!-- Main Content Grid -->
@@ -192,15 +201,35 @@
     </div>
 </section>
 
-<script>
+<script define:vars={{ countdownEndDate: websiteInfo.promo.countdownEndDate }}>
     // Instagram embed script
     const script = document.createElement("script");
     script.async = true;
     script.src = "//www.instagram.com/embed.js";
     document.body.appendChild(script);
 
-    // Countdown Timer - Set to 30 days from now
-    const countdownDate = new Date().getTime() + 30 * 24 * 60 * 60 * 1000;
+    // Countdown Timer - Configurable from info.ts
+    // Parse the countdown end date from config (format: "YYYY-MM-DD HH:mm:ss" in WIB/GMT+7)
+    const parseCountdownDate = (dateStr) => {
+        // If no date is provided, default to 1 month from now
+        if (!dateStr || dateStr.trim() === "") {
+            return new Date().getTime() + 30 * 24 * 60 * 60 * 1000; // 30 days
+        }
+
+        // Parse date string in format "YYYY-MM-DD HH:mm:ss"
+        const [datePart, timePart] = dateStr.split(" ");
+        const [year, month, day] = datePart.split("-").map(Number);
+        const [hours, minutes, seconds] = timePart.split(":").map(Number);
+
+        // Create date in WIB timezone (GMT+7)
+        // JavaScript Date uses local timezone, so we create UTC and adjust
+        const date = new Date(
+            Date.UTC(year, month - 1, day, hours - 7, minutes, seconds),
+        );
+        return date.getTime();
+    };
+
+    const countdownDate = parseCountdownDate(countdownEndDate);
 
     function updateCountdown() {
         const now = new Date().getTime();

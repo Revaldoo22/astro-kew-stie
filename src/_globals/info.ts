@@ -1,9 +1,9 @@
 export const websiteInfo = {
-    name: "Kuliah Kelas Karyawan",
+    name: "Kuliah Kelas Karyawan | Univ STEKOM",
     shortName: "KEW",
     logoLight: "/favicon.svg",
     logoDark: "/favicon.svg",
-    description: "Kuliah Online Kelas Karyawan adalah perkuliahan yang dikhususkan untuk karyawan sibuk bekerja dan juga mereka yang ingin atau sedang mencari pekerjaan",
+    description: "Informasi lengkap seputar kuliah kelas karyawan seperti biaya, jadwal, jurusan atau program studi di Universitas STEKOM",
     keywords: "Kuliah Sambil Kerja, Kelas Karyawan, Kuliah Online, Kuliah Full Online, Kuliah Sambil Kerja",
 
     // Contact Information
@@ -40,5 +40,13 @@ export const websiteInfo = {
     //brossur
     brosur: {
         pmb: "https://drive.google.com/drive/folders/1yV9JBKU9qRZijStcP0TiElitVmz5Z6Sn",
+    },
+
+    // Promo Configuration
+    promo: {
+        // Countdown end date - format: "YYYY-MM-DD HH:mm:ss" (WIB/GMT+7)
+        // Example: "2026-02-28 23:59:59" means countdown ends on February 28, 2026 at 23:59:59 WIB
+        // Leave empty ("") or null to automatically set countdown to 1 month from now
+        countdownEndDate: "",
     }
 };

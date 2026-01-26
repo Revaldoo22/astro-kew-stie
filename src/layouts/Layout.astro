@@ -52,9 +52,31 @@ const imagePage = metaTags.image ? metaTags.image : websiteInfo.logoLight;
 		<meta name="Twitter:description" content={descriptionPage || ""} />
 		<meta name="Twitter:image" content={imagePage || ""} />
 
+		<script is:inline type="application/ld+json">
+			{
+				"@context": "https://schema.org",
+				"@type": "Organization",
+				"name": "Kuliah Kelas Karyawan",
+				"alternateName": "Kelas Karyawan",
+				"url": "https://kew.stekom.ac.id",
+				"logo": "https://kew.stekom.ac.id/assets/images/logo.png",
+				"sameAs": [
+					"https://www.instagram.com/kelaskaryawan.pmb",
+					"https://www.facebook.com/stekom.ac.id",
+					"https://www.linkedin.com/school/universitas-sains-dan-teknologi-komputer-stekom"
+				],
+				"contactPoint": {
+					"@type": "ContactPoint",
+					"telephone": "+62817775758",
+					"contactType": "Kelas Karyawan",
+					"areaServed": "ID",
+					"availableLanguage": "Indonesian"
+				}
+			}
+		</script>
+
 		<script src="https://cdn.tailwindcss.com"></script>
-		<script src="https://unpkg.com/flowbite@1.8.1/dist/flowbite.min.js"
-		></script>
+		<script src="https://unpkg.com/flowbite@1.8.1/dist/flowbite.min.js"></script>
 		<script is:inline>
 			// On page load or when changing themes, best to add inline in `head` to avoid FOUC
 			(function () {
