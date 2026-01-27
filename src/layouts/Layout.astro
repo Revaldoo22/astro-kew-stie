@@ -9,9 +9,7 @@ import { websiteInfo } from "@globals/info";
 
 const { metaTags } = Astro.props;
 
-const titlePage = metaTags.title
-	? `${metaTags.title} - ${websiteInfo.name}`
-	: websiteInfo.name;
+const titlePage = metaTags.title ? `${metaTags.title}` : websiteInfo.name;
 const descriptionPage = metaTags.description
 	? metaTags.description
 	: websiteInfo.description;
@@ -76,7 +74,8 @@ const imagePage = metaTags.image ? metaTags.image : websiteInfo.logoLight;
 		</script>
 
 		<script src="https://cdn.tailwindcss.com"></script>
-		<script src="https://unpkg.com/flowbite@1.8.1/dist/flowbite.min.js"></script>
+		<script src="https://unpkg.com/flowbite@1.8.1/dist/flowbite.min.js"
+		></script>
 		<script is:inline>
 			// On page load or when changing themes, best to add inline in `head` to avoid FOUC
 			(function () {
