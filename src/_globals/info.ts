@@ -1,8 +1,8 @@
 export const websiteInfo = {
     name: "Kuliah Kelas Karyawan",
     shortName: "KEW",
-    logoLight: "/favicon.svg",
-    logoDark: "/favicon.svg",
+    logoLight: "/assets/images/logo.png",
+    logoDark: "/assets/images/logo.png",
     description: "Informasi lengkap seputar kuliah kelas karyawan seperti biaya, jadwal, jurusan atau program studi di Universitas STEKOM",
     keywords: "Kuliah Sambil Kerja, Kelas Karyawan, Kuliah Online, Kuliah Full Online, Kuliah Sambil Kerja",
 
