@@ -1,5 +1,5 @@
 export const websiteInfo = {
-    name: "Kuliah Kelas Karyawan | Univ STEKOM",
+    name: "Kuliah Kelas Karyawan",
     shortName: "KEW",
     logoLight: "/favicon.svg",
     logoDark: "/favicon.svg",
