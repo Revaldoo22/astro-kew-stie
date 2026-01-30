@@ -7,6 +7,10 @@ export const GET: APIRoute = async () => {
     // Fetch all contents from all projects
     const allContents = await blogApi.fetchAllContentsForSitemap();
 
+    // Fetch all categories
+    const categoriesResponse = await blogApi.fetchCategories();
+    const categories = categoriesResponse?.data || [];
+
     const baseUrl = "https://kew.stekom.ac.id";
 
     // Generate XML sitemap
@@ -19,6 +23,24 @@ export const GET: APIRoute = async () => {
     <changefreq>daily</changefreq>
     <priority>1.0</priority>
   </url>
+  <url>
+    <loc>${baseUrl}/biaya-kuliah-kelas-karyawan</loc>
+    <lastmod>${new Date().toISOString()}</lastmod>
+    <changefreq>daily</changefreq>
+    <priority>0.9</priority>
+  </url>
+  <url>
+    <loc>${baseUrl}/program-studi-kelas-karyawan</loc>
+    <lastmod>${new Date().toISOString()}</lastmod>
+    <changefreq>daily</changefreq>
+    <priority>0.9</priority>
+  </url>
+  <url>
+    <loc>${baseUrl}/hubungi-kami</loc>
+    <lastmod>${new Date().toISOString()}</lastmod>
+    <changefreq>daily</changefreq>
+    <priority>0.9</priority>
+  </url>
   
   <!-- Blog Index -->
   <url>
@@ -27,6 +49,17 @@ export const GET: APIRoute = async () => {
     <changefreq>daily</changefreq>
     <priority>0.9</priority>
   </url>
+  
+  <!-- Blog Categories -->
+  ${categories && categories.length > 0
+            ? categories.map((category) => `
+  <url>
+    <loc>${baseUrl}/blog/kategori/${category.slug}</loc>
+    <lastmod>${new Date().toISOString()}</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.85</priority>
+  </url>`).join('')
+            : ''}
   
   <!-- Blog Posts -->
   ${allContents && allContents.length > 0
