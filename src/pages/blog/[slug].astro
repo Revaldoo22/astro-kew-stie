@@ -1,5 +1,5 @@
 ---
-import Layout from "@layouts/Layout.astro";
+import LayoutBlog from "@layouts/LayoutBlog.astro";
 import Breadcrumb from "@components/Breadcrumb.astro";
 import { BlogApi } from "@/services/blogApi";
 import BrochureRequestForm from "@components/blog/BrochureRequestForm.astro";
@@ -49,10 +49,9 @@ const metaTags = {
     image: fullContent.thumbnailUrl || "",
 };
 
-console.log('Full Content:', fullContent);
 ---
 
-<Layout metaTags={metaTags}>
+<LayoutBlog metaTags={metaTags}>
     <div class="min-h-screen bg-gray-50 dark:bg-gray-900">
         <!-- Breadcrumb -->
         <div class="bg-white dark:bg-gray-800 border-b border-gray-200 dark:border-gray-700">
@@ -297,7 +296,7 @@ console.log('Full Content:', fullContent);
             </div>
         </div>
     </div>
-</Layout>
+</LayoutBlog>
 
 <script is:inline define:vars={{ postTitle: fullContent.title }}>
     (function () {
