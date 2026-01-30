@@ -26,6 +26,7 @@ const fullContent = await blogApi.fetchContentById(post.slug);
 if (!fullContent) {
     return Astro.redirect('/blog');
 }
+console.log('fullContent',fullContent);
 
 // Fetch categories for sidebar
 const categoriesResponse = await blogApi.fetchCategories();
@@ -48,7 +49,6 @@ const metaTags = {
     keywords: fullContent.tags || "blog, artikel, " + (fullContent.title || ""),
     image: fullContent.thumbnailUrl || "",
 };
-
 ---
 
 <LayoutBlog metaTags={metaTags}>
@@ -300,10 +300,10 @@ const metaTags = {
 
 <script is:inline define:vars={{ postTitle: fullContent.title }}>
     (function () {
-      console.log('Post Title for CSE:', postTitle);
+    //   console.log('Post Title for CSE:', postTitle);
       
       function executeSearch() {
-        console.log('Attempting to execute search...');
+        // console.log('Attempting to execute search...');
         
         if (!(window.google && google.search && google.search.cse)) {
           console.log('⏳ CSE not loaded yet, retrying...');
@@ -314,7 +314,7 @@ const metaTags = {
         try {
           // Get all CSE elements (auto-rendered from content)
           const allElements = google.search.cse.element.getAllElements();
-          console.log('All CSE elements:', allElements);
+        //   console.log('All CSE elements:', allElements);
           
           // CSE returns an object, not array - get first element
           const elementKeys = Object.keys(allElements || {});
@@ -322,11 +322,11 @@ const metaTags = {
           if (elementKeys.length > 0) {
             const firstKey = elementKeys[0];
             const searchElement = allElements[firstKey];
-            console.log('✅ Found CSE element:', firstKey, searchElement);
+            // console.log('✅ Found CSE element:', firstKey, searchElement);
             
             if (postTitle) {
               searchElement.execute(postTitle);
-              console.log('✅ Query executed with title:', postTitle);
+            //   console.log('✅ Query executed with title:', postTitle);
               
               // Hide loading if exists
               setTimeout(function() {
@@ -338,10 +338,10 @@ const metaTags = {
               
               // Clean URL after CSE updates hash
               setTimeout(function() {
-                console.log('Current URL:', window.location.href);
+                // console.log('Current URL:', window.location.href);
                 if (window.location.search) {
                   const cleanUrl = window.location.pathname + window.location.hash;
-                  console.log('Cleaning to:', cleanUrl);
+                //   console.log('Cleaning to:', cleanUrl);
                   window.history.replaceState({}, document.title, cleanUrl);
                 } else {
                   console.log('No query params to clean');
@@ -351,11 +351,11 @@ const metaTags = {
               console.error('❌ PostTitle is empty');
             }
           } else {
-            console.log('⏳ No CSE elements found yet, retrying...');
+            // console.log('⏳ No CSE elements found yet, retrying...');
             setTimeout(executeSearch, 200);
           }
         } catch (error) {
-          console.error('❌ Error in executeSearch:', error);
+        //   console.error('❌ Error in executeSearch:', error);
           setTimeout(executeSearch, 200);
         }
       }

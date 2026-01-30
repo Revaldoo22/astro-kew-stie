@@ -60,11 +60,12 @@ const imagePage = metaTags.image ? metaTags.image : websiteInfo.logoLight;
 					"@id": Astro.url.href,
 				},
 				headline: titlePage,
+				description: descriptionPage,
 				image: [imagePage],
 				datePublished: new Date().toISOString(),
 				dateModified: new Date().toISOString(),
 				author: {
-					"@type": "Person",
+					"@type": "Organization",
 					name: "Kuliah Kelas Karyawan",
 					url: "https://kew.stekom.ac.id",
 				},
