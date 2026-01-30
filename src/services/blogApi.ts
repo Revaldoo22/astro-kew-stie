@@ -93,7 +93,7 @@ class BlogApi extends FetchData {
       return null;
     }
 
-    console.log('All projects:', projects.map(p => ({ id: p.id, name: p.name, createdAt: p.createdAt })));
+    // console.log('All projects:', projects.map(p => ({ id: p.id, name: p.name, createdAt: p.createdAt })));
 
     // Sort projects by createdAt descending (latest first)
     const sortedProjects = [...projects].sort((a, b) => {
@@ -102,7 +102,7 @@ class BlogApi extends FetchData {
       return dateB - dateA; // Descending order (newest first)
     });
 
-    console.log('Sorted projects:', sortedProjects.map(p => ({ id: p.id, name: p.name, createdAt: p.createdAt })));
+    // console.log('Sorted projects:', sortedProjects.map(p => ({ id: p.id, name: p.name, createdAt: p.createdAt })));
 
     // Priority order:
     // 1. LAST project (latest based on createdAt) - tried first
@@ -282,6 +282,102 @@ class BlogApi extends FetchData {
     }
 
     return null;
+  }
+
+  /**
+   * Fetch all contents from all projects for sitemap generation
+   * @param status - Publication status (default: "published")
+   * @returns Array of all content from all projects or null
+   */
+  async fetchAllContentsForSitemap(
+    status: string = "published"
+  ): Promise<ProjectContent[] | null> {
+    // Fetch all projects once
+    const projects = await this.fetchAllProjects();
+
+    if (!projects || projects.length === 0) {
+      console.warn("No projects available for sitemap");
+      return null;
+    }
+
+    console.log(`📍 Fetching contents from ${projects.length} projects for sitemap...`);
+
+    const allContents: ProjectContent[] = [];
+
+    // Iterate through all projects
+    for (const project of projects) {
+      console.log(`📄 Fetching contents from project: ${project.name} (${project.id})`);
+
+      try {
+        let currentPage = 1;
+        let hasMorePages = true;
+        const limit = 100; // Fetch 100 items per page for efficiency
+
+        // Fetch all pages for this project
+        while (hasMorePages) {
+          const endpoint = `public/projects/${project.id}/contents?status=${status}&page=${currentPage}&limit=${limit}`;
+          const data = await this.fetchData(API_KEY_SEO_MASTER, endpoint);
+
+          // Handle rate limit response
+          if (data === "limit") {
+            console.warn(`⚠️ API rate limit reached for project ${project.name}, skipping...`);
+            break;
+          }
+
+          // Handle null or invalid response
+          if (!data || !hasValue(data) || !data?.data) {
+            console.warn(`⚠️ No data returned from project ${project.name}`);
+            break;
+          }
+
+          // If no data in this page, stop pagination
+          if (data.data.length === 0) {
+            break;
+          }
+
+          // Map the data array to ProjectContent type
+          const mappedData = data.data.map((item: any) =>
+            mapData<ProjectContent>(item, projectSchema) as ProjectContent
+          );
+
+          // Add to allContents array
+          allContents.push(...mappedData);
+
+          console.log(`  ✓ Fetched ${mappedData.length} items from page ${currentPage} of ${project.name}`);
+
+          // Check if there are more pages
+          const totalPages = data.totalPages || 0;
+          if (currentPage >= totalPages) {
+            hasMorePages = false;
+          } else {
+            currentPage++;
+          }
+        }
+
+        console.log(`✅ Total ${allContents.length} contents collected from ${project.name}`);
+
+      } catch (error) {
+        console.error(`❌ Error fetching contents from project ${project.name}:`, error);
+        // Continue with next project even if one fails
+        continue;
+      }
+    }
+
+    if (allContents.length === 0) {
+      console.warn("No contents found across all projects");
+      return null;
+    }
+
+    console.log(`🎉 Successfully fetched ${allContents.length} total contents from ${projects.length} projects for sitemap`);
+
+    // Sort by createdAt descending (most recent first)
+    const sortedContents = allContents.sort((a, b) => {
+      const dateA = new Date(a.createdAt).getTime();
+      const dateB = new Date(b.createdAt).getTime();
+      return dateB - dateA;
+    });
+
+    return sortedContents;
   }
 
 }
