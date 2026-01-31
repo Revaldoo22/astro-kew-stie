@@ -50,6 +50,9 @@ const imagePage = metaTags.image ? metaTags.image : websiteInfo.logoLight;
 		<meta name="Twitter:description" content={descriptionPage || ""} />
 		<meta name="Twitter:image" content={imagePage || ""} />
 
+		<link rel="canonical" href={Astro.url.href} />
+		<meta name="robots" content="index, follow" />
+
 		<script is:inline type="application/ld+json">
 			{
 				"@context": "https://schema.org",
