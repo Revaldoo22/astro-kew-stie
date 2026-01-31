@@ -1,2 +1,46 @@
+# ==========================================================
+# ROBOTS.TXT - KEW.STEKOM.AC.ID
+# ==========================================================
+# Mohon sesuaikan sitemap URL jika menggunakan sistem dinamis.
+
 User-agent: *
-Disallow: /
+
+# --- AKSES PUBLIK ---
+# Izinkan crawling pada aset agar skor Google PageSpeed & Mobile-Friendly tetap tinggi
+# Contoh
+# Allow: /assets/
+# Allow: /css/
+# Allow: /js/
+# Allow: /images/
+
+# --- PENGECUALIAN PARAMETER (PENTING) ---
+# Memblokir semua URL yang mengandung query string/parameter (e.g. ?id=, ?page=, ?ref=)
+# Ini untuk menghindari duplicate content dan menghemat crawl budget.
+Disallow: /?
+
+# --- PROTEKSI SISTEM LARAVEL ---
+# Jangan biarkan Google mengintip folder vendor atau storage internal
+# Contoh
+# Disallow: /vendor/
+# Disallow: /storage/
+# Disallow: /api/
+# Disallow: /_debugbar/
+# Disallow: /telescope/
+
+# --- HALAMAN PRIVASI & AUTH ---
+# Halaman login, dashboard, dan admin tidak perlu muncul di hasil pencarian
+# Contoh
+# Disallow: /login
+# Disallow: /register
+# Disallow: /admin/
+# Disallow: /dashboard/
+# Disallow: /auth/
+
+# --- LOKASI SITEMAP ---
+# Pastikan route ini bisa diakses secara publik
+# Contoh
+# Sitemap: https://kew.stekom.ac.id/sitemap.xml
+
+# ==========================================================
+# CATATAN: Pastikan file ini berada di folder /public/robots.txt
+# ==========================================================
