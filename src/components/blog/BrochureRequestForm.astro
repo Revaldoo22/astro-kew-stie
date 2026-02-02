@@ -165,17 +165,47 @@ const brochureLink = websiteInfo.brosur.pmb;
 
             <!-- Submit Button -->
             <button
+                id="submit-button"
                 type="submit"
-                class="w-full px-4 py-2.5 bg-green-600 hover:bg-green-700 text-white font-bold text-sm rounded-lg transition-all duration-300 shadow-lg hover:shadow-xl transform hover:-translate-y-0.5"
+                class="w-full px-4 py-2.5 bg-green-600 hover:bg-green-700 text-white font-bold text-sm rounded-lg transition-all duration-300 shadow-lg hover:shadow-xl transform hover:-translate-y-0.5 disabled:opacity-50 disabled:cursor-not-allowed disabled:transform-none"
             >
-                KIRIM
+                <span id="submit-text">KIRIM</span>
+                <span id="submit-loading" class="hidden">
+                    <svg
+                        class="animate-spin inline-block w-4 h-4 mr-2"
+                        xmlns="http://www.w3.org/2000/svg"
+                        fill="none"
+                        viewBox="0 0 24 24"
+                    >
+                        <circle
+                            class="opacity-25"
+                            cx="12"
+                            cy="12"
+                            r="10"
+                            stroke="currentColor"
+                            stroke-width="4"></circle>
+                        <path
+                            class="opacity-75"
+                            fill="currentColor"
+                            d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
+                        ></path>
+                    </svg>
+                    Mengirim...
+                </span>
             </button>
+
+            <!-- Error Message -->
+            <p
+                id="submit-error"
+                class="hidden text-xs text-red-500 text-center mt-2"
+            >
+            </p>
         </form>
     </div>
 </div>
 
 <!-- Success Modal -->
-<div id="brochure-modal" class="hidden fixed inset-0 z-50 overflow-y-auto">
+<div id="brochure-modal" class="hidden fixed inset-0 z-[9999] overflow-y-auto">
     <!-- Backdrop -->
     <div class="fixed inset-0 bg-black/50 backdrop-blur-sm transition-opacity">
     </div>
@@ -212,13 +242,13 @@ const brochureLink = websiteInfo.brosur.pmb;
 
             <!-- Message -->
             <p class="text-center text-gray-600 dark:text-gray-300 mb-6">
-                Permintaan brosur Anda telah dikirim. Silakan download brosur
-                kami melalui link di bawah ini.
+                Data Anda telah tersimpan. Silakan klik tombol di bawah untuk
+                mengunduh brosur kami.
             </p>
 
-            <!-- Brochure Link Button -->
+            <!-- Manual Download Button (backup) -->
             <a
-                id="brochure-link"
+                id="brochure-link-backup"
                 href={brochureLink}
                 target="_blank"
                 rel="noopener noreferrer"
@@ -254,6 +284,12 @@ const brochureLink = websiteInfo.brosur.pmb;
 </div>
 
 <script>
+    // Type declarations for window functions
+    declare global {
+        interface Window {
+            showBrochureSuccessModal?: () => void;
+        }
+    }
     document.addEventListener("DOMContentLoaded", () => {
         // Handle form submission
         const form = document.getElementById(
@@ -526,26 +562,176 @@ const brochureLink = websiteInfo.brosur.pmb;
                     return;
                 }
 
+                // Get form data
                 const formData = new FormData(form);
                 const data = Object.fromEntries(formData.entries());
+                // console.log("Form data:", data);
 
-                // You can add your API call here
-                console.log("Form data:", data);
+                // Get UI elements for loading state
+                const submitButton = document.getElementById(
+                    "submit-button",
+                ) as HTMLButtonElement;
+                const submitText = document.getElementById("submit-text");
+                const submitLoading = document.getElementById("submit-loading");
+                const submitError = document.getElementById("submit-error");
 
-                // Show modal
-                modal.classList.remove("hidden");
-                console.log("Modal should be visible now");
+                // Show loading state
+                if (submitButton && submitText && submitLoading) {
+                    submitButton.disabled = true;
+                    submitText.classList.add("hidden");
+                    submitLoading.classList.remove("hidden");
+                }
 
-                // Reset form
-                form.reset();
+                // Hide previous errors
+                if (submitError) {
+                    submitError.classList.add("hidden");
+                    submitError.textContent = "";
+                }
 
-                // Clear all errors
-                clearError(fullNameInput, fullNameError);
-                clearError(emailInput, emailError);
-                clearError(phoneInput, phoneError);
-                clearError(addressInput, addressError);
-                clearError(studyProgramSelect, studyProgramError);
-                clearError(studyMethodSelect, studyMethodError);
+                try {
+                    // Send data to Google Sheets
+                    // Get API URL from meta tag (set in Layout.astro)
+                    const apiUrl =
+                        document
+                            .querySelector('meta[name="google-sheets-api"]')
+                            ?.getAttribute("content") || "";
+
+                    if (!apiUrl) {
+                        // console.warn("Google Sheets API URL not configured");
+                        throw new Error(
+                            "Konfigurasi Google Sheets belum diatur. Silakan hubungi administrator.",
+                        );
+                    }
+
+                    // console.log("Sending to Google Sheets:", apiUrl);
+                    // console.log("Data to send:", data);
+
+                    // Get current URL for slug and hostname for source
+                    const currentUrl = window.location.href;
+                    const hostname = window.location.hostname;
+
+                    // Convert data to URL parameters for Google Apps Script
+                    const params = new URLSearchParams();
+                    params.append("fullName", data.fullName as string);
+                    params.append("email", data.email as string);
+                    params.append("phone", data.phone as string);
+                    params.append("address", data.address as string);
+                    params.append("studyProgram", data.studyProgram as string);
+                    params.append("studyMethod", data.studyMethod as string);
+                    params.append("slug", currentUrl);
+                    params.append("source", "Permintaan Brosur KEW");
+
+                    // Send as GET request with parameters (Google Apps Script friendly)
+                    const urlWithParams = `${apiUrl}?${params.toString()}`;
+                    // console.log("Request URL:", urlWithParams);
+
+                    const response = await fetch(urlWithParams, {
+                        method: "GET",
+                        redirect: "follow",
+                    });
+
+                    // console.log("Response received:", response);
+                    // console.log("Data sent to Google Sheets successfully");
+
+                    // Don't close the parent form modal yet - let success modal show first
+                    // The success modal close button will handle closing both modals
+                    // const formModal = document.getElementById(
+                    //     "brochure-form-modal",
+                    // );
+                    // if (formModal) {
+                    //     formModal.classList.add("hidden");
+                    //     console.log("Form modal closed");
+                    // } else {
+                    //     console.log("Form modal not found");
+                    // }
+
+                    // Check if we're inside BrochureRequestFormModal (external modal exists)
+                    const externalSuccessModal = document.getElementById(
+                        "brochure-modal-external",
+                    );
+
+                    if (externalSuccessModal) {
+                        // We're inside BrochureRequestFormModal, use external success modal
+                        console.log("Using external success modal");
+                        if (
+                            typeof window.showBrochureSuccessModal ===
+                            "function"
+                        ) {
+                            window.showBrochureSuccessModal();
+                        }
+
+                        // Close the form modal
+                        const formModal = document.getElementById(
+                            "brochure-form-modal",
+                        );
+                        if (formModal) {
+                            formModal.classList.add("hidden");
+                        }
+                    } else {
+                        // Standalone form, use inline success modal
+                        console.log("Using inline success modal");
+                        console.log("Success modal element:", modal);
+                        console.log(
+                            "Modal classes before:",
+                            modal?.classList.toString(),
+                        );
+
+                        if (modal) {
+                            modal.classList.remove("hidden");
+                            // Ensure body can scroll to show modal
+                            document.body.style.overflow = "";
+
+                            console.log(
+                                "Modal classes after:",
+                                modal?.classList.toString(),
+                            );
+                            console.log(
+                                "Modal display:",
+                                window.getComputedStyle(modal).display,
+                            );
+                            console.log(
+                                "Modal visibility:",
+                                window.getComputedStyle(modal).visibility,
+                            );
+                            console.log(
+                                "Modal z-index:",
+                                window.getComputedStyle(modal).zIndex,
+                            );
+                            console.log("Modal should be visible now");
+                        } else {
+                            console.error("Success modal not found in DOM!");
+                        }
+                    }
+
+                    // Reset form
+                    form.reset();
+
+                    // Clear all errors
+                    clearError(fullNameInput, fullNameError);
+                    clearError(emailInput, emailError);
+                    clearError(phoneInput, phoneError);
+                    clearError(addressInput, addressError);
+                    clearError(studyProgramSelect, studyProgramError);
+                    clearError(studyMethodSelect, studyMethodError);
+                } catch (error) {
+                    // console.error("Error sending to Google Sheets:", error);
+
+                    // Show error message
+                    if (submitError) {
+                        submitError.textContent =
+                            error instanceof Error
+                                ? error.message
+                                : "Terjadi kesalahan saat mengirim data. Silakan coba lagi.";
+                        submitError.classList.remove("hidden");
+                    }
+                } finally {
+                    // Reset loading state
+                    if (submitButton && submitText && submitLoading) {
+                        submitButton.disabled = false;
+                        submitText.classList.remove("hidden");
+                        submitLoading.classList.add("hidden");
+                    }
+                }
             });
         } else {
             console.error("Form or modal not found!", { form, modal });
@@ -553,21 +739,32 @@ const brochureLink = websiteInfo.brosur.pmb;
 
         // Close modal handlers
         if (closeModalBtn && modal) {
-            closeModalBtn.addEventListener("click", () => {
+            const closeSuccessModal = () => {
                 modal.classList.add("hidden");
-            });
+
+                // Also close the parent form modal if it exists
+                const formModal = document.getElementById(
+                    "brochure-form-modal",
+                );
+                if (formModal) {
+                    formModal.classList.add("hidden");
+                    document.body.style.overflow = ""; // Restore scroll
+                }
+            };
+
+            closeModalBtn.addEventListener("click", closeSuccessModal);
 
             // Close on backdrop click
             modal.addEventListener("click", (e) => {
                 if (e.target === modal) {
-                    modal.classList.add("hidden");
+                    closeSuccessModal();
                 }
             });
 
             // Close on Escape key
             document.addEventListener("keydown", (e) => {
                 if (e.key === "Escape" && !modal.classList.contains("hidden")) {
-                    modal.classList.add("hidden");
+                    closeSuccessModal();
                 }
             });
         }

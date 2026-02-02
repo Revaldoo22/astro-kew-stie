@@ -1,0 +1,228 @@
+---
+// Brochure Request Form Modal Component
+import BrochureRequestForm from "./BrochureRequestForm.astro";
+import { websiteInfo } from "@globals/info";
+
+const brochureLink = websiteInfo.brosur.pmb;
+---
+
+<!-- Modal Backdrop & Container -->
+<div id="brochure-form-modal" class="hidden fixed inset-0 z-50 overflow-y-auto">
+    <!-- Backdrop -->
+    <div class="fixed inset-0 bg-black/60 backdrop-blur-sm transition-opacity">
+    </div>
+
+    <!-- Modal Content -->
+    <div class="flex min-h-full items-center justify-center p-4">
+        <div
+            class="relative bg-transparent max-w-2xl w-full transform transition-all"
+        >
+            <!-- Close Button -->
+            <button
+                id="close-form-modal"
+                class="absolute -top-4 -right-4 z-10 bg-white dark:bg-gray-800 rounded-full p-2 shadow-lg hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors"
+                aria-label="Tutup"
+            >
+                <svg
+                    class="w-6 h-6 text-gray-600 dark:text-gray-300"
+                    fill="none"
+                    stroke="currentColor"
+                    viewBox="0 0 24 24"
+                >
+                    <path
+                        stroke-linecap="round"
+                        stroke-linejoin="round"
+                        stroke-width="2"
+                        d="M6 18L18 6M6 6l12 12"></path>
+                </svg>
+            </button>
+
+            <!-- Form Component -->
+            <BrochureRequestForm />
+        </div>
+    </div>
+</div>
+
+<!-- Success Modal (separate from form modal, higher z-index) -->
+<div
+    id="brochure-modal-external"
+    class="hidden fixed inset-0 z-[9999] overflow-y-auto"
+>
+    <!-- Backdrop -->
+    <div class="fixed inset-0 bg-black/50 backdrop-blur-sm transition-opacity">
+    </div>
+
+    <!-- Modal Content -->
+    <div class="flex min-h-full items-center justify-center p-4">
+        <div
+            class="relative bg-white dark:bg-gray-800 rounded-2xl shadow-2xl max-w-md w-full p-6 transform transition-all"
+        >
+            <!-- Success Icon -->
+            <div
+                class="mx-auto flex items-center justify-center h-16 w-16 rounded-full bg-green-100 dark:bg-green-900/30 mb-4"
+            >
+                <svg
+                    class="h-10 w-10 text-green-600 dark:text-green-400"
+                    fill="none"
+                    stroke="currentColor"
+                    viewBox="0 0 24 24"
+                >
+                    <path
+                        stroke-linecap="round"
+                        stroke-linejoin="round"
+                        stroke-width="2"
+                        d="M5 13l4 4L19 7"></path>
+                </svg>
+            </div>
+
+            <!-- Title -->
+            <h3
+                class="text-xl font-bold text-center text-gray-900 dark:text-white mb-2"
+            >
+                Terima Kasih!
+            </h3>
+
+            <!-- Message -->
+            <p class="text-center text-gray-600 dark:text-gray-300 mb-6">
+                Data Anda telah tersimpan. Silakan klik tombol di bawah untuk
+                mengunduh brosur kami.
+            </p>
+
+            <!-- Manual Download Button -->
+            <a
+                id="brochure-link-external"
+                href={brochureLink}
+                target="_blank"
+                rel="noopener noreferrer"
+                class="block w-full px-6 py-3 bg-gradient-to-r from-orange-500 to-orange-600 hover:from-orange-600 hover:to-orange-700 text-white font-bold text-center rounded-lg transition-all duration-300 shadow-lg hover:shadow-xl mb-3"
+            >
+                <span class="flex items-center justify-center gap-2">
+                    <svg
+                        class="w-5 h-5"
+                        fill="none"
+                        stroke="currentColor"
+                        viewBox="0 0 24 24"
+                    >
+                        <path
+                            stroke-linecap="round"
+                            stroke-linejoin="round"
+                            stroke-width="2"
+                            d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"
+                        ></path>
+                    </svg>
+                    Download Brosur
+                </span>
+            </a>
+
+            <!-- Close Button -->
+            <button
+                id="close-success-modal-external"
+                class="w-full px-6 py-2.5 bg-gray-200 dark:bg-gray-700 hover:bg-gray-300 dark:hover:bg-gray-600 text-gray-800 dark:text-gray-200 font-semibold rounded-lg transition-all duration-300"
+            >
+                Tutup
+            </button>
+        </div>
+    </div>
+</div>
+
+<script>
+    // Type declarations for window functions
+    declare global {
+        interface Window {
+            openBrochureFormModal?: () => void;
+            showBrochureSuccessModal?: () => void;
+        }
+    }
+    document.addEventListener("DOMContentLoaded", () => {
+        const modal = document.getElementById("brochure-form-modal");
+        const closeButton = document.getElementById("close-form-modal");
+        const successModal = document.getElementById("brochure-modal-external");
+        const closeSuccessButton = document.getElementById(
+            "close-success-modal-external",
+        );
+
+        // Function to open modal
+        window.openBrochureFormModal = () => {
+            if (modal) {
+                modal.classList.remove("hidden");
+                document.body.style.overflow = "hidden"; // Prevent background scroll
+            }
+        };
+
+        // Function to close form modal
+        const closeModal = () => {
+            if (modal) {
+                modal.classList.add("hidden");
+                document.body.style.overflow = ""; // Restore scroll
+            }
+        };
+
+        // Function to show success modal
+        window.showBrochureSuccessModal = () => {
+            if (successModal) {
+                successModal.classList.remove("hidden");
+            }
+        };
+
+        // Function to close success modal
+        const closeSuccessModal = () => {
+            if (successModal) {
+                successModal.classList.add("hidden");
+            }
+            // Also close the form modal
+            closeModal();
+        };
+
+        // Close form modal button
+        if (closeButton) {
+            closeButton.addEventListener("click", closeModal);
+        }
+
+        // Close success modal button
+        if (closeSuccessButton) {
+            closeSuccessButton.addEventListener("click", closeSuccessModal);
+        }
+
+        // Close on backdrop click (form modal)
+        if (modal) {
+            modal.addEventListener("click", (e) => {
+                if (e.target === modal) {
+                    closeModal();
+                }
+            });
+        }
+
+        // Close on backdrop click (success modal)
+        if (successModal) {
+            successModal.addEventListener("click", (e) => {
+                if (e.target === successModal) {
+                    closeSuccessModal();
+                }
+            });
+        }
+
+        // Close on Escape key
+        document.addEventListener("keydown", (e) => {
+            if (e.key === "Escape") {
+                if (
+                    successModal &&
+                    !successModal.classList.contains("hidden")
+                ) {
+                    closeSuccessModal();
+                } else if (modal && !modal.classList.contains("hidden")) {
+                    closeModal();
+                }
+            }
+        });
+
+        // Listen for successful form submission to show success modal
+        document.addEventListener("brochure-form-submitted", () => {
+            closeModal();
+            setTimeout(() => {
+                if (typeof window.showBrochureSuccessModal === "function") {
+                    window.showBrochureSuccessModal();
+                }
+            }, 100);
+        });
+    });
+</script>

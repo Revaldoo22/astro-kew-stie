@@ -53,6 +53,12 @@ const imagePage = metaTags.image ? metaTags.image : websiteInfo.logoLight;
 		<link rel="canonical" href={Astro.url.href} />
 		<meta name="robots" content="index, follow" />
 
+		<!-- Google Sheets API Configuration -->
+		<meta
+			name="google-sheets-api"
+			content={websiteInfo.googleSheetsApiUrl}
+		/>
+
 		<script is:inline type="application/ld+json">
 			{
 				"@context": "https://schema.org",

@@ -8,6 +8,8 @@ import BiayaKuliahSection from "@components/home/BiayaKuliahSection.astro";
 import ProgramStudiSection from "@components/home/ProgramStudiSection.astro";
 import LokasiKampusSection from "@components/home/LokasiKampusSection.astro";
 import PromoTableSection from "@components/home/PromoTableSection.astro";
+import BrochureRequestFormModal from "@components/blog/BrochureRequestFormModal.astro";
+import { websiteInfo } from "@globals/info";
 
 const metaTags = {
     title: "Kuliah Kelas Karyawan",
@@ -20,10 +22,13 @@ const metaTags = {
 ---
 
 <Layout metaTags={metaTags}>
-    <PromoHeroSection />
-    <AboutSection />
+    <PromoHeroSection websiteInfo={websiteInfo} />
+    <AboutSection websiteInfo={websiteInfo} />
     <BiayaKuliahSection />
     <ProgramStudiSection />
     <LokasiKampusSection />
-    <PromoTableSection />
+    <PromoTableSection websiteInfo={websiteInfo} />
+
+    <!-- Brochure Request Form Modal -->
+    <BrochureRequestFormModal />
 </Layout>

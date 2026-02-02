@@ -1,5 +1,5 @@
 ---
-// Achievements Section Component
+const { websiteInfo } = Astro.props;
 ---
 
 <section class="py-16 bg-gray-50 dark:bg-gray-900">
@@ -24,7 +24,7 @@
                     <iframe
                         width="100%"
                         height="100%"
-                        src="https://www.youtube.com/embed/ShrAW2cZi9M?si=2dxuHIdFw1k_UFkO"
+                        src={websiteInfo.youtubeVideoUrl}
                         title="Profile Universitas STEKOM 2025"
                         frameborder="0"
                         allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
@@ -39,8 +39,8 @@
                 </p>
             </div>
             <div class="text-center mt-6">
-                <a
-                    href="https://drive.google.com/drive/folders/1yV9JBKU9qRZijStcP0TiElitVmz5Z6Sn"
+                <button
+                    id="scroll-to-brochure-form"
                     class="inline-flex items-center justify-center bg-gradient-to-r from-[#1055C9] to-[#05339C] hover:from-[#05339C] hover:to-[#1055C9] text-white px-8 py-4 rounded-lg font-bold text-base transition-all duration-300 shadow-lg hover:shadow-xl transform hover:-translate-y-0.5"
                 >
                     <svg
@@ -57,9 +57,28 @@
                         ></path>
                     </svg>
                     Download Brosur
-                </a>
+                </button>
             </div>
         </div>
+
+        <script>
+            document.addEventListener("DOMContentLoaded", () => {
+                const scrollButton = document.getElementById(
+                    "scroll-to-brochure-form",
+                );
+
+                if (scrollButton) {
+                    scrollButton.addEventListener("click", () => {
+                        // Open brochure form modal
+                        if (
+                            typeof window.openBrochureFormModal === "function"
+                        ) {
+                            window.openBrochureFormModal();
+                        }
+                    });
+                }
+            });
+        </script>
 
         <!-- Info Section -->
         <div class="text-center max-w-3xl mx-auto mt-8">
