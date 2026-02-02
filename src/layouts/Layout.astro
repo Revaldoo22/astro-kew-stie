@@ -242,6 +242,9 @@ const imagePage = metaTags.image ? metaTags.image : websiteInfo.logoLight;
 			<slot />
 		</main>
 		<Footer websiteInfo={websiteInfo} />
+
+		<!-- Modals slot - outside main to avoid z-index stacking context issues -->
+		<slot name="modals" />
 	</body>
 </html>
 

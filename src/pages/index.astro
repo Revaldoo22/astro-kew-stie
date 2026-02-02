@@ -29,6 +29,6 @@ const metaTags = {
     <LokasiKampusSection />
     <PromoTableSection websiteInfo={websiteInfo} />
 
-    <!-- Brochure Request Form Modal -->
-    <BrochureRequestFormModal />
+    <!-- Brochure Request Form Modal - placed in modals slot to avoid z-index issues -->
+    <BrochureRequestFormModal slot="modals" />
 </Layout>
