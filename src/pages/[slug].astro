@@ -4,10 +4,8 @@ import Breadcrumb from "@components/Breadcrumb.astro";
 import { BlogApi } from "@/services/blogApi";
 import BrochureRequestForm from "@components/blog/BrochureRequestForm.astro";
 
-// Get slug from URL
 const { slug } = Astro.params;
 
-// Fetch all posts to find the one with matching slug
 const blogApi = new BlogApi();
 const projectsResponse = await blogApi.fetchProjects(1, 100, "published");
 const allPosts = projectsResponse?.data || [];
