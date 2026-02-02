@@ -1,3 +1,21 @@
+/**
+ * Get the last day of the current month at 23:59:59
+ * Automatically calculates the end of month date
+ * @returns Date string in format "YYYY-MM-DD HH:mm:ss" (WIB/GMT+7)
+ */
+const getEndOfCurrentMonth = (): string => {
+    const now = new Date();
+    // Get the last day of current month
+    const lastDay = new Date(now.getFullYear(), now.getMonth() + 1, 0);
+
+    // Format: YYYY-MM-DD 23:59:59
+    const year = lastDay.getFullYear();
+    const month = String(lastDay.getMonth() + 1).padStart(2, '0');
+    const day = String(lastDay.getDate()).padStart(2, '0');
+
+    return `${year}-${month}-${day} 23:59:59`;
+};
+
 export const websiteInfo = {
     name: "Kuliah Kelas Karyawan",
     shortName: "KEW",
@@ -44,9 +62,9 @@ export const websiteInfo = {
 
     // Promo Configuration
     promo: {
-        // Countdown end date - format: "YYYY-MM-DD HH:mm:ss" (WIB/GMT+7)
-        // Example: "2026-02-28 23:59:59" means countdown ends on February 28, 2026 at 23:59:59 WIB
-        // Leave empty ("") or null to automatically set countdown to 1 month from now
-        countdownEndDate: "",
+        // Countdown end date - Automatically set to the last day of current month at 23:59:59 WIB
+        // This will dynamically update based on the current month
+        // Example: If current month is February 2026, it will be "2026-02-28 23:59:59"
+        countdownEndDate: getEndOfCurrentMonth(),
     }
 };
