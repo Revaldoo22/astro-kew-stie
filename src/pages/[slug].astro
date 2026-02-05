@@ -3,9 +3,12 @@ import LayoutBlog from "@layouts/LayoutBlog.astro";
 import Breadcrumb from "@components/Breadcrumb.astro";
 import { BlogApi } from "@/services/blogApi";
 import BrochureRequestForm from "@components/blog/BrochureRequestForm.astro";
+import BrochureRequestFormModal from "@components/blog/BrochureRequestFormModal.astro";
 
+// Get slug from URL
 const { slug } = Astro.params;
 
+// Fetch all posts to find the one with matching slug
 const blogApi = new BlogApi();
 const projectsResponse = await blogApi.fetchProjects(1, 100, "published");
 const allPosts = projectsResponse?.data || [];
@@ -46,9 +49,15 @@ const metaTags = {
     keywords: fullContent.tags || "blog, artikel, " + (fullContent.title || ""),
     image: fullContent.thumbnailUrl || "",
 };
+
+console.log("📄 [slug].astro - Rendering page with autoOpen modal");
 ---
 
+
 <LayoutBlog metaTags={metaTags}>
+    <!-- Brochure Request Form Modal - Auto Open -->
+    <BrochureRequestFormModal autoOpen={true} />
+    
     <div class="min-h-screen bg-gray-50 dark:bg-gray-900">
         <!-- Breadcrumb -->
         <div class="bg-white dark:bg-gray-800 border-b border-gray-200 dark:border-gray-700">
@@ -237,8 +246,6 @@ const metaTags = {
                 <!-- Sidebar -->
                 <aside class="lg:col-span-3">
                     <div class="sticky top-4 space-y-6">
-                        <!-- Brochure Request Form -->
-                        <BrochureRequestForm />
                         
                         <!-- Categories Card -->
                         <div class="bg-white dark:bg-gray-800 rounded-xl shadow-md border border-gray-200 dark:border-gray-700 overflow-hidden">
@@ -280,6 +287,9 @@ const metaTags = {
                                 )}
                             </div>
                         </div>
+                        
+                        <!-- Brochure Request Form -->
+                        <BrochureRequestForm />
 
                         <!-- Back to Blog -->
                         <a
@@ -293,78 +303,6 @@ const metaTags = {
             </div>
         </div>
     </div>
+
 </LayoutBlog>
 
-<script is:inline define:vars={{ postTitle: fullContent.title }}>
-    (function () {
-    //   console.log('Post Title for CSE:', postTitle);
-      
-      function executeSearch() {
-        // console.log('Attempting to execute search...');
-        
-        if (!(window.google && google.search && google.search.cse)) {
-          console.log('⏳ CSE not loaded yet, retrying...');
-          setTimeout(executeSearch, 200);
-          return;
-        }
-        
-        try {
-          // Get all CSE elements (auto-rendered from content)
-          const allElements = google.search.cse.element.getAllElements();
-        //   console.log('All CSE elements:', allElements);
-          
-          // CSE returns an object, not array - get first element
-          const elementKeys = Object.keys(allElements || {});
-          
-          if (elementKeys.length > 0) {
-            const firstKey = elementKeys[0];
-            const searchElement = allElements[firstKey];
-            // console.log('✅ Found CSE element:', firstKey, searchElement);
-            
-            if (postTitle) {
-              searchElement.execute(postTitle);
-            //   console.log('✅ Query executed with title:', postTitle);
-              
-              // Hide loading if exists
-              setTimeout(function() {
-                const loadingEl = document.getElementById("loading");
-                if (loadingEl) {
-                  loadingEl.style.display = "none";
-                }
-              }, 500);
-              
-              // Clean URL after CSE updates hash
-              setTimeout(function() {
-                // console.log('Current URL:', window.location.href);
-                if (window.location.search) {
-                  const cleanUrl = window.location.pathname + window.location.hash;
-                //   console.log('Cleaning to:', cleanUrl);
-                  window.history.replaceState({}, document.title, cleanUrl);
-                } else {
-                  console.log('No query params to clean');
-                }
-              }, 2000);
-            } else {
-              console.error('❌ PostTitle is empty');
-            }
-          } else {
-            // console.log('⏳ No CSE elements found yet, retrying...');
-            setTimeout(executeSearch, 200);
-          }
-        } catch (error) {
-        //   console.error('❌ Error in executeSearch:', error);
-          setTimeout(executeSearch, 200);
-        }
-      }
-
-      // Start trying to execute search after page load
-      if (document.readyState === 'loading') {
-        document.addEventListener('DOMContentLoaded', function() {
-          setTimeout(executeSearch, 1000);
-        });
-      } else {
-        setTimeout(executeSearch, 1000);
-      }
-
-    })();
-  </script>

@@ -713,6 +713,11 @@ const brochureLink = websiteInfo.brosur.pmb;
                     clearError(addressInput, addressError);
                     clearError(studyProgramSelect, studyProgramError);
                     clearError(studyMethodSelect, studyMethodError);
+
+                    // Dispatch custom event for BrochureRequestFormModal
+                    document.dispatchEvent(
+                        new CustomEvent("brochure-form-submitted"),
+                    );
                 } catch (error) {
                     // console.error("Error sending to Google Sheets:", error);
 

@@ -21,16 +21,32 @@
 <script>
     // This script will be executed when the button is clicked
     // It will open the brochure form modal
-    document.addEventListener("DOMContentLoaded", () => {
+    function initBrochureButton() {
         const openButton = document.getElementById("open-brochure-form");
 
         if (openButton) {
-            openButton.addEventListener("click", () => {
+            openButton.addEventListener("click", function () {
+                console.log("🔘 Brochure button clicked");
                 // Open brochure form modal
                 if (typeof window.openBrochureFormModal === "function") {
                     window.openBrochureFormModal();
+                } else {
+                    console.error(
+                        "❌ openBrochureFormModal function not found!",
+                    );
                 }
             });
+            console.log("✅ Brochure button initialized");
+        } else {
+            console.error("❌ Brochure button not found!");
         }
-    });
+    }
+
+    // Run initialization when DOM is ready
+    if (document.readyState === "loading") {
+        document.addEventListener("DOMContentLoaded", initBrochureButton);
+    } else {
+        // DOM already loaded, run immediately
+        initBrochureButton();
+    }
 </script>

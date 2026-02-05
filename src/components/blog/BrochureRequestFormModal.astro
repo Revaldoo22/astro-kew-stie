@@ -3,13 +3,21 @@
 import BrochureRequestForm from "./BrochureRequestForm.astro";
 import { websiteInfo } from "@globals/info";
 
+interface Props {
+    autoOpen?: boolean; // Optional: auto-open modal after 5 seconds
+}
+
+const { autoOpen = false } = Astro.props;
 const brochureLink = websiteInfo.brosur.pmb;
+
+console.log("autoOpen", autoOpen);
 ---
 
 <!-- Modal Backdrop & Container -->
 <div
     id="brochure-form-modal"
     class="hidden fixed inset-0 z-[100] overflow-y-auto"
+    data-auto-open={autoOpen ? "true" : "false"}
 >
     <!-- Backdrop -->
     <div class="fixed inset-0 bg-black/60 backdrop-blur-sm transition-opacity">
@@ -128,15 +136,10 @@ const brochureLink = websiteInfo.brosur.pmb;
     </div>
 </div>
 
-<script>
-    // Type declarations for window functions
-    declare global {
-        interface Window {
-            openBrochureFormModal?: () => void;
-            showBrochureSuccessModal?: () => void;
-        }
-    }
-    document.addEventListener("DOMContentLoaded", () => {
+<script is:inline>
+    // Initialize modal functionality
+    function initBrochureModal() {
+
         const modal = document.getElementById("brochure-form-modal");
         const closeButton = document.getElementById("close-form-modal");
         const successModal = document.getElementById("brochure-modal-external");
@@ -144,33 +147,97 @@ const brochureLink = websiteInfo.brosur.pmb;
             "close-success-modal-external",
         );
 
+
+        if (!modal) {
+            console.error("❌ Modal element not found!");
+            return;
+        }
+
         // Function to open modal
-        window.openBrochureFormModal = () => {
-            if (modal) {
-                modal.classList.remove("hidden");
+        window.openBrochureFormModal = function () {
+            const modalEl = document.getElementById("brochure-form-modal");
+            if (modalEl) {
+                modalEl.classList.remove("hidden");
                 document.body.style.overflow = "hidden"; // Prevent background scroll
+
+                // Remove fixed positioning from navigation
+                const navigation = document.getElementById("navigation");
+                if (navigation) {
+                    navigation.classList.remove(
+                        "fixed",
+                        "top-0",
+                        "left-0",
+                        "right-0",
+                        "z-50",
+                        "shadow-lg",
+                    );
+                    navigation.classList.remove("py-2");
+                    navigation.classList.add(
+                        "py-1",
+                        "sm:py-1",
+                        "md:py-2",
+                        "lg:py-4",
+                    );
+                    // Store that we manually removed fixed
+                    navigation.setAttribute("data-modal-open", "true");
+                }
+            } else {
+                console.error(
+                    "❌ Modal element not found when trying to open!",
+                );
             }
         };
 
         // Function to close form modal
-        const closeModal = () => {
-            if (modal) {
-                modal.classList.add("hidden");
+        const closeModal = function () {
+            const modalEl = document.getElementById("brochure-form-modal");
+            if (modalEl) {
+                modalEl.classList.add("hidden");
                 document.body.style.overflow = ""; // Restore scroll
+
+                // Restore fixed positioning if needed
+                const navigation = document.getElementById("navigation");
+                if (navigation) {
+                    navigation.removeAttribute("data-modal-open");
+                    // Re-trigger scroll handler to restore fixed state if needed
+                    if (window.scrollY > 100) {
+                        navigation.classList.add(
+                            "fixed",
+                            "top-0",
+                            "left-0",
+                            "right-0",
+                            "z-50",
+                            "shadow-lg",
+                        );
+                        navigation.classList.remove(
+                            "py-1",
+                            "sm:py-1",
+                            "md:py-2",
+                            "lg:py-4",
+                        );
+                        navigation.classList.add("py-2");
+                    }
+                }
             }
         };
 
         // Function to show success modal
-        window.showBrochureSuccessModal = () => {
-            if (successModal) {
-                successModal.classList.remove("hidden");
+        window.showBrochureSuccessModal = function () {
+            const successModalEl = document.getElementById(
+                "brochure-modal-external",
+            );
+            if (successModalEl) {
+                successModalEl.classList.remove("hidden");
             }
         };
 
         // Function to close success modal
-        const closeSuccessModal = () => {
-            if (successModal) {
-                successModal.classList.add("hidden");
+        const closeSuccessModal = function () {
+            const successModalEl = document.getElementById(
+                "brochure-modal-external",
+            );
+            if (successModalEl) {
+                successModalEl.classList.add("hidden");
             }
             // Also close the form modal
             closeModal();
@@ -188,7 +255,7 @@ const brochureLink = websiteInfo.brosur.pmb;
 
         // Close on backdrop click (form modal)
         if (modal) {
-            modal.addEventListener("click", (e) => {
+            modal.addEventListener("click", function (e) {
                 if (e.target === modal) {
                     closeModal();
                 }
@@ -197,7 +264,7 @@ const brochureLink = websiteInfo.brosur.pmb;
 
         // Close on backdrop click (success modal)
         if (successModal) {
-            successModal.addEventListener("click", (e) => {
+            successModal.addEventListener("click", function (e) {
                 if (e.target === successModal) {
                     closeSuccessModal();
                 }
@@ -205,27 +272,56 @@ const brochureLink = websiteInfo.brosur.pmb;
         }
 
         // Close on Escape key
-        document.addEventListener("keydown", (e) => {
+        document.addEventListener("keydown", function (e) {
             if (e.key === "Escape") {
+                const successModalEl = document.getElementById(
+                    "brochure-modal-external",
+                );
+                const modalEl = document.getElementById("brochure-form-modal");
+
                 if (
-                    successModal &&
-                    !successModal.classList.contains("hidden")
+                    successModalEl &&
+                    !successModalEl.classList.contains("hidden")
                 ) {
                     closeSuccessModal();
-                } else if (modal && !modal.classList.contains("hidden")) {
+                } else if (modalEl && !modalEl.classList.contains("hidden")) {
                     closeModal();
                 }
             }
         });
 
         // Listen for successful form submission to show success modal
-        document.addEventListener("brochure-form-submitted", () => {
+        document.addEventListener("brochure-form-submitted", function () {
             closeModal();
-            setTimeout(() => {
+            setTimeout(function () {
                 if (typeof window.showBrochureSuccessModal === "function") {
                     window.showBrochureSuccessModal();
                 }
             }, 100);
         });
-    });
+
+        // Auto-open modal logic
+        const shouldAutoOpen = modal.getAttribute("data-auto-open") === "true";
+
+      
+        if (shouldAutoOpen) {
+            // Auto-open after a short delay to ensure page is fully loaded
+            setTimeout(function () {
+                if (typeof window.openBrochureFormModal === "function") {
+                    window.openBrochureFormModal();
+                }
+            }, 1500);
+        } else {
+            console.log("ℹ️ AutoOpen is disabled for brochure modal");
+        }
+
+    }
+
+    // Run initialization when DOM is ready
+    if (document.readyState === "loading") {
+        document.addEventListener("DOMContentLoaded", initBrochureModal);
+    } else {
+        // DOM already loaded, run immediately
+        initBrochureModal();
+    }
 </script>

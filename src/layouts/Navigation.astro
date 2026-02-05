@@ -366,7 +366,10 @@ const spaceX = "space-x-8";
     const navLogo = document.getElementById("nav-logo");
 
     if (navigation) {
-      if (window.scrollY > 100) {
+      // Check if modal is open - don't apply fixed if modal is active
+      const isModalOpen = navigation.getAttribute("data-modal-open") === "true";
+
+      if (window.scrollY > 100 && !isModalOpen) {
         navigation.classList.add(
           "fixed",
           "top-0",
@@ -382,7 +385,7 @@ const spaceX = "space-x-8";
         if (navLogo) {
           navLogo.classList.add("hidden");
         }
-      } else {
+      } else if (!isModalOpen) {
         navigation.classList.remove(
           "fixed",
           "top-0",

@@ -1,6 +1,10 @@
 ---
 const { websiteInfo } = Astro.props;
+import BrochureRequestFormModal from "@components/blog/BrochureRequestFormModal.astro";
 ---
+
+<!-- Brochure Request Form Modal - placed in modals slot to avoid z-index issues -->
+<BrochureRequestFormModal slot="modals" autoOpen={false} />
 
 <section class="py-16 bg-gray-50 dark:bg-gray-900">
     <div class="max-w-screen-xl mx-auto px-4">
@@ -62,22 +66,38 @@ const { websiteInfo } = Astro.props;
         </div>
 
         <script>
-            document.addEventListener("DOMContentLoaded", () => {
+            function initScrollButton() {
                 const scrollButton = document.getElementById(
                     "scroll-to-brochure-form",
                 );
 
                 if (scrollButton) {
-                    scrollButton.addEventListener("click", () => {
+                    scrollButton.addEventListener("click", function () {
+                        console.log("🔘 Scroll to brochure button clicked");
                         // Open brochure form modal
                         if (
                             typeof window.openBrochureFormModal === "function"
                         ) {
                             window.openBrochureFormModal();
+                        } else {
+                            console.error(
+                                "❌ openBrochureFormModal function not found!",
+                            );
                         }
                     });
+                    console.log("✅ Scroll button initialized");
+                } else {
+                    console.error("❌ Scroll button not found!");
                 }
-            });
+            }
+
+            // Run initialization when DOM is ready
+            if (document.readyState === "loading") {
+                document.addEventListener("DOMContentLoaded", initScrollButton);
+            } else {
+                // DOM already loaded, run immediately
+                initScrollButton();
+            }
         </script>
 
         <!-- Info Section -->

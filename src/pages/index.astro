@@ -8,7 +8,6 @@ import BiayaKuliahSection from "@components/home/BiayaKuliahSection.astro";
 import ProgramStudiSection from "@components/home/ProgramStudiSection.astro";
 import LokasiKampusSection from "@components/home/LokasiKampusSection.astro";
 import PromoTableSection from "@components/home/PromoTableSection.astro";
-import BrochureRequestFormModal from "@components/blog/BrochureRequestFormModal.astro";
 import { websiteInfo } from "@globals/info";
 
 const metaTags = {
@@ -28,7 +27,4 @@ const metaTags = {
     <ProgramStudiSection />
     <LokasiKampusSection />
     <PromoTableSection websiteInfo={websiteInfo} />
-
-    <!-- Brochure Request Form Modal - placed in modals slot to avoid z-index issues -->
-    <BrochureRequestFormModal slot="modals" />
 </Layout>
