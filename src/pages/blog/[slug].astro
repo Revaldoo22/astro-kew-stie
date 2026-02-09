@@ -10,19 +10,11 @@ const { slug } = Astro.params;
 
 // Fetch all posts to find the one with matching slug
 const blogApi = new BlogApi();
-const projectsResponse = await blogApi.fetchProjects(1, 100, "published");
+const projectsResponse = await blogApi.fetchProjects(1, 10, "published");
 const allPosts = projectsResponse?.data || [];
 
-// Find post by slug
-const post = allPosts.find(p => p.slug === slug);
-
-// If post not found, redirect to blog
-if (!post) {
-    return Astro.redirect('/blog');
-}
-
 // Fetch full content details
-const fullContent = await blogApi.fetchContentById(post.slug);
+const fullContent = await blogApi.fetchContentById(slug || "");
 
 if (!fullContent) {
     return Astro.redirect('/blog');
@@ -34,7 +26,7 @@ const categories = categoriesResponse?.data || [];
 
 // Get related posts (same category, exclude current post)
 const relatedPosts = allPosts
-    .filter(p => p.slug !== post.slug)
+    .filter(p => p.slug !== slug)
     .slice(0, 3);
 
 const breadcrumbs = [
