@@ -609,7 +609,9 @@ const brochureLink = websiteInfo.brosur.pmb;
 
                     // Get current URL for slug and hostname for source
                     const currentUrl =
-                        window.location.origin + window.location.pathname;
+                        window.location.origin +
+                        window.location.pathname +
+                        window.location.search;
                     const hostname = window.location.hostname;
 
                     // Convert data to URL parameters for Google Apps Script
