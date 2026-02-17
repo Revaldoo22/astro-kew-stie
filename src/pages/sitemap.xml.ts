@@ -1,83 +1,46 @@
 import { BlogApi } from "@/services/blogApi";
 import type { APIRoute } from "astro";
 
+import { slugify } from "@/utils/slug";
+
 export const GET: APIRoute = async () => {
   const blogApi = new BlogApi();
-
-  // Fetch all contents from all projects
-  const allContents = await blogApi.fetchAllContentsForSitemap();
-
-  // Fetch all categories
-  const categoriesResponse = await blogApi.fetchCategories();
-  const categories = categoriesResponse?.data || [];
-
+  const projects = await blogApi.fetchAllProjects();
   const baseUrl = "https://kew.stekom.ac.id";
 
-  // Generate XML sitemap
-  const sitemap = `<?xml version="1.0" encoding="UTF-8"?>
-<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
-  <!-- Homepage -->
-  <url>
-    <loc>${baseUrl}/</loc>
-    <lastmod>${new Date().toISOString()}</lastmod>
-    <changefreq>daily</changefreq>
-    <priority>1.0</priority>
-  </url>
-  <url>
-    <loc>${baseUrl}/biaya-kuliah-kelas-karyawan</loc>
-    <lastmod>${new Date().toISOString()}</lastmod>
-    <changefreq>daily</changefreq>
-    <priority>0.9</priority>
-  </url>
-  <url>
-    <loc>${baseUrl}/program-studi-kelas-karyawan</loc>
-    <lastmod>${new Date().toISOString()}</lastmod>
-    <changefreq>daily</changefreq>
-    <priority>0.9</priority>
-  </url>
-  <url>
-    <loc>${baseUrl}/hubungi-kami</loc>
-    <lastmod>${new Date().toISOString()}</lastmod>
-    <changefreq>daily</changefreq>
-    <priority>0.9</priority>
-  </url>
-  
-  <!-- Blog Index -->
-  <url>
-    <loc>${baseUrl}/blog</loc>
-    <lastmod>${new Date().toISOString()}</lastmod>
-    <changefreq>daily</changefreq>
-    <priority>0.9</priority>
-  </url>
-  
-  <!-- Blog Categories -->
-  ${categories && categories.length > 0
-      ? categories.map((category) => `
-  <url>
-    <loc>${baseUrl}/blog/kategori/${category.slug}</loc>
-    <lastmod>${new Date().toISOString()}</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.85</priority>
-  </url>`).join('')
-      : ''}
-  
-  <!-- Blog Posts -->
-  ${allContents && allContents.length > 0
-      ? allContents.map((content) => `
-  <url>
-    <loc>${baseUrl}/${content.slug}</loc>
-    <lastmod>${content.createdAt}</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.8</priority>
-  </url>`).join('')
-      : ''}
-</urlset>`;
+  let projectSitemaps = "";
 
-  // Return XML response
-  return new Response(sitemap, {
+  if (projects && projects.length > 0) {
+    // Sort projects to be consistent with sitemap-[project] logic
+    const sortedProjects = [...projects].sort((a, b) => {
+      const dateA = new Date(a.createdAt).getTime();
+      const dateB = new Date(b.createdAt).getTime();
+      return dateB - dateA;
+    });
+
+    projectSitemaps = sortedProjects.map((project) => `
+  <sitemap>
+    <loc>${baseUrl}/sitemap-${slugify(project.name)}.xml</loc>
+    <lastmod>${new Date().toISOString()}</lastmod>
+  </sitemap>`).join('');
+  }
+
+  const sitemapIndex = `<?xml version="1.0" encoding="UTF-8"?>
+<sitemapindex xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+  <!-- Main Static Pages & Categories -->
+  <sitemap>
+    <loc>${baseUrl}/sitemap-main.xml</loc>
+    <lastmod>${new Date().toISOString()}</lastmod>
+  </sitemap>
+  
+  <!-- Project Sitemaps -->
+  ${projectSitemaps}
+</sitemapindex>`;
+
+  return new Response(sitemapIndex, {
     headers: {
       'Content-Type': 'application/xml; charset=utf-8',
-      'Cache-Control': 'public, max-age=3600', // Cache for 1 hour
+      'Cache-Control': 'public, max-age=3600',
     },
   });
 };

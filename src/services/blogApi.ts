@@ -380,6 +380,74 @@ class BlogApi extends FetchData {
     return sortedContents;
   }
 
+  /**
+   * Fetch all contents from a specific project
+   * @param project - Project object
+   * @param status - Publication status (default: "published")
+   * @returns Array of contents from the project
+   */
+  async fetchContentsByProject(
+    project: Project,
+    status: string = "published"
+  ): Promise<ProjectContent[] | null> {
+    console.log(`📄 Fetching contents from project: ${project.name} (${project.id})`);
+
+    try {
+      let currentPage = 1;
+      let hasMorePages = true;
+      const limit = 100; // Fetch 100 items per page for efficiency
+      const allContents: ProjectContent[] = [];
+
+      // Fetch all pages for this project
+      while (hasMorePages) {
+        const endpoint = `public/projects/${project.id}/contents?status=${status}&page=${currentPage}&limit=${limit}`;
+        const data = await this.fetchData(API_KEY_SEO_MASTER, endpoint);
+
+        // Handle rate limit response
+        if (data === "limit") {
+          console.warn(`⚠️ API rate limit reached for project ${project.name}, skipping...`);
+          break;
+        }
+
+        // Handle null or invalid response
+        if (!data || !hasValue(data) || !data?.data) {
+          console.warn(`⚠️ No data returned from project ${project.name}`);
+          break;
+        }
+
+        // If no data in this page, stop pagination
+        if (data.data.length === 0) {
+          break;
+        }
+
+        // Map the data array to ProjectContent type
+        const mappedData = data.data.map((item: any) =>
+          mapData<ProjectContent>(item, projectSchema) as ProjectContent
+        );
+
+        // Add to allContents array
+        allContents.push(...mappedData);
+
+        console.log(`  ✓ Fetched ${mappedData.length} items from page ${currentPage} of ${project.name}`);
+
+        // Check if there are more pages
+        const totalPages = data.totalPages || 0;
+        if (currentPage >= totalPages) {
+          hasMorePages = false;
+        } else {
+          currentPage++;
+        }
+      }
+
+      console.log(`✅ Total ${allContents.length} contents collected from ${project.name}`);
+      return allContents;
+
+    } catch (error) {
+      console.error(`❌ Error fetching contents from project ${project.name}:`, error);
+      return null;
+    }
+  }
+
 }
 
 export { BlogApi };
