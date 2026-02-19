@@ -139,14 +139,12 @@ console.log("autoOpen", autoOpen);
 <script is:inline>
     // Initialize modal functionality
     function initBrochureModal() {
-
         const modal = document.getElementById("brochure-form-modal");
         const closeButton = document.getElementById("close-form-modal");
         const successModal = document.getElementById("brochure-modal-external");
         const closeSuccessButton = document.getElementById(
             "close-success-modal-external",
         );
-
 
         if (!modal) {
             console.error("❌ Modal element not found!");
@@ -303,7 +301,6 @@ console.log("autoOpen", autoOpen);
         // Auto-open modal logic
         const shouldAutoOpen = modal.getAttribute("data-auto-open") === "true";
 
-      
         if (shouldAutoOpen) {
             // Auto-open after a short delay to ensure page is fully loaded
             setTimeout(function () {
@@ -314,7 +311,6 @@ console.log("autoOpen", autoOpen);
         } else {
             console.log("ℹ️ AutoOpen is disabled for brochure modal");
         }
-
     }
 
     // Run initialization when DOM is ready
