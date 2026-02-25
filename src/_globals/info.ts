@@ -77,5 +77,6 @@ export const websiteInfo = {
         // This will dynamically update based on the current month
         // Example: If current month is February 2026, it will be "2026-02-28 23:59:59"
         countdownEndDate: getEndOfCurrentMonth(),
-    }
+    },
+    contactUs: "https://link.stekom.ac.id/ads?text=Halo%20Admin,%20Saya%20ingin%20konsultasi%20terkait%20pendaftaran%20kuliah%20kelas%20karyawan"
 };
