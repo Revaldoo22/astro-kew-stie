@@ -52,6 +52,41 @@ const documents = [
     "Sertifikat pelatihan/kompetensi",
     "Surat pengalaman kerja (jika ada)",
 ];
+
+const campusLocations = [
+    {
+        name: "Kampus Pusat Semarang",
+        mapsUrl: "https://maps.app.goo.gl/VNpC3rPLKVgdUepF6",
+    },
+    {
+        name: "Kampus Siliwangi",
+        mapsUrl: "https://maps.app.goo.gl/zbp3jqRbsmmyb8gy6",
+    },
+    {
+        name: "Kampus Ungaran",
+        mapsUrl: "https://maps.app.goo.gl/yCWGRQWa1U2icRBdA",
+    },
+    {
+        name: "Kampus Kendal Kota",
+        mapsUrl: "https://maps.app.goo.gl/fDftWjXJc7wy9o6h9",
+    },
+    {
+        name: "Kampus Sruwen Salatiga",
+        mapsUrl: "https://maps.app.goo.gl/84Ka1uSM5fV624bX8",
+    },
+    {
+        name: "Kampus Solo",
+        mapsUrl: "https://maps.app.goo.gl/aXPnrKZ4Q9ZgwTBS7",
+    },
+    {
+        name: "Kampus Weleri Batang",
+        mapsUrl: "https://maps.app.goo.gl/fxChVNqWCKfpLXUk6",
+    },
+    {
+        name: "Kampus Ambarawa",
+        mapsUrl: "https://maps.app.goo.gl/AN9vbQmfrZEknjBs5",
+    },
+];
 ---
 
 <Layout metaTags={metaTags}>
@@ -71,6 +106,80 @@ const documents = [
         </div>
 
         <div class="relative max-w-screen-xl mx-auto px-4">
+            <!-- Countdown Timer -->
+            <div class="max-w-2xl mx-auto mb-8">
+                <p
+                    class="text-center text-white/70 text-sm uppercase tracking-widest font-semibold mb-4"
+                >
+                    ⏳ Promo berlaku hingga
+                </p>
+                <div
+                    id="rpl-countdown"
+                    class="grid grid-cols-4 gap-3 text-center"
+                >
+                    <div
+                        class="bg-white/15 backdrop-blur-sm border border-white/20 rounded-xl p-4"
+                    >
+                        <div
+                            id="rpl-days"
+                            class="text-3xl md:text-4xl font-bold text-white"
+                        >
+                            00
+                        </div>
+                        <div
+                            class="text-xs md:text-sm text-white/70 mt-1 uppercase tracking-wider"
+                        >
+                            Hari
+                        </div>
+                    </div>
+                    <div
+                        class="bg-white/15 backdrop-blur-sm border border-white/20 rounded-xl p-4"
+                    >
+                        <div
+                            id="rpl-hours"
+                            class="text-3xl md:text-4xl font-bold text-white"
+                        >
+                            00
+                        </div>
+                        <div
+                            class="text-xs md:text-sm text-white/70 mt-1 uppercase tracking-wider"
+                        >
+                            Jam
+                        </div>
+                    </div>
+                    <div
+                        class="bg-white/15 backdrop-blur-sm border border-white/20 rounded-xl p-4"
+                    >
+                        <div
+                            id="rpl-minutes"
+                            class="text-3xl md:text-4xl font-bold text-white"
+                        >
+                            00
+                        </div>
+                        <div
+                            class="text-xs md:text-sm text-white/70 mt-1 uppercase tracking-wider"
+                        >
+                            Menit
+                        </div>
+                    </div>
+                    <div
+                        class="bg-white/15 backdrop-blur-sm border border-white/20 rounded-xl p-4"
+                    >
+                        <div
+                            id="rpl-seconds"
+                            class="text-3xl md:text-4xl font-bold text-yellow-300"
+                        >
+                            00
+                        </div>
+                        <div
+                            class="text-xs md:text-sm text-white/70 mt-1 uppercase tracking-wider"
+                        >
+                            Detik
+                        </div>
+                    </div>
+                </div>
+            </div>
+
             <!-- Badge -->
             <div class="flex justify-center mb-4">
                 <span
@@ -141,80 +250,6 @@ const documents = [
                             </div>
                         ))
                     }
-                </div>
-            </div>
-
-            <!-- Countdown Timer -->
-            <div class="max-w-2xl mx-auto mt-10">
-                <p
-                    class="text-center text-white/70 text-sm uppercase tracking-widest font-semibold mb-4"
-                >
-                    ⏳ Promo berlaku hingga
-                </p>
-                <div
-                    id="rpl-countdown"
-                    class="grid grid-cols-4 gap-3 text-center"
-                >
-                    <div
-                        class="bg-white/15 backdrop-blur-sm border border-white/20 rounded-xl p-4"
-                    >
-                        <div
-                            id="rpl-days"
-                            class="text-3xl md:text-4xl font-bold text-white"
-                        >
-                            00
-                        </div>
-                        <div
-                            class="text-xs md:text-sm text-white/70 mt-1 uppercase tracking-wider"
-                        >
-                            Hari
-                        </div>
-                    </div>
-                    <div
-                        class="bg-white/15 backdrop-blur-sm border border-white/20 rounded-xl p-4"
-                    >
-                        <div
-                            id="rpl-hours"
-                            class="text-3xl md:text-4xl font-bold text-white"
-                        >
-                            00
-                        </div>
-                        <div
-                            class="text-xs md:text-sm text-white/70 mt-1 uppercase tracking-wider"
-                        >
-                            Jam
-                        </div>
-                    </div>
-                    <div
-                        class="bg-white/15 backdrop-blur-sm border border-white/20 rounded-xl p-4"
-                    >
-                        <div
-                            id="rpl-minutes"
-                            class="text-3xl md:text-4xl font-bold text-white"
-                        >
-                            00
-                        </div>
-                        <div
-                            class="text-xs md:text-sm text-white/70 mt-1 uppercase tracking-wider"
-                        >
-                            Menit
-                        </div>
-                    </div>
-                    <div
-                        class="bg-white/15 backdrop-blur-sm border border-white/20 rounded-xl p-4"
-                    >
-                        <div
-                            id="rpl-seconds"
-                            class="text-3xl md:text-4xl font-bold text-yellow-300"
-                        >
-                            00
-                        </div>
-                        <div
-                            class="text-xs md:text-sm text-white/70 mt-1 uppercase tracking-wider"
-                        >
-                            Detik
-                        </div>
-                    </div>
                 </div>
             </div>
 
@@ -545,6 +580,258 @@ const documents = [
                         Dokumen yang diperlukan bisa disesuaikan dengan jenis
                         RPL yang kamu pilih. Konsultasikan dengan tim kami untuk
                         informasi lebih lanjut.
+                    </p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Lokasi Kampus Section -->
+    <section class="py-16 bg-gray-50 dark:bg-gray-900">
+        <div class="max-w-screen-xl mx-auto px-4">
+            <!-- Header -->
+            <div class="text-center mb-12">
+                <h2
+                    class="text-3xl md:text-4xl lg:text-5xl font-bold mb-4 bg-gradient-to-r from-[#1055C9] to-[#05339C] bg-clip-text text-transparent"
+                >
+                    Lokasi Kampus RPL
+                </h2>
+                <p
+                    class="text-lg md:text-xl text-gray-700 dark:text-gray-300 max-w-3xl mx-auto mb-6"
+                >
+                    Berkuliah dari daerah Anda? Konsultasi Gratis sekarang!
+                </p>
+
+                <!-- Hubungi Kami Button -->
+                <div class="mb-8">
+                    <a
+                        href={websiteInfo.contactUs}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        class="inline-flex items-center justify-center bg-gradient-to-r from-[#1055C9] to-[#05339C] hover:from-[#05339C] hover:to-[#1055C9] text-white px-8 py-3 rounded-full font-bold text-base transition-all duration-300 shadow-lg hover:shadow-xl transform hover:-translate-y-0.5"
+                    >
+                        HUBUNGI KAMI
+                    </a>
+                </div>
+
+                <p
+                    class="text-base text-gray-600 dark:text-gray-400 max-w-2xl mx-auto"
+                >
+                    Dengan layanan akademik kuliah full online dapat diakses
+                    dari manapun dan kapanpun!
+                </p>
+            </div>
+
+            <!-- Campus Table -->
+            <div class="max-w-4xl mx-auto">
+                <div
+                    class="overflow-x-auto rounded-2xl border-2 border-gray-200 dark:border-gray-700 shadow-lg"
+                >
+                    <table class="w-full">
+                        <thead
+                            class="bg-gradient-to-r from-[#1055C9] to-[#05339C] text-white"
+                        >
+                            <tr>
+                                <th
+                                    class="px-6 py-4 text-left font-bold text-lg"
+                                    >KAMPUS</th
+                                >
+                                <th
+                                    class="px-6 py-4 text-center font-bold text-lg"
+                                    >ALAMAT</th
+                                >
+                            </tr>
+                        </thead>
+                        <tbody
+                            class="bg-white dark:bg-gray-800 divide-y divide-gray-200 dark:divide-gray-700"
+                        >
+                            {
+                                campusLocations.map((campus, index) => (
+                                    <tr
+                                        class={
+                                            index % 2 === 0
+                                                ? ""
+                                                : "bg-gray-50 dark:bg-gray-900"
+                                        }
+                                    >
+                                        <td class="px-6 py-4 text-gray-900 dark:text-white font-medium">
+                                            {campus.name}
+                                        </td>
+                                        <td class="px-6 py-4 text-center">
+                                            <a
+                                                href={campus.mapsUrl}
+                                                target="_blank"
+                                                rel="noopener noreferrer"
+                                                class="inline-flex items-center justify-center gap-2 bg-gradient-to-r from-[#1055C9] to-[#05339C] hover:from-[#05339C] hover:to-[#1055C9] text-white px-6 py-2 rounded-full font-bold text-sm transition-all duration-300 shadow-md hover:shadow-lg transform hover:-translate-y-0.5"
+                                            >
+                                                <svg
+                                                    class="w-5 h-5"
+                                                    fill="none"
+                                                    stroke="currentColor"
+                                                    viewBox="0 0 24 24"
+                                                >
+                                                    <path
+                                                        stroke-linecap="round"
+                                                        stroke-linejoin="round"
+                                                        stroke-width="2"
+                                                        d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"
+                                                    />
+                                                    <path
+                                                        stroke-linecap="round"
+                                                        stroke-linejoin="round"
+                                                        stroke-width="2"
+                                                        d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"
+                                                    />
+                                                </svg>
+                                                Maps
+                                            </a>
+                                        </td>
+                                    </tr>
+                                ))
+                            }
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            <!-- Online Learning Info -->
+            <div class="max-w-4xl mx-auto mt-12">
+                <div
+                    class="bg-gradient-to-r from-blue-50 to-indigo-50 dark:from-blue-900/20 dark:to-indigo-900/20 rounded-2xl p-6 md:p-8 border-2 border-blue-200 dark:border-blue-800"
+                >
+                    <div class="flex items-start gap-4">
+                        <svg
+                            class="w-8 h-8 text-[#1055C9] flex-shrink-0 mt-1"
+                            fill="none"
+                            stroke="currentColor"
+                            viewBox="0 0 24 24"
+                        >
+                            <path
+                                stroke-linecap="round"
+                                stroke-linejoin="round"
+                                stroke-width="2"
+                                d="M9.75 17L9 20l-1 1h8l-1-1-.75-3M3 13h18M5 17h14a2 2 0 002-2V5a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"
+                            ></path>
+                        </svg>
+                        <div>
+                            <h4
+                                class="text-xl font-bold text-gray-900 dark:text-white mb-3"
+                            >
+                                Kuliah Full Online dari Mana Saja!
+                            </h4>
+                            <p
+                                class="text-gray-700 dark:text-gray-300 leading-relaxed"
+                            >
+                                Tidak perlu khawatir jika Anda berada jauh dari
+                                kampus. Dengan sistem layanan akademik full
+                                online, Anda dapat mengakses perkuliahan dari
+                                mana saja dan kapan saja. Fleksibilitas penuh
+                                untuk karyawan yang sibuk!
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Additional Features -->
+            <div
+                class="grid grid-cols-1 md:grid-cols-3 gap-6 max-w-5xl mx-auto mt-12"
+            >
+                <!-- Feature 1 -->
+                <div
+                    class="bg-white dark:bg-gray-800 rounded-xl p-6 shadow-lg border border-gray-200 dark:border-gray-700 text-center"
+                >
+                    <div
+                        class="inline-flex items-center justify-center w-16 h-16 bg-gradient-to-r from-[#1055C9] to-[#05339C] rounded-full mb-4"
+                    >
+                        <svg
+                            class="w-8 h-8 text-white"
+                            fill="none"
+                            stroke="currentColor"
+                            viewBox="0 0 24 24"
+                        >
+                            <path
+                                stroke-linecap="round"
+                                stroke-linejoin="round"
+                                stroke-width="2"
+                                d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"
+                            ></path>
+                            <path
+                                stroke-linecap="round"
+                                stroke-linejoin="round"
+                                stroke-width="2"
+                                d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"></path>
+                        </svg>
+                    </div>
+                    <h4
+                        class="text-lg font-bold text-gray-900 dark:text-white mb-2"
+                    >
+                        8 Lokasi Kampus
+                    </h4>
+                    <p class="text-gray-600 dark:text-gray-400 text-sm">
+                        Tersebar di berbagai kota untuk kemudahan akses
+                    </p>
+                </div>
+
+                <!-- Feature 2 -->
+                <div
+                    class="bg-white dark:bg-gray-800 rounded-xl p-6 shadow-lg border border-gray-200 dark:border-gray-700 text-center"
+                >
+                    <div
+                        class="inline-flex items-center justify-center w-16 h-16 bg-gradient-to-r from-[#1055C9] to-[#05339C] rounded-full mb-4"
+                    >
+                        <svg
+                            class="w-8 h-8 text-white"
+                            fill="none"
+                            stroke="currentColor"
+                            viewBox="0 0 24 24"
+                        >
+                            <path
+                                stroke-linecap="round"
+                                stroke-linejoin="round"
+                                stroke-width="2"
+                                d="M12 18h.01M8 21h8a2 2 0 002-2V5a2 2 0 00-2-2H8a2 2 0 00-2 2v14a2 2 0 002 2z"
+                            ></path>
+                        </svg>
+                    </div>
+                    <h4
+                        class="text-lg font-bold text-gray-900 dark:text-white mb-2"
+                    >
+                        Full Online
+                    </h4>
+                    <p class="text-gray-600 dark:text-gray-400 text-sm">
+                        Kuliah dari rumah atau kantor dengan sistem online
+                    </p>
+                </div>
+
+                <!-- Feature 3 -->
+                <div
+                    class="bg-white dark:bg-gray-800 rounded-xl p-6 shadow-lg border border-gray-200 dark:border-gray-700 text-center"
+                >
+                    <div
+                        class="inline-flex items-center justify-center w-16 h-16 bg-gradient-to-r from-[#1055C9] to-[#05339C] rounded-full mb-4"
+                    >
+                        <svg
+                            class="w-8 h-8 text-white"
+                            fill="none"
+                            stroke="currentColor"
+                            viewBox="0 0 24 24"
+                        >
+                            <path
+                                stroke-linecap="round"
+                                stroke-linejoin="round"
+                                stroke-width="2"
+                                d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"
+                            ></path>
+                        </svg>
+                    </div>
+                    <h4
+                        class="text-lg font-bold text-gray-900 dark:text-white mb-2"
+                    >
+                        Jadwal Fleksibel
+                    </h4>
+                    <p class="text-gray-600 dark:text-gray-400 text-sm">
+                        Sesuaikan waktu kuliah dengan jadwal kerja Anda
                     </p>
                 </div>
             </div>
