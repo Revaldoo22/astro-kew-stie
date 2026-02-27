@@ -19,7 +19,7 @@ app.use((req, res) => {
 
 // Middleware untuk menangani error
 app.use((err, req, res, next) => {
-  console.error('Error:', err);
+  // console.error('Error:', err);
   res.status(500).redirect('/500');
 });
 

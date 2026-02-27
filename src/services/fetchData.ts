@@ -28,7 +28,7 @@ class FetchData {
 
       const data = await response.json() as ApiResponse;
 
-      console.log("RAW JSON =>", data);
+      // console.log("RAW JSON =>", data);
 
       return data;
     } catch (error) {

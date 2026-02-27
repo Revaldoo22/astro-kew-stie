@@ -66,7 +66,6 @@ class BlogApi extends FetchData {
 
     if (hasValue(data) && data?.data && data.data.length > 0) {
       const projects = data.data as Project[];
-      console.log(`Fetched ${projects.length} projects from organization`);
       return projects;
     }
 
@@ -93,7 +92,6 @@ class BlogApi extends FetchData {
       return null;
     }
 
-    // console.log('All projects:', projects.map(p => ({ id: p.id, name: p.name, createdAt: p.createdAt })));
 
     // Sort projects by createdAt descending (latest first)
     const sortedProjects = [...projects].sort((a, b) => {
@@ -102,16 +100,12 @@ class BlogApi extends FetchData {
       return dateB - dateA; // Descending order (newest first)
     });
 
-    // console.log('Sorted projects:', sortedProjects.map(p => ({ id: p.id, name: p.name, createdAt: p.createdAt })));
 
     // Priority order:
     // 1. LAST project (latest based on createdAt) - tried first
     // 2. FIRST project (first in original array) - only if #1 returns empty/null data
     const latestProject = sortedProjects[0];
     const firstProject = projects[0];
-
-    console.log('Latest project (by createdAt):', { id: latestProject.id, name: latestProject.name, createdAt: latestProject.createdAt });
-    console.log('First project (original order):', { id: firstProject.id, name: firstProject.name, createdAt: firstProject.createdAt });
 
     const projectsToTry = [latestProject];
 
@@ -121,24 +115,19 @@ class BlogApi extends FetchData {
     } else {
       // If they're the same, try the last project in the original array as fallback
       const lastProjectInArray = projects[projects.length - 1];
-      console.log('Latest === First, using last project in array as fallback:', { id: lastProjectInArray.id, name: lastProjectInArray.name });
       projectsToTry.push(lastProjectInArray);
     }
 
-    console.log('Projects to try (in order):', projectsToTry.map(p => ({ id: p.id, name: p.name, createdAt: p.createdAt })));
 
     // Try each project sequentially until we get valid data
     for (const project of projectsToTry) {
-      console.log(`Trying project: ${project.name} (${project.id})`);
 
       const endpoint = `public/projects/${project.id}/contents?status=${status}&page=${page}&limit=${limit}`;
       const data = await this.fetchData(API_KEY_SEO_MASTER, endpoint);
 
-      console.log(`Data from project ${project.name}:`, data);
 
       // Handle rate limit response
       if (data === "limit") {
-        console.warn("API rate limit reached");
         continue; // Try next project
       }
 
@@ -149,7 +138,6 @@ class BlogApi extends FetchData {
           mapData<ProjectContent>(item, projectSchema) as ProjectContent
         );
 
-        console.log(`✅ Successfully fetched ${mappedData.length} items from project: ${project.name}`);
 
         return {
           data: mappedData,
@@ -194,7 +182,6 @@ class BlogApi extends FetchData {
     if (hasValue(data)) {
       // Map the single content to ProjectContent type
       const mappedContent = mapData<ProjectContent>(data, projectSchema) as ProjectContent;
-      console.log('Mapped content:', mappedContent);
       return mappedContent;
     }
 
@@ -223,7 +210,6 @@ class BlogApi extends FetchData {
     }
 
     if (hasValue(data)) {
-      console.log('data categories', data);
       return {
         data: data?.data || [],
         total: data?.total || 0
@@ -270,7 +256,6 @@ class BlogApi extends FetchData {
         mapData<ProjectContent>(item, projectSchema) as ProjectContent
       ) || [];
 
-      console.log('mappedData by category', data);
 
       return {
         data: mappedData,
@@ -300,13 +285,11 @@ class BlogApi extends FetchData {
       return null;
     }
 
-    console.log(`📍 Fetching contents from ${projects.length} projects for sitemap...`);
 
     const allContents: ProjectContent[] = [];
 
     // Iterate through all projects
     for (const project of projects) {
-      console.log(`📄 Fetching contents from project: ${project.name} (${project.id})`);
 
       try {
         let currentPage = 1;
@@ -343,7 +326,6 @@ class BlogApi extends FetchData {
           // Add to allContents array
           allContents.push(...mappedData);
 
-          console.log(`  ✓ Fetched ${mappedData.length} items from page ${currentPage} of ${project.name}`);
 
           // Check if there are more pages
           const totalPages = data.totalPages || 0;
@@ -354,10 +336,8 @@ class BlogApi extends FetchData {
           }
         }
 
-        console.log(`✅ Total ${allContents.length} contents collected from ${project.name}`);
 
       } catch (error) {
-        console.error(`❌ Error fetching contents from project ${project.name}:`, error);
         // Continue with next project even if one fails
         continue;
       }
@@ -368,7 +348,6 @@ class BlogApi extends FetchData {
       return null;
     }
 
-    console.log(`🎉 Successfully fetched ${allContents.length} total contents from ${projects.length} projects for sitemap`);
 
     // Sort by createdAt descending (most recent first)
     const sortedContents = allContents.sort((a, b) => {
@@ -390,7 +369,6 @@ class BlogApi extends FetchData {
     project: Project,
     status: string = "published"
   ): Promise<ProjectContent[] | null> {
-    console.log(`📄 Fetching contents from project: ${project.name} (${project.id})`);
 
     try {
       let currentPage = 1;
@@ -428,7 +406,6 @@ class BlogApi extends FetchData {
         // Add to allContents array
         allContents.push(...mappedData);
 
-        console.log(`  ✓ Fetched ${mappedData.length} items from page ${currentPage} of ${project.name}`);
 
         // Check if there are more pages
         const totalPages = data.totalPages || 0;
@@ -439,11 +416,9 @@ class BlogApi extends FetchData {
         }
       }
 
-      console.log(`✅ Total ${allContents.length} contents collected from ${project.name}`);
       return allContents;
 
     } catch (error) {
-      console.error(`❌ Error fetching contents from project ${project.name}:`, error);
       return null;
     }
   }

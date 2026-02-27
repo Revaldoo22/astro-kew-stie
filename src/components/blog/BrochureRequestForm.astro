@@ -326,7 +326,6 @@ const brochureLink = websiteInfo.brosur.pmb;
         const studyProgramError = document.getElementById("studyProgram-error");
         const studyMethodError = document.getElementById("studyMethod-error");
 
-        console.log("Script loaded, form:", form, "modal:", modal);
 
         // Validation functions
         function validateFullName(): boolean {
@@ -541,7 +540,6 @@ const brochureLink = websiteInfo.brosur.pmb;
         if (form && modal) {
             form.addEventListener("submit", async (e) => {
                 e.preventDefault();
-                console.log("Form submitted!");
 
                 // Validate all fields
                 const isFullNameValid = validateFullName();
@@ -559,14 +557,12 @@ const brochureLink = websiteInfo.brosur.pmb;
                     !isStudyProgramValid ||
                     !isStudyMethodValid
                 ) {
-                    console.log("Validation failed");
                     return;
                 }
 
                 // Get form data
                 const formData = new FormData(form);
                 const data = Object.fromEntries(formData.entries());
-                // console.log("Form data:", data);
 
                 // Get UI elements for loading state
                 const submitButton = document.getElementById(
@@ -603,9 +599,6 @@ const brochureLink = websiteInfo.brosur.pmb;
                             "Konfigurasi Google Sheets belum diatur. Silakan hubungi administrator.",
                         );
                     }
-
-                    // console.log("Sending to Google Sheets:", apiUrl);
-                    // console.log("Data to send:", data);
 
                     // Get current URL for slug and hostname for source
                     const currentUrl =
@@ -656,7 +649,7 @@ const brochureLink = websiteInfo.brosur.pmb;
 
                     if (externalSuccessModal) {
                         // We're inside BrochureRequestFormModal, use external success modal
-                        console.log("Using external success modal");
+                        // console.log("Using external success modal");
                         if (
                             typeof window.showBrochureSuccessModal ===
                             "function"
@@ -672,39 +665,12 @@ const brochureLink = websiteInfo.brosur.pmb;
                             formModal.classList.add("hidden");
                         }
                     } else {
-                        // Standalone form, use inline success modal
-                        console.log("Using inline success modal");
-                        console.log("Success modal element:", modal);
-                        console.log(
-                            "Modal classes before:",
-                            modal?.classList.toString(),
-                        );
-
+                        
                         if (modal) {
                             modal.classList.remove("hidden");
                             // Ensure body can scroll to show modal
                             document.body.style.overflow = "";
-
-                            console.log(
-                                "Modal classes after:",
-                                modal?.classList.toString(),
-                            );
-                            console.log(
-                                "Modal display:",
-                                window.getComputedStyle(modal).display,
-                            );
-                            console.log(
-                                "Modal visibility:",
-                                window.getComputedStyle(modal).visibility,
-                            );
-                            console.log(
-                                "Modal z-index:",
-                                window.getComputedStyle(modal).zIndex,
-                            );
-                            console.log("Modal should be visible now");
-                        } else {
-                            console.error("Success modal not found in DOM!");
-                        }
+                        } 
                     }
 
                     // Reset form

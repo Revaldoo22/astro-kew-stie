@@ -24,7 +24,6 @@ export const GET: APIRoute = async ({ params }) => {
         return new Response('Not found', { status: 404 });
     }
 
-    console.log(`Generating sitemap for project: ${targetProject.name} (Slug: ${projectParam})`);
 
     // Fetch contents for this project
     const contents = await blogApi.fetchContentsByProject(targetProject);

@@ -7,9 +7,6 @@ interface Props {
 
 const { listData, isEmptyList, baseUrl = "" } = Astro.props;
 
-console.log("isEmptyList", isEmptyList);
-console.log("baseUrl", baseUrl);
-
 if (isEmptyList) {
     return;
 }

@@ -27,8 +27,6 @@ if (!currentCategory) {
 // Page 1: 10 items (1 featured + 9 grid), Page 2+: 9 items (grid only)
 const itemsPerPage = currentPage === 1 ? 10 : 9;
 
-console.log('Current Category:', currentCategory.slug);
-
 // Fetch blog posts by category
 const projectsResponse = await blogApi.fetchProjectsByCategory(currentCategory.slug, currentPage, itemsPerPage, "published");
 const posts = projectsResponse?.data || [];
@@ -54,9 +52,6 @@ const metaTags = {
     image: "",
 };
 
-console.log('Category:', currentCategory);
-console.log('Posts:', posts);
-console.log('Pagination:', paginationData);
 ---
 
 <Layout metaTags={metaTags}>

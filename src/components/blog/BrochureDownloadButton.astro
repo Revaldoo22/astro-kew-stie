@@ -26,7 +26,6 @@
 
         if (openButton) {
             openButton.addEventListener("click", function () {
-                console.log("🔘 Brochure button clicked");
                 // Open brochure form modal
                 if (typeof window.openBrochureFormModal === "function") {
                     window.openBrochureFormModal();
@@ -36,7 +35,6 @@
                     );
                 }
             });
-            console.log("✅ Brochure button initialized");
         } else {
             console.error("❌ Brochure button not found!");
         }

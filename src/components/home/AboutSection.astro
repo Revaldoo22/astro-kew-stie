@@ -73,7 +73,6 @@ import BrochureRequestFormModal from "@components/blog/BrochureRequestFormModal.
 
                 if (scrollButton) {
                     scrollButton.addEventListener("click", function () {
-                        console.log("🔘 Scroll to brochure button clicked");
                         // Open brochure form modal
                         if (
                             typeof window.openBrochureFormModal === "function"
@@ -85,9 +84,6 @@ import BrochureRequestFormModal from "@components/blog/BrochureRequestFormModal.
                             );
                         }
                     });
-                    console.log("✅ Scroll button initialized");
-                } else {
-                    console.error("❌ Scroll button not found!");
                 }
             }
 

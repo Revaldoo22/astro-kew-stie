@@ -10,7 +10,6 @@ interface Props {
 const { autoOpen = false } = Astro.props;
 const brochureLink = websiteInfo.brosur.pmb;
 
-console.log("autoOpen", autoOpen);
 ---
 
 <!-- Modal Backdrop & Container -->
@@ -308,8 +307,6 @@ console.log("autoOpen", autoOpen);
                     window.openBrochureFormModal();
                 }
             }, 3000);
-        } else {
-            console.log("ℹ️ AutoOpen is disabled for brochure modal");
         }
     }
 
