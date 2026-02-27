@@ -18,6 +18,11 @@ export const menuItems: MenuItem[] = [
         isHome: true
     },
     {
+        label: "RPL",
+        href: "/promo-kuliah-cepat-rpl",
+        submenuId: "menu-promo-rpl"
+    },
+    {
         label: "Biaya Kuliah Kelas Karyawan",
         href: "/biaya-kuliah-kelas-karyawan",
         submenuId: "menu-biaya"

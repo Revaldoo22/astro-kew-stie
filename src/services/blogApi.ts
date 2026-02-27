@@ -175,7 +175,7 @@ class BlogApi extends FetchData {
 
     // Handle null or invalid response
     if (!data) {
-      console.warn("No content data returned from API");
+      // console.warn("No content data returned from API");
       return null;
     }
 
