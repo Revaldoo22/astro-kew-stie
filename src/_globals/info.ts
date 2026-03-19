@@ -63,7 +63,7 @@ export const websiteInfo = {
 
     //brossur
     brosur: {
-        pmb: "https://drive.google.com/drive/folders/1yV9JBKU9qRZijStcP0TiElitVmz5Z6Sn",
+        pmb: "https://drive.google.com/drive/folders/11TBtxukFBYbdZEaVgnib-q8n6NQ2ORoC",
     },
 
     // Google Sheets API Configuration
