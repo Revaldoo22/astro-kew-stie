@@ -2,11 +2,8 @@
 import LayoutBlog from "@layouts/LayoutBlog.astro";
 import Breadcrumb from "@components/Breadcrumb.astro";
 import { BlogApi } from "@/services/blogApi";
-import HalamanTerkaitCard from "@components/blog/HalamanTerkaitCard.astro";
 import BrochureRequestForm from "@components/blog/BrochureRequestForm.astro";
 import BrochureRequestFormModal from "@components/blog/BrochureRequestFormModal.astro";
-import BrochureRequestFormSNPMB from "@components/blog/BrochureRequestFormSNPMB.astro";
-import BrochureRequestFormModalSNPMB from "@components/blog/BrochureRequestFormModalSNPMB.astro";
 
 // Get slug from URL
 const { slug } = Astro.params;
@@ -45,17 +42,114 @@ const metaTags = {
     image: fullContent.thumbnailUrl || "",
 };
 
-// console.log("📄 [slug].astro - Rendering page with autoOpen modal");
+const formattedTitle = fullContent.title 
+    ? fullContent.title.toLowerCase().replace(/[^a-z0-9]+/g, '+').replace(/(^\+|\+$)/g, '') 
+    : '';
 
-// Check if slug contains SNPMB-related keywords
-const isSNPMBSlug = /beasiswa-kuliah|snpmb|utbk|snbt/i.test(slug || '');
+const adDiv = `
+<a href="/?utm_source=artikel+${formattedTitle}" class="group relative block w-full max-w-4xl mx-auto my-10 no-underline font-sans transition-all duration-500 hover:scale-[1.01]">
+
+  <!-- Background Glow -->
+  <div class="absolute inset-0 bg-gradient-to-r from-orange-400/10 via-red-400/10 to-yellow-400/10 blur-2xl opacity-70 group-hover:opacity-100 transition"></div>
+
+  <!-- Main Card -->
+  <div class="relative bg-white border border-gray-200 rounded-2xl shadow-lg hover:shadow-2xl transition-all duration-300 overflow-hidden">
+
+    <!-- Ad Badge -->
+    <span class="absolute top-0 right-0 bg-gray-100 text-gray-500 text-[10px] uppercase px-3 py-1 border-b border-l border-gray-200 z-10 rounded-bl-xl font-bold">
+      Ad
+    </span>
+
+    <div class="flex flex-col md:flex-row p-6 md:p-8 gap-6 items-center">
+
+      <!-- LEFT -->
+      <div class="flex-1 w-full space-y-5">
+
+        <!-- Title + Ranking -->
+        <div>
+          <h3 class="text-2xl md:text-3xl font-extrabold text-[#1a2b4c] leading-tight">
+            Kuliah Kelas Karyawan
+          </h3>
+
+          <div class="inline-block mt-3 bg-[#FEF6D8] border border-[#FBE3A1] rounded-lg px-3 py-2 shadow-sm">
+            <p class="text-xs md:text-sm text-[#9C5A14] font-bold leading-relaxed">
+              <span class="text-sm mr-1">🏆</span>
+              Universitas Terbaik Peringkat #1 Jawa Tengah dan #9 Nasional 
+              <span class="font-medium opacity-90">(PTS UniRank 2025)</span>
+            </p>
+          </div>
+        </div>
+
+        <!-- Price -->
+        <div class="flex items-baseline gap-2 text-gray-700">
+          <span class="text-sm font-medium">Kuliah Hanya</span>
+          <span class="text-4xl md:text-5xl font-extrabold bg-gradient-to-r from-[#E03125] to-[#FF6B3D] bg-clip-text text-transparent tracking-tight">
+            498rb
+          </span>
+          <span class="text-sm font-medium">/ Bln</span>
+        </div>
+
+        <!-- Benefit -->
+        <ul class="space-y-3 text-sm text-gray-700">
+          <li class="flex items-start gap-2">
+            <svg class="w-5 h-5 text-blue-500 shrink-0 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+            </svg>
+            <span>Waktu Kuliah <strong class="text-[#009A60]">FLEKSIBEL</strong></span>
+          </li>
+
+          <li class="flex items-start gap-2">
+            <svg class="w-5 h-5 text-blue-500 shrink-0 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+            </svg>
+            <span class="leading-relaxed">
+              <strong class="text-[#009A60]">BEBAS</strong> Pilih Biaya Kuliah & Cicilan,<br>
+              <strong class="text-[#009A60]">GRATIS</strong> Biaya SPI / Uang Pangkal Semua Jurusan
+            </span>
+          </li>
+        </ul>
+
+        <!-- Info Box -->
+        <div class="bg-blue-50 border-l-4 border-blue-500 text-blue-800 text-xs md:text-sm font-medium px-4 py-2 rounded-r-md inline-block">
+          Layanan Akademik Kuliah Full Online Dari Manapun dan Kapanpun
+        </div>
+
+      </div>
+
+      <!-- RIGHT CTA -->
+      <div class="w-full md:w-auto shrink-0 flex justify-center md:justify-end">
+
+        <div class="relative bg-gradient-to-br from-[#DF6E22] to-[#DE3827] rounded-2xl p-5 text-center shadow-xl w-full md:w-[220px] transition-all duration-300 group-hover:scale-105">
+
+          <!-- Hover Glow -->
+          <div class="absolute inset-0 bg-white/10 opacity-0 group-hover:opacity-20 transition rounded-2xl"></div>
+
+          <span class="inline-block bg-black/20 text-white text-[10px] font-extrabold px-3 py-1 rounded-full mb-3 tracking-wider shadow-inner">
+            KLIK DISINI
+          </span>
+
+          <div class="text-white text-2xl md:text-3xl font-extrabold leading-tight">
+            DAPATKAN<br>7 JUTA
+          </div>
+
+        </div>
+
+      </div>
+
+    </div>
+  </div>
+</a>
+`;
+
+let modifiedContent = fullContent.content || "";
+modifiedContent = modifiedContent.replace(/<\/p>/i, `</p>\n${adDiv}`);
+
 ---
 
 
 <LayoutBlog metaTags={metaTags}>
     <!-- Brochure Request Form Modal - Auto Open -->
-    {isSNPMBSlug && <BrochureRequestFormModalSNPMB autoOpen={true} />}
-    {!isSNPMBSlug && <BrochureRequestFormModal autoOpen={true} />}
+    <BrochureRequestFormModal autoOpen={true} />
     
     <div class="min-h-screen bg-gray-50 dark:bg-gray-900">
         <!-- Breadcrumb -->
@@ -133,7 +227,7 @@ const isSNPMBSlug = /beasiswa-kuliah|snpmb|utbk|snbt/i.test(slug || '');
 
                         <!-- Content -->
                         <div class="prose prose-lg dark:prose-invert max-w-none mt-8">
-                            <Fragment set:html={fullContent.content} />
+                            <Fragment set:html={modifiedContent} />
                         </div>
 
                         <!-- Share Buttons -->
@@ -286,12 +380,9 @@ const isSNPMBSlug = /beasiswa-kuliah|snpmb|utbk|snbt/i.test(slug || '');
                                 )}
                             </div>
                         </div>
-
-                        <HalamanTerkaitCard />
                         
                         <!-- Brochure Request Form -->
-                        {isSNPMBSlug && <BrochureRequestFormSNPMB />}
-                        {!isSNPMBSlug && <BrochureRequestForm />}
+                        <BrochureRequestForm />
 
                         <!-- Back to Blog -->
                         <a
