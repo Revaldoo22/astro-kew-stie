@@ -2,8 +2,11 @@
 import LayoutBlog from "@layouts/LayoutBlog.astro";
 import Breadcrumb from "@components/Breadcrumb.astro";
 import { BlogApi } from "@/services/blogApi";
+import HalamanTerkaitCard from "@components/blog/HalamanTerkaitCard.astro";
 import BrochureRequestForm from "@components/blog/BrochureRequestForm.astro";
 import BrochureRequestFormModal from "@components/blog/BrochureRequestFormModal.astro";
+import BrochureRequestFormSNPMB from "@components/blog/BrochureRequestFormSNPMB.astro";
+import BrochureRequestFormModalSNPMB from "@components/blog/BrochureRequestFormModalSNPMB.astro";
 
 // Get slug from URL
 const { slug } = Astro.params;
@@ -42,12 +45,20 @@ const metaTags = {
     image: fullContent.thumbnailUrl || "",
 };
 
+// Check if slug contains SNPMB-related keywords
+const isSNPMBSlug = /beasiswa-kuliah|snpmb|utbk|snbt/i.test(slug || '');
+
+// console.log("📄 [slug].astro - Rendering page with autoOpen modal");
 ---
 
 
 <LayoutBlog metaTags={metaTags}>
     <!-- Brochure Request Form Modal - Auto Open -->
-    <BrochureRequestFormModal autoOpen={true} />
+    {isSNPMBSlug ? (
+        <BrochureRequestFormModalSNPMB autoOpen={true} />
+    ) : (
+        <BrochureRequestFormModal autoOpen={true} />
+    )}
     
     <div class="min-h-screen bg-gray-50 dark:bg-gray-900">
         <!-- Breadcrumb -->
@@ -278,9 +289,15 @@ const metaTags = {
                                 )}
                             </div>
                         </div>
+
+                        <HalamanTerkaitCard />
                         
                         <!-- Brochure Request Form -->
-                        <BrochureRequestForm />
+                        {isSNPMBSlug ? (
+                            <BrochureRequestFormSNPMB />
+                        ) : (
+                            <BrochureRequestForm />
+                        )}
 
                         <!-- Back to Blog -->
                         <a
