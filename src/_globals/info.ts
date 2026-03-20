@@ -41,7 +41,7 @@ export const websiteInfo = {
     googleMapsEmbed: "https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3966.521260322283!2d106.8195613!3d-6.1944491!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x2e69f5d2e764b12d%3A0x3d2ad6e1e0e9bcc8!2sMonas!5e0!3m2!1sen!2sid!4v1234567890",
 
     // Ig Embed
-    igEmbed: "https://www.instagram.com/p/DVAqliIEkxM",
+    igEmbed: "https://www.instagram.com/p/DWFr_7NCb0P",
 
     //youtube embed
     youtubeVideoUrl: "https://www.youtube.com/embed/ShrAW2cZi9M?si=2dxuHIdFw1k_UFkO",
