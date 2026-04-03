@@ -1,10 +1,28 @@
 ---
 // Program Studi Section Component
+
+const magisterPrograms = ["S2 Manajemen dan Kewirausahaan (M.Bns)"];
+
+const sarjanaPrograms = [
+    "S1 Manajemen (S.M.)",
+    "S1 Akuntansi (S.Ak.)",
+    "S1 Bisnis (S.Bns.)",
+    "S1 Hukum (S.H.)",
+    "S1 Teknik Sipil (S.T.)",
+    "S1 Teknik Informatika (S.Kom.)",
+    "S1 Desain Komunikasi Visual (S.Ds.)",
+    "S1 Sistem Komputer (S.Kom.)",
+    "S1 Sistem Informasi (S.Kom.)",
+];
+
+const diplomaPrograms = [
+    "D4 Akuntansi Perpajakan (S.Tr.Ak.)",
+    "D3 Teknik Informatika (A.Md.Kom.)",
+];
 ---
 
 <section class="py-16 bg-gray-50 dark:bg-gray-900">
     <div class="max-w-screen-xl mx-auto px-4">
-        <!-- Header -->
         <div class="text-center mb-12">
             <h2
                 class="text-3xl md:text-4xl lg:text-5xl font-bold mb-4 bg-gradient-to-r from-[#1055C9] to-[#05339C] bg-clip-text text-transparent"
@@ -12,20 +30,14 @@
                 Program Studi atau Jurusan Kelas Karyawan
             </h2>
             <p
-                class="text-lg md:text-xl text-gray-700 dark:text-gray-300 max-w-3xl mx-auto mb-4"
+                class="text-lg md:text-xl text-gray-700 dark:text-gray-300 max-w-4xl mx-auto"
             >
-                Tersedia Pilihan Gratis Biaya SPI di Semua Jurusan!
-            </p>
-            <p
-                class="text-base text-gray-600 dark:text-gray-400 max-w-2xl mx-auto"
-            >
-                Berikut adalah pilihan biaya kuliah (Semua Program Studi):
+                Tersedia Pilihan Gratis Biaya SPI (Sumbangan Pengembangan
+                Institusi) di Semua Jurusan!
             </p>
         </div>
 
-        <!-- Program Studi Grid -->
-        <div class="grid grid-cols-1 lg:grid-cols-2 gap-8 max-w-5xl mx-auto">
-            <!-- Program Studi Sarjana -->
+        <div class="max-w-5xl mx-auto space-y-8">
             <div
                 class="bg-white dark:bg-gray-800 rounded-2xl shadow-lg border-2 border-gray-200 dark:border-gray-700 overflow-hidden"
             >
@@ -33,283 +45,116 @@
                     class="bg-gradient-to-r from-[#1055C9] to-[#05339C] text-white px-6 py-4"
                 >
                     <h3 class="text-xl md:text-2xl font-bold text-center">
-                        Program Studi Sarjana
+                        MAGISTER
                     </h3>
                 </div>
                 <div class="divide-y divide-gray-200 dark:divide-gray-700">
-                    <div
-                        class="px-6 py-4 hover:bg-blue-50 dark:hover:bg-blue-900/20 transition-colors"
-                    >
-                        <div class="flex items-center gap-3">
-                            <svg
-                                class="w-5 h-5 text-[#1055C9] flex-shrink-0"
-                                fill="none"
-                                stroke="currentColor"
-                                viewBox="0 0 24 24"
-                            >
-                                <path
-                                    stroke-linecap="round"
-                                    stroke-linejoin="round"
-                                    stroke-width="2"
-                                    d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"
-                                ></path>
-                            </svg>
-                            <span
-                                class="text-gray-900 dark:text-white font-medium"
-                                >S1 Manajemen (S.M.)</span
-                            >
-                        </div>
-                    </div>
-                    <div
-                        class="px-6 py-4 hover:bg-blue-50 dark:hover:bg-blue-900/20 transition-colors"
-                    >
-                        <div class="flex items-center gap-3">
-                            <svg
-                                class="w-5 h-5 text-[#1055C9] flex-shrink-0"
-                                fill="none"
-                                stroke="currentColor"
-                                viewBox="0 0 24 24"
-                            >
-                                <path
-                                    stroke-linecap="round"
-                                    stroke-linejoin="round"
-                                    stroke-width="2"
-                                    d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"
-                                ></path>
-                            </svg>
-                            <span
-                                class="text-gray-900 dark:text-white font-medium"
-                                >S1 Akuntansi (S.Ak.)</span
-                            >
-                        </div>
-                    </div>
-                    <div
-                        class="px-6 py-4 hover:bg-blue-50 dark:hover:bg-blue-900/20 transition-colors"
-                    >
-                        <div class="flex items-center gap-3">
-                            <svg
-                                class="w-5 h-5 text-[#1055C9] flex-shrink-0"
-                                fill="none"
-                                stroke="currentColor"
-                                viewBox="0 0 24 24"
-                            >
-                                <path
-                                    stroke-linecap="round"
-                                    stroke-linejoin="round"
-                                    stroke-width="2"
-                                    d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"
-                                ></path>
-                            </svg>
-                            <span
-                                class="text-gray-900 dark:text-white font-medium"
-                                >S1 Bisnis (S.Bns.)</span
-                            >
-                        </div>
-                    </div>
-                    <div
-                        class="px-6 py-4 hover:bg-blue-50 dark:hover:bg-blue-900/20 transition-colors"
-                    >
-                        <div class="flex items-center gap-3">
-                            <svg
-                                class="w-5 h-5 text-[#1055C9] flex-shrink-0"
-                                fill="none"
-                                stroke="currentColor"
-                                viewBox="0 0 24 24"
-                            >
-                                <path
-                                    stroke-linecap="round"
-                                    stroke-linejoin="round"
-                                    stroke-width="2"
-                                    d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"
-                                ></path>
-                            </svg>
-                            <span
-                                class="text-gray-900 dark:text-white font-medium"
-                                >S1 Hukum (S.H.)</span
-                            >
-                        </div>
-                    </div>
-                    <div
-                        class="px-6 py-4 hover:bg-blue-50 dark:hover:bg-blue-900/20 transition-colors"
-                    >
-                        <div class="flex items-center gap-3">
-                            <svg
-                                class="w-5 h-5 text-[#1055C9] flex-shrink-0"
-                                fill="none"
-                                stroke="currentColor"
-                                viewBox="0 0 24 24"
-                            >
-                                <path
-                                    stroke-linecap="round"
-                                    stroke-linejoin="round"
-                                    stroke-width="2"
-                                    d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"
-                                ></path>
-                            </svg>
-                            <span
-                                class="text-gray-900 dark:text-white font-medium"
-                                >S1 Teknik Sipil (S.T.)</span
-                            >
-                        </div>
-                    </div>
-                    <div
-                        class="px-6 py-4 hover:bg-blue-50 dark:hover:bg-blue-900/20 transition-colors"
-                    >
-                        <div class="flex items-center gap-3">
-                            <svg
-                                class="w-5 h-5 text-[#1055C9] flex-shrink-0"
-                                fill="none"
-                                stroke="currentColor"
-                                viewBox="0 0 24 24"
-                            >
-                                <path
-                                    stroke-linecap="round"
-                                    stroke-linejoin="round"
-                                    stroke-width="2"
-                                    d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"
-                                ></path>
-                            </svg>
-                            <span
-                                class="text-gray-900 dark:text-white font-medium"
-                                >S1 Teknik Informatika (S.Kom.)</span
-                            >
-                        </div>
-                    </div>
-                    <div
-                        class="px-6 py-4 hover:bg-blue-50 dark:hover:bg-blue-900/20 transition-colors"
-                    >
-                        <div class="flex items-center gap-3">
-                            <svg
-                                class="w-5 h-5 text-[#1055C9] flex-shrink-0"
-                                fill="none"
-                                stroke="currentColor"
-                                viewBox="0 0 24 24"
-                            >
-                                <path
-                                    stroke-linecap="round"
-                                    stroke-linejoin="round"
-                                    stroke-width="2"
-                                    d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"
-                                ></path>
-                            </svg>
-                            <span
-                                class="text-gray-900 dark:text-white font-medium"
-                                >S1 Desain Komunikasi Visual (S.Ds.)</span
-                            >
-                        </div>
-                    </div>
-                    <div
-                        class="px-6 py-4 hover:bg-blue-50 dark:hover:bg-blue-900/20 transition-colors"
-                    >
-                        <div class="flex items-center gap-3">
-                            <svg
-                                class="w-5 h-5 text-[#1055C9] flex-shrink-0"
-                                fill="none"
-                                stroke="currentColor"
-                                viewBox="0 0 24 24"
-                            >
-                                <path
-                                    stroke-linecap="round"
-                                    stroke-linejoin="round"
-                                    stroke-width="2"
-                                    d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"
-                                ></path>
-                            </svg>
-                            <span
-                                class="text-gray-900 dark:text-white font-medium"
-                                >S1 Sistem Komputer (S.Kom.)</span
-                            >
-                        </div>
-                    </div>
-                    <div
-                        class="px-6 py-4 hover:bg-blue-50 dark:hover:bg-blue-900/20 transition-colors"
-                    >
-                        <div class="flex items-center gap-3">
-                            <svg
-                                class="w-5 h-5 text-[#1055C9] flex-shrink-0"
-                                fill="none"
-                                stroke="currentColor"
-                                viewBox="0 0 24 24"
-                            >
-                                <path
-                                    stroke-linecap="round"
-                                    stroke-linejoin="round"
-                                    stroke-width="2"
-                                    d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"
-                                ></path>
-                            </svg>
-                            <span
-                                class="text-gray-900 dark:text-white font-medium"
-                                >S1 Sistem Informasi (S.Kom.)</span
-                            >
-                        </div>
-                    </div>
+                    {
+                        magisterPrograms.map((program) => (
+                            <div class="px-6 py-4 hover:bg-blue-50 dark:hover:bg-blue-900/20 transition-colors">
+                                <div class="flex items-center gap-3">
+                                    <svg
+                                        class="w-5 h-5 text-[#1055C9] flex-shrink-0"
+                                        fill="none"
+                                        stroke="currentColor"
+                                        viewBox="0 0 24 24"
+                                    >
+                                        <path
+                                            stroke-linecap="round"
+                                            stroke-linejoin="round"
+                                            stroke-width="2"
+                                            d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"
+                                        ></path>
+                                    </svg>
+                                    <span class="text-gray-900 dark:text-white font-medium">
+                                        {program}
+                                    </span>
+                                </div>
+                            </div>
+                        ))
+                    }
                 </div>
             </div>
 
-            <!-- Program Studi Diploma -->
-            <div
-                class="bg-white dark:bg-gray-800 rounded-2xl shadow-lg border-2 border-gray-200 dark:border-gray-700 overflow-hidden"
-            >
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
                 <div
-                    class="bg-gradient-to-r from-[#1055C9] to-[#05339C] text-white px-6 py-4"
+                    class="bg-white dark:bg-gray-800 rounded-2xl shadow-lg border-2 border-gray-200 dark:border-gray-700 overflow-hidden"
                 >
-                    <h3 class="text-xl md:text-2xl font-bold text-center">
-                        Program Studi Diploma
-                    </h3>
-                </div>
-                <div class="divide-y divide-gray-200 dark:divide-gray-700">
                     <div
-                        class="px-6 py-4 hover:bg-blue-50 dark:hover:bg-blue-900/20 transition-colors"
+                        class="bg-gradient-to-r from-[#1055C9] to-[#05339C] text-white px-6 py-4"
                     >
-                        <div class="flex items-center gap-3">
-                            <svg
-                                class="w-5 h-5 text-[#1055C9] flex-shrink-0"
-                                fill="none"
-                                stroke="currentColor"
-                                viewBox="0 0 24 24"
-                            >
-                                <path
-                                    stroke-linecap="round"
-                                    stroke-linejoin="round"
-                                    stroke-width="2"
-                                    d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"
-                                ></path>
-                            </svg>
-                            <span
-                                class="text-gray-900 dark:text-white font-medium"
-                                >D4 Akuntansi Perpajakan (S.Tr.Ak.)</span
-                            >
-                        </div>
+                        <h3 class="text-xl md:text-2xl font-bold text-center">
+                            SARJANA
+                        </h3>
                     </div>
+                    <div class="divide-y divide-gray-200 dark:divide-gray-700">
+                        {
+                            sarjanaPrograms.map((program) => (
+                                <div class="px-6 py-4 hover:bg-blue-50 dark:hover:bg-blue-900/20 transition-colors">
+                                    <div class="flex items-center gap-3">
+                                        <svg
+                                            class="w-5 h-5 text-[#1055C9] flex-shrink-0"
+                                            fill="none"
+                                            stroke="currentColor"
+                                            viewBox="0 0 24 24"
+                                        >
+                                            <path
+                                                stroke-linecap="round"
+                                                stroke-linejoin="round"
+                                                stroke-width="2"
+                                                d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"
+                                            ></path>
+                                        </svg>
+                                        <span class="text-gray-900 dark:text-white font-medium">
+                                            {program}
+                                        </span>
+                                    </div>
+                                </div>
+                            ))
+                        }
+                    </div>
+                </div>
+
+                <div
+                    class="bg-white dark:bg-gray-800 rounded-2xl shadow-lg border-2 border-gray-200 dark:border-gray-700 overflow-hidden"
+                >
                     <div
-                        class="px-6 py-4 hover:bg-blue-50 dark:hover:bg-blue-900/20 transition-colors"
+                        class="bg-gradient-to-r from-[#1055C9] to-[#05339C] text-white px-6 py-4"
                     >
-                        <div class="flex items-center gap-3">
-                            <svg
-                                class="w-5 h-5 text-[#1055C9] flex-shrink-0"
-                                fill="none"
-                                stroke="currentColor"
-                                viewBox="0 0 24 24"
-                            >
-                                <path
-                                    stroke-linecap="round"
-                                    stroke-linejoin="round"
-                                    stroke-width="2"
-                                    d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"
-                                ></path>
-                            </svg>
-                            <span
-                                class="text-gray-900 dark:text-white font-medium"
-                                >D3 Teknik Informatika (A.Md.Kom.)</span
-                            >
-                        </div>
+                        <h3 class="text-xl md:text-2xl font-bold text-center">
+                            DIPLOMA
+                        </h3>
+                    </div>
+                    <div class="divide-y divide-gray-200 dark:divide-gray-700">
+                        {
+                            diplomaPrograms.map((program) => (
+                                <div class="px-6 py-4 hover:bg-blue-50 dark:hover:bg-blue-900/20 transition-colors">
+                                    <div class="flex items-center gap-3">
+                                        <svg
+                                            class="w-5 h-5 text-[#1055C9] flex-shrink-0"
+                                            fill="none"
+                                            stroke="currentColor"
+                                            viewBox="0 0 24 24"
+                                        >
+                                            <path
+                                                stroke-linecap="round"
+                                                stroke-linejoin="round"
+                                                stroke-width="2"
+                                                d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"
+                                            ></path>
+                                        </svg>
+                                        <span class="text-gray-900 dark:text-white font-medium">
+                                            {program}
+                                        </span>
+                                    </div>
+                                </div>
+                            ))
+                        }
                     </div>
                 </div>
             </div>
         </div>
 
-        <!-- Info Box -->
         <div class="max-w-4xl mx-auto mt-12">
             <div
                 class="bg-gradient-to-r from-green-50 to-emerald-50 dark:from-green-900/20 dark:to-emerald-900/20 rounded-2xl p-6 md:p-8 border-2 border-green-200 dark:border-green-800"
@@ -338,12 +183,13 @@
                             class="text-gray-700 dark:text-gray-300 leading-relaxed"
                         >
                             Setiap program studi di atas menyediakan pilihan
-                            biaya kuliah dengan <strong
-                                class="text-green-600 dark:text-green-400"
-                                >GRATIS Biaya SPI (Sumbangan Pengembangan
-                                Institusi)</strong
-                            > atau uang pangkal. Anda dapat memilih paket biaya yang
-                            sesuai dengan kemampuan finansial Anda.
+                            biaya kuliah dengan
+                            <strong class="text-green-600 dark:text-green-400">
+                                GRATIS Biaya SPI (Sumbangan Pengembangan
+                                Institusi)
+                            </strong>
+                            atau uang pangkal. Anda dapat memilih paket biaya
+                            yang sesuai dengan kemampuan finansial Anda.
                         </p>
                     </div>
                 </div>
