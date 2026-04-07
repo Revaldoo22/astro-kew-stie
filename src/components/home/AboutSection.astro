@@ -2,15 +2,13 @@
 const { websiteInfo } = Astro.props;
 import BrochureRequestFormModal from "@components/blog/BrochureRequestFormModal.astro";
 
-const rankingShowcase = [
+const spotlightRanks = [
     {
-        title: "Pemeringkatan UniRank 2026",
-        eyebrow: "Sorotan UniRank 2026",
-        highlight: "#1",
-        highlightLabel: "PTS Jawa Tengah",
-        supportingRank: "#13",
-        supportingLabel: "PTS di Indonesia",
+        rank: "#1",
+        label: "PTS Jawa Tengah",
+        source: "UniRank 2026",
         accent: "from-[#1055C9] to-[#05339C]",
+        description: "Peringkat 1 PTS Jawa Tengah versi UniRank 2026 yang menguatkan reputasi STEKOM.",
         items: [
             "PTS di Semarang Peringkat 1",
             "PTS di Jawa Tengah Peringkat 1",
@@ -20,13 +18,11 @@ const rankingShowcase = [
         ],
     },
     {
-        title: "Pemeringkatan Webometrics Impact Rank 2026",
-        eyebrow: "Sorotan Webometrics 2026",
-        highlight: "#2",
-        highlightLabel: "PTS Semarang",
-        supportingRank: "#32",
-        supportingLabel: "PTS di Indonesia",
+        rank: "#4",
+        label: "PTS Jawa Tengah",
+        source: "Webometrics Impact Rank 2026",
         accent: "from-slate-900 to-[#1055C9]",
+        description: "Peringkat 4 PTS Jawa Tengah versi Webometrics 2026 yang menguatkan visibilitas STEKOM.",
         items: [
             "PTS di Semarang Peringkat 2",
             "PTS di Jawa Tengah Peringkat 4",
@@ -34,23 +30,6 @@ const rankingShowcase = [
             "PTN & PTS di Semarang Peringkat 4",
             "PTN & PTS di Jawa Tengah Peringkat 8",
         ],
-    },
-];
-
-const spotlightRanks = [
-    {
-        rank: "#1",
-        label: "PTS Jawa Tengah",
-        source: "UniRank 2026",
-        accent: "from-[#1055C9] to-[#05339C]",
-        description: "Pencapaian utama yang paling menonjol untuk kategori PTS.",
-    },
-    {
-        rank: "#4",
-        label: "PTS Jawa Tengah",
-        source: "Webometrics Impact Rank 2026",
-        accent: "from-slate-900 to-[#1055C9]",
-        description: "Posisi unggulan di Jawa Tengah dengan performa impact yang kuat.",
     },
 ];
 
@@ -199,11 +178,11 @@ const parseRankingItem = (item: string) => {
                     <p
                         class="mt-4 sm:mt-5 text-sm sm:text-base md:text-xl text-gray-700 dark:text-gray-300 leading-relaxed"
                     >
-                        Universitas Sains &amp; Teknologi Komputer meraih
-                        peringkat 1 PTS di Jawa Tengah dan 13 PTS di Indonesia
-                        pada UniRank 2026, serta peringkat 2 PTS di Semarang
-                        dan 4 PTS di Jawa Tengah pada Webometrics Impact Rank
-                        2026.
+                        Universitas Sains &amp; Teknologi Komputer (Universitas
+                        STEKOM) meraih Peringkat 1 PTS Jawa Tengah versi
+                        UniRank 2026 dan tampil unggul pada Webometrics Impact
+                        Rank 2026, memperkuat reputasinya sebagai kampus
+                        unggulan.
                     </p>
 
                     <div class="mt-6 sm:mt-8 grid grid-cols-1 gap-4 sm:gap-5 md:grid-cols-2">
@@ -211,8 +190,8 @@ const parseRankingItem = (item: string) => {
                             spotlightRanks.map((spotlight) => (
                                 <div class="rounded-[1.35rem] sm:rounded-[1.75rem] border border-white/70 bg-white/85 p-4 sm:p-6 md:p-7 text-center sm:text-left shadow-[0_24px_55px_-25px_rgba(15,23,42,0.35)] backdrop-blur dark:border-gray-700/80 dark:bg-gray-800/80">
                                     <div class="flex flex-col items-center gap-4 sm:flex-row sm:items-start sm:justify-between sm:gap-5">
-                                        <div class="flex flex-col items-center sm:items-start">
-                                            <p class="text-[11px] sm:text-sm md:text-base font-semibold uppercase tracking-[0.18em] sm:tracking-[0.22em] text-gray-500 dark:text-gray-400">
+                                        <div class="flex flex-col items-center sm:items-start md:min-h-[7.25rem] md:justify-between">
+                                            <p class="text-[11px] sm:text-sm md:text-base font-semibold uppercase leading-tight tracking-[0.18em] sm:tracking-[0.22em] text-gray-500 dark:text-gray-400">
                                                 {spotlight.source}
                                             </p>
                                             <h4 class="mt-3 sm:mt-4 text-xl sm:text-2xl md:text-3xl font-bold text-gray-900 dark:text-white">
@@ -225,112 +204,61 @@ const parseRankingItem = (item: string) => {
                                             {spotlight.rank}
                                         </div>
                                     </div>
-                                    <p class="mt-4 sm:mt-5 text-sm sm:text-base md:text-lg leading-relaxed text-gray-600 dark:text-gray-300">
+                                    <p class="mt-4 sm:mt-5 md:min-h-[3.8rem] text-sm sm:text-base md:text-lg leading-relaxed text-gray-600 dark:text-gray-300">
                                         {spotlight.description}
                                     </p>
+                                    {
+                                        spotlight.items && (
+                                            <div class="mt-5 sm:mt-6 grid gap-3 text-left">
+                                                {
+                                                    spotlight.items.map((item) => {
+                                                        const parsedItem =
+                                                            parseRankingItem(item);
+
+                                                        return (
+                                                            <div class="flex min-h-[3.75rem] items-center gap-3 rounded-[1.05rem] border border-gray-100 bg-gray-50/80 px-3.5 py-3.5 dark:border-gray-700 dark:bg-gray-900/60">
+                                                                <div class="mt-0.5 flex h-6 w-6 flex-shrink-0 items-center justify-center rounded-full bg-gradient-to-r from-[#1055C9] to-[#05339C] text-white shadow-md">
+                                                                    <svg
+                                                                        class="h-3.5 w-3.5"
+                                                                        fill="none"
+                                                                        stroke="currentColor"
+                                                                        viewBox="0 0 24 24"
+                                                                    >
+                                                                        <path
+                                                                            stroke-linecap="round"
+                                                                            stroke-linejoin="round"
+                                                                            stroke-width="2.5"
+                                                                            d="M5 13l4 4L19 7"
+                                                                        ></path>
+                                                                    </svg>
+                                                                </div>
+                                                                <div class="grid w-full grid-cols-[minmax(0,1fr)_auto] items-center gap-2 sm:gap-3">
+                                                                    <p class="text-sm font-medium leading-relaxed text-gray-700 dark:text-gray-300 md:text-base">
+                                                                        {parsedItem.label}
+                                                                    </p>
+                                                                    {
+                                                                        parsedItem.rank && (
+                                                                            <span
+                                                                                class="inline-flex w-fit items-center justify-center rounded-full border border-slate-200 bg-white px-2.5 py-1 text-[11px] sm:px-3 sm:text-xs font-bold uppercase tracking-[0.08em] sm:tracking-wide text-slate-700 shadow-sm dark:border-slate-600 dark:bg-slate-900 dark:text-slate-200"
+                                                                            >
+                                                                                {parsedItem.rank}
+                                                                            </span>
+                                                                        )
+                                                                    }
+                                                                </div>
+                                                            </div>
+                                                        );
+                                                    })
+                                                }
+                                            </div>
+                                        )
+                                    }
                                 </div>
                             ))
                         }
                     </div>
                 </div>
             </div>
-        </div>
-
-        <div class="max-w-5xl mx-auto grid grid-cols-1 xl:grid-cols-2 gap-4 sm:gap-6 mb-12">
-            {
-                rankingShowcase.map((ranking) => (
-                    <div class="group relative flex h-full flex-col overflow-hidden rounded-[1.35rem] sm:rounded-[1.75rem] border border-gray-200/80 bg-white/95 shadow-[0_20px_60px_-35px_rgba(15,23,42,0.45)] transition-all duration-300 hover:-translate-y-1 hover:shadow-[0_28px_80px_-35px_rgba(16,85,201,0.45)] dark:border-gray-700/80 dark:bg-gray-800/95">
-                        <div class={`h-2 bg-gradient-to-r ${ranking.accent}`}></div>
-                        <div class="flex h-full flex-col p-4 sm:p-6 md:p-8">
-                            <div class="grid gap-4 sm:gap-6 md:grid-cols-[minmax(0,1fr)_12rem] md:items-start">
-                                <div class="flex min-h-0 flex-col justify-start md:min-h-[8.25rem]">
-                                    <span
-                                        class={`inline-flex w-fit items-center rounded-full bg-gradient-to-r px-3 py-1 text-[11px] sm:text-xs font-bold uppercase tracking-[0.16em] sm:tracking-[0.2em] text-white shadow-lg ${ranking.accent}`}
-                                    >
-                                        {ranking.eyebrow}
-                                    </span>
-                                    <h4 class="mt-3 sm:mt-4 max-w-none md:max-w-[18ch] text-lg sm:text-xl font-bold leading-tight text-gray-900 dark:text-white md:text-[2rem]">
-                                        {ranking.title}
-                                    </h4>
-                                </div>
-                                <div class="flex flex-row items-center justify-center gap-3 sm:gap-4 md:flex-col md:items-end">
-                                    <div
-                                        class="flex min-h-0 w-auto max-w-none flex-row items-center justify-center gap-2 rounded-[1.15rem] sm:rounded-[1.5rem] border border-blue-100 bg-gradient-to-br from-blue-50 to-white px-3 py-3 text-center shadow-sm dark:border-blue-900/50 dark:from-blue-950/30 dark:to-gray-900 sm:min-h-[9rem] sm:max-w-[11rem] sm:w-full sm:flex-col sm:px-4 sm:py-4"
-                                    >
-                                        <div
-                                            class="text-3xl sm:text-4xl md:text-5xl font-black bg-gradient-to-r from-[#1055C9] to-[#05339C] bg-clip-text text-transparent"
-                                        >
-                                            {ranking.highlight}
-                                        </div>
-                                        <p class="whitespace-nowrap text-[11px] sm:mt-2 sm:text-xs sm:whitespace-normal font-semibold uppercase tracking-[0.14em] sm:tracking-[0.18em] text-gray-500 dark:text-gray-400">
-                                            {ranking.highlightLabel}
-                                        </p>
-                                    </div>
-                                    <div
-                                        class="inline-flex w-auto max-w-none items-center justify-center gap-2 rounded-full border border-blue-100 bg-blue-50 px-3 py-2 text-center text-[11px] sm:w-full sm:max-w-[11rem] sm:text-xs font-bold uppercase tracking-[0.08em] sm:tracking-wide text-[#1055C9] dark:border-blue-900/60 dark:bg-blue-950/40 dark:text-blue-300"
-                                    >
-                                        <span>{ranking.supportingRank}</span>
-                                        <span>{ranking.supportingLabel}</span>
-                                    </div>
-                                </div>
-                            </div>
-
-                            <div class="mt-6 sm:mt-8 grid gap-3 sm:gap-4">
-                                {
-                                    ranking.items.map((item) => {
-                                        const parsedItem =
-                                            parseRankingItem(item);
-
-                                        return (
-                                            <div class="flex min-h-[3.75rem] sm:min-h-[4.25rem] items-center gap-3 rounded-[1.05rem] sm:rounded-[1.35rem] border border-gray-100 bg-gray-50/80 px-3.5 py-3.5 sm:px-4 sm:py-4 dark:border-gray-700 dark:bg-gray-900/60">
-                                                <div class="mt-0.5 sm:mt-0 flex h-6 w-6 sm:h-7 sm:w-7 flex-shrink-0 items-center justify-center rounded-full bg-gradient-to-r from-[#1055C9] to-[#05339C] text-white shadow-md">
-                                                    <svg
-                                                        class="h-3.5 w-3.5 sm:h-4 sm:w-4"
-                                                        fill="none"
-                                                        stroke="currentColor"
-                                                        viewBox="0 0 24 24"
-                                                    >
-                                                        <path
-                                                            stroke-linecap="round"
-                                                            stroke-linejoin="round"
-                                                            stroke-width="2.5"
-                                                            d="M5 13l4 4L19 7"
-                                                        ></path>
-                                                    </svg>
-                                                </div>
-                                                <div class="grid w-full grid-cols-[minmax(0,1fr)_auto] items-center gap-2 sm:gap-3">
-                                                    <p class="text-sm font-medium leading-relaxed text-gray-700 dark:text-gray-300 md:text-base">
-                                                        {parsedItem.label}
-                                                    </p>
-                                                    {
-                                                        parsedItem.rank && (
-                                                            <span
-                                                                class={`inline-flex w-fit items-center justify-center rounded-full border px-2.5 py-1 text-[11px] sm:px-3 sm:text-xs font-bold uppercase tracking-[0.08em] sm:tracking-wide shadow-sm ${
-                                                                    parsedItem.rankNumber &&
-                                                                    parsedItem.rankNumber <=
-                                                                        2
-                                                                        ? "border-amber-200 bg-amber-50 text-amber-700 dark:border-amber-700/60 dark:bg-amber-950/40 dark:text-amber-300"
-                                                                        : parsedItem.rankNumber &&
-                                                                              parsedItem.rankNumber <=
-                                                                                  5
-                                                                            ? "border-blue-200 bg-blue-50 text-[#1055C9] dark:border-blue-800 dark:bg-blue-950/40 dark:text-blue-300"
-                                                                            : "border-slate-200 bg-slate-100 text-slate-700 dark:border-slate-700 dark:bg-slate-800 dark:text-slate-300"
-                                                                }`}
-                                                            >
-                                                                {parsedItem.rank}
-                                                            </span>
-                                                        )
-                                                    }
-                                                </div>
-                                            </div>
-                                        );
-                                    })
-                                }
-                            </div>
-                        </div>
-                    </div>
-                ))
-            }
         </div>
 
         <!-- Features Section -->
