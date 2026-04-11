@@ -6,8 +6,8 @@ const programs = [
     {
         name: "S1 Hukum (S.H.)",
         badge: "GRATIS 7 JUTA",
-        status: "Tersedia",
-        statusColor: "green",
+        status: "Hampir Penuh",
+        statusColor: "orange",
         gratisSpI: true,
     },
     {
@@ -20,8 +20,8 @@ const programs = [
     {
         name: "S1 Teknik Sipil (S.T.)",
         badge: "GRATIS 7 JUTA",
-        status: "Tersedia",
-        statusColor: "green",
+        status: "Hampir Penuh",
+        statusColor: "orange",
         gratisSpI: true,
     },
     {
@@ -34,22 +34,22 @@ const programs = [
     {
         name: "S1 Teknik Informatika (S.Kom.)",
         badge: null,
-        status: "Hampir Penuh",
-        statusColor: "orange",
+        status: "Kuota Tambahan +50",
+        statusColor: "indigo",
         gratisSpI: true,
     },
     {
         name: "S1 Manajemen (S.M.)",
         badge: null,
-        status: "Hampir Penuh",
-        statusColor: "orange",
+        status: "Kuota Tambahan +50",
+        statusColor: "indigo",
         gratisSpI: true,
     },
     {
         name: "S1 Desain Komunikasi Visual (S.Ds.)",
         badge: null,
-        status: "Tersedia",
-        statusColor: "green",
+        status: "Hampir Penuh",
+        statusColor: "orange",
         gratisSpI: true,
     },
     {
@@ -76,8 +76,8 @@ const programs = [
     {
         name: "D3 Teknik Informatika (A.Md.Kom.)",
         badge: null,
-        status: "Hampir Penuh",
-        statusColor: "orange",
+        status: "Tersedia",
+        statusColor: "green",
         gratisSpI: true,
     },
     {
@@ -323,16 +323,22 @@ const programs = [
                                                 class={`inline-flex items-center gap-2 font-bold text-base px-4 py-2 rounded-full ${
                                                     program.statusColor ===
                                                     "green"
-                                                        ? "bg-green-100 dark:bg-green-900/30 text-green-700 dark:text-green-400"
-                                                        : "bg-orange-100 dark:bg-orange-900/30 text-orange-700 dark:text-orange-400"
+                                                        ? "bg-[#E6F7EF] text-[#1F9D68]"
+                                                        : program.statusColor ===
+                                                              "indigo"
+                                                          ? "bg-[#FFE4E6] text-[#E11D48] border border-[#FDA4AF]"
+                                                        : "bg-[#FFF4E5] text-[#D97706]"
                                                 }`}
                                             >
                                                 <span
                                                     class={`w-2 h-2 rounded-full ${
                                                         program.statusColor ===
                                                         "green"
-                                                            ? "bg-green-500 animate-pulse"
-                                                            : "bg-orange-500 animate-pulse"
+                                                            ? "bg-[#1F9D68]"
+                                                            : program.statusColor ===
+                                                                  "indigo"
+                                                              ? "bg-[#E11D48]"
+                                                            : "bg-[#F59E0B]"
                                                     }`}
                                                 />
                                                 {program.status}
@@ -418,15 +424,21 @@ const programs = [
                                     <span
                                         class={`inline-flex items-center gap-2 font-bold px-3 py-1 rounded-full ${
                                             program.statusColor === "green"
-                                                ? "bg-green-100 dark:bg-green-900/30 text-green-700 dark:text-green-400"
-                                                : "bg-orange-100 dark:bg-orange-900/30 text-orange-700 dark:text-orange-400"
+                                                ? "bg-[#E6F7EF] text-[#1F9D68]"
+                                                : program.statusColor ===
+                                                      "indigo"
+                                                  ? "bg-[#FFE4E6] text-[#E11D48] border border-[#FDA4AF]"
+                                                : "bg-[#FFF4E5] text-[#D97706]"
                                         }`}
                                     >
                                         <span
                                             class={`w-2 h-2 rounded-full ${
                                                 program.statusColor === "green"
-                                                    ? "bg-green-500 animate-pulse"
-                                                    : "bg-orange-500 animate-pulse"
+                                                    ? "bg-[#1F9D68]"
+                                                    : program.statusColor ===
+                                                          "indigo"
+                                                      ? "bg-[#E11D48]"
+                                                    : "bg-[#F59E0B]"
                                             }`}
                                         />
                                         {program.status}
