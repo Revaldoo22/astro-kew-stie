@@ -1,10 +1,12 @@
 ---
 // Brochure Download Button Component
-// This button triggers the brochure request form modal
+// This button redirects to WhatsApp for requesting the brochure
 ---
 
-<button
-    id="open-brochure-form"
+<a
+    href="https://api.whatsapp.com/send/?phone=62817775758&text=Halo+Admin%2C+saya+ingin+minta+brosur+kelas+karyawan&type=phone_number&app_absent=0"
+    target="_blank"
+    rel="noopener noreferrer"
     class="inline-flex items-center gap-2 px-6 py-3 bg-gradient-to-r from-orange-500 to-orange-600 hover:from-orange-600 hover:to-orange-700 text-white font-bold rounded-lg transition-all duration-300 shadow-lg hover:shadow-xl transform hover:-translate-y-0.5"
 >
     <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -15,36 +17,5 @@
             d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"
         ></path>
     </svg>
-    Download Brosur
-</button>
-
-<script>
-    // This script will be executed when the button is clicked
-    // It will open the brochure form modal
-    function initBrochureButton() {
-        const openButton = document.getElementById("open-brochure-form");
-
-        if (openButton) {
-            openButton.addEventListener("click", function () {
-                // Open brochure form modal
-                if (typeof window.openBrochureFormModal === "function") {
-                    window.openBrochureFormModal();
-                } else {
-                    console.error(
-                        "❌ openBrochureFormModal function not found!",
-                    );
-                }
-            });
-        } else {
-            console.error("❌ Brochure button not found!");
-        }
-    }
-
-    // Run initialization when DOM is ready
-    if (document.readyState === "loading") {
-        document.addEventListener("DOMContentLoaded", initBrochureButton);
-    } else {
-        // DOM already loaded, run immediately
-        initBrochureButton();
-    }
-</script>
+    Minta Brosur
+</a>
