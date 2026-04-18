@@ -9,6 +9,8 @@ const programs = [
         status: "Hampir Penuh",
         statusColor: "orange",
         gratisSpI: true,
+        registrationLink:
+            "http://link.stekom.ac.id/ads?text=Halo%20Admin,%20Saya%20ingin%20mendaftar%20S1%20Hukum%20(S.H.)%20Dengan%20Promo%20Gratis%207%20Juta",
     },
     {
         name: "S1 Akuntansi (S.Ak.)",
@@ -16,6 +18,8 @@ const programs = [
         status: "Hampir Penuh",
         statusColor: "orange",
         gratisSpI: true,
+        registrationLink:
+            "http://link.stekom.ac.id/ads?text=Halo%20Admin,%20Saya%20ingin%20mendaftar%20S1%20Akuntansi%20(S.Ak.)%20Dengan%20Promo%20Gratis%207%20Juta",
     },
     {
         name: "S1 Teknik Sipil (S.T.)",
@@ -23,6 +27,8 @@ const programs = [
         status: "Hampir Penuh",
         statusColor: "orange",
         gratisSpI: true,
+        registrationLink:
+            "http://link.stekom.ac.id/ads?text=Halo%20Admin,%20Saya%20ingin%20mendaftar%20S1%20Teknik%20Sipil%20(S.T.)%20Dengan%20Promo%20Gratis%207%20Juta",
     },
     {
         name: "S2 Manajemen dan Kewirausahaan (M.Bns)",
@@ -365,7 +371,8 @@ const programs = [
                                         </td>
                                         <td class="px-6 py-5 text-center">
                                             <a
-                                                href={`http://link.stekom.ac.id/ads?text=Halo Admin, Saya ingin mendaftar ${program.name} Dengan Pilihan Biaya Gratis SPI/Uang Pangkal`}
+                                                href={program.registrationLink ??
+                                                    `http://link.stekom.ac.id/ads?text=Halo Admin, Saya ingin mendaftar ${program.name} Dengan Pilihan Biaya Gratis SPI/Uang Pangkal`}
                                                 target="_blank"
                                                 rel="noopener noreferrer"
                                                 class="inline-flex items-center gap-2 bg-gradient-to-r from-[#1055C9] to-[#05339C] hover:from-[#05339C] hover:to-[#1055C9] text-white px-8 py-3 rounded-full font-bold text-base transition-all duration-300 shadow-lg hover:shadow-2xl hover:shadow-blue-500/50 transform hover:-translate-y-1 hover:scale-105"
@@ -468,7 +475,8 @@ const programs = [
                                 )}
                             </div>
                             <a
-                                href={`http://link.stekom.ac.id/ads?text=Halo Admin, Saya ingin mendaftar ${program.name} Dengan Pilihan Biaya Gratis SPI/Uang Pangkal`}
+                                href={program.registrationLink ??
+                                    `http://link.stekom.ac.id/ads?text=Halo Admin, Saya ingin mendaftar ${program.name} Dengan Pilihan Biaya Gratis SPI/Uang Pangkal`}
                                 target="_blank"
                                 rel="noopener noreferrer"
                                 class="flex items-center justify-center gap-2 w-full bg-gradient-to-r from-[#1055C9] to-[#05339C] hover:from-[#05339C] hover:to-[#1055C9] text-white px-6 py-4 rounded-full font-bold text-base transition-all duration-300 shadow-lg hover:shadow-2xl hover:shadow-blue-500/50 transform hover:-translate-y-1"

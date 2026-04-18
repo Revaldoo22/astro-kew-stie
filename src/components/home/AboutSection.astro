@@ -49,6 +49,19 @@ const parseRankingItem = (item: string) => {
         rankNumber: Number(match[2]),
     };
 };
+const currentQuotaDate = new Intl.DateTimeFormat("id-ID", {
+    day: "2-digit",
+    month: "long",
+    year: "numeric",
+    timeZone: "Asia/Jakarta",
+})
+    .format(new Date())
+    .toUpperCase();
+
+const fallbackQuotaData = {
+    updateDate: currentQuotaDate,
+    available: 500 - 204 + 100,
+};
 ---
 
 <!-- Brochure Request Form Modal - placed in modals slot to avoid z-index issues -->
@@ -113,6 +126,39 @@ const parseRankingItem = (item: string) => {
             </div>
         </div>
 
+        <!-- Kuota Update Sticky -->
+        <div class="fixed bottom-4 left-3 z-40 w-40 sm:bottom-6 sm:left-6 sm:w-52">
+            <div class="rounded-xl border border-blue-200/70 bg-white/95 p-2 sm:rounded-2xl sm:p-3 shadow-[0_20px_45px_-20px_rgba(16,85,201,0.55)] backdrop-blur dark:border-blue-900/60 dark:bg-gray-900/90">
+                <div class="flex items-start justify-between gap-2">
+                    <p class="text-[10px] sm:text-[11px] font-extrabold uppercase tracking-[0.1em] sm:tracking-[0.12em] text-[#05339C] dark:text-blue-300">
+                        Update Kuota
+                    </p>
+                    <span class="mt-0.5 h-2 w-2 rounded-full bg-emerald-500 animate-pulse"></span>
+                </div>
+                <p
+                    id="sticky-quota-update-date"
+                    class="mt-1 text-[9px] sm:text-[10px] font-semibold text-gray-500 dark:text-gray-400"
+                >
+                    {fallbackQuotaData.updateDate}
+                </p>
+                <p
+                    id="sticky-quota-available"
+                    class="mt-1.5 sm:mt-2 text-[13px] sm:text-sm font-black text-emerald-700 dark:text-emerald-400"
+                >
+                    Tersedia {fallbackQuotaData.available}
+                </p>
+                <p class="mt-1 text-[9px] sm:text-[10px] font-semibold text-amber-700 dark:text-amber-300">
+                    ⚠️ Kuota Setiap Prodi Berbeda
+                </p>
+                <a
+                    id="sticky-quota-daftar"
+                    href="#promokelaskaryawan"
+                    class="mt-1.5 sm:mt-2 inline-flex w-full items-center justify-center rounded-md sm:rounded-lg bg-gradient-to-r from-green-500 to-emerald-600 px-2 py-1 text-[9px] sm:text-[10px] font-bold text-white shadow-md transition-all hover:from-green-600 hover:to-emerald-700"
+                >
+                    Daftar
+                </a>
+            </div>
+        </div>
         <script>
             function initScrollButton() {
                 const scrollButton = document.getElementById(
@@ -135,12 +181,92 @@ const parseRankingItem = (item: string) => {
                 }
             }
 
+            function formatIdNumber(value: number) {
+                return new Intl.NumberFormat("id-ID").format(
+                    Math.max(0, Math.round(value)),
+                );
+            }
+
+            async function initQuotaData() {
+                const stickyDate = document.getElementById(
+                    "sticky-quota-update-date",
+                );
+                const stickyAvailable = document.getElementById(
+                    "sticky-quota-available",
+                );
+
+                if (!stickyDate || !stickyAvailable) {
+                    return;
+                }
+
+                try {
+                    const response = await fetch("/api/quota");
+
+                    if (!response.ok) {
+                        throw new Error("Failed to fetch quota data");
+                    }
+
+                    const data = await response.json();
+                    const nextAvailable = Number(data.available) || 0;
+
+                    stickyDate.textContent = data.updateDate;
+                    stickyAvailable.textContent = `Tersedia ${formatIdNumber(nextAvailable)}`;
+                } catch (error) {
+                    console.error("Failed to load quota data:", error);
+                }
+            }
+
+            function startQuotaAutoRefresh() {
+                const refreshIntervalMs = 60_000;
+
+                initQuotaData();
+                window.setInterval(() => {
+                    initQuotaData();
+                }, refreshIntervalMs);
+
+                document.addEventListener("visibilitychange", () => {
+                    if (document.visibilityState === "visible") {
+                        initQuotaData();
+                    }
+                });
+
+                window.addEventListener("focus", () => {
+                    initQuotaData();
+                });
+            }
+
+            function initStickyDaftarButton() {
+                const stickyDaftarButton = document.getElementById("sticky-quota-daftar");
+                if (!stickyDaftarButton) {
+                    return;
+                }
+
+                stickyDaftarButton.addEventListener("click", function (event) {
+                    event.preventDefault();
+                    const targetSection = document.getElementById("promokelaskaryawan");
+                    if (!targetSection) {
+                        return;
+                    }
+
+                    targetSection.scrollIntoView({
+                        behavior: "smooth",
+                        block: "start",
+                    });
+                });
+            }
+
             // Run initialization when DOM is ready
             if (document.readyState === "loading") {
-                document.addEventListener("DOMContentLoaded", initScrollButton);
+                document.addEventListener("DOMContentLoaded", function () {
+                    initScrollButton();
+                    initStickyDaftarButton();
+                    startQuotaAutoRefresh();
+                });
             } else {
                 // DOM already loaded, run immediately
                 initScrollButton();
+                initStickyDaftarButton();
+                startQuotaAutoRefresh();
             }
         </script>
 
@@ -209,48 +335,91 @@ const parseRankingItem = (item: string) => {
                                     </p>
                                     {
                                         spotlight.items && (
-                                            <div class="mt-5 sm:mt-6 grid gap-3 text-left">
-                                                {
-                                                    spotlight.items.map((item) => {
-                                                        const parsedItem =
-                                                            parseRankingItem(item);
+                                            <>
+                                                <details class="group mt-5 sm:mt-6 rounded-[1.05rem] border border-gray-100 bg-gray-50/80 px-3.5 py-3 dark:border-gray-700 dark:bg-gray-900/60 md:hidden">
+                                                    <summary class="flex cursor-pointer list-none items-center justify-between gap-3">
+                                                        <p class="text-sm font-semibold leading-relaxed text-gray-700 dark:text-gray-300">
+                                                            Lihat Detail Peringkat
+                                                        </p>
+                                                        <svg
+                                                            class="h-4 w-4 flex-shrink-0 text-[#05339C] transition-transform duration-200 group-open:rotate-180 dark:text-blue-300"
+                                                            fill="none"
+                                                            stroke="currentColor"
+                                                            viewBox="0 0 24 24"
+                                                        >
+                                                            <path
+                                                                stroke-linecap="round"
+                                                                stroke-linejoin="round"
+                                                                stroke-width="2.5"
+                                                                d="M19 9l-7 7-7-7"
+                                                            ></path>
+                                                        </svg>
+                                                    </summary>
+                                                    <div class="mt-3 grid gap-3">
+                                                        {
+                                                            spotlight.items.map((item) => {
+                                                                const parsedItem =
+                                                                    parseRankingItem(item);
 
-                                                        return (
-                                                            <div class="flex min-h-[3.75rem] items-center gap-3 rounded-[1.05rem] border border-gray-100 bg-gray-50/80 px-3.5 py-3.5 dark:border-gray-700 dark:bg-gray-900/60">
-                                                                <div class="mt-0.5 flex h-6 w-6 flex-shrink-0 items-center justify-center rounded-full bg-gradient-to-r from-[#1055C9] to-[#05339C] text-white shadow-md">
-                                                                    <svg
-                                                                        class="h-3.5 w-3.5"
-                                                                        fill="none"
-                                                                        stroke="currentColor"
-                                                                        viewBox="0 0 24 24"
-                                                                    >
-                                                                        <path
-                                                                            stroke-linecap="round"
-                                                                            stroke-linejoin="round"
-                                                                            stroke-width="2.5"
-                                                                            d="M5 13l4 4L19 7"
-                                                                        ></path>
-                                                                    </svg>
+                                                                return (
+                                                                    <div class="rounded-xl border border-gray-100 bg-white px-3 py-2.5 dark:border-gray-700 dark:bg-gray-800/70">
+                                                                        <p class="text-sm font-semibold leading-relaxed text-gray-700 dark:text-gray-200">
+                                                                            {parsedItem.label}
+                                                                        </p>
+                                                                        {
+                                                                            parsedItem.rank && (
+                                                                                <p class="mt-1 text-sm font-bold text-[#05339C] dark:text-blue-300">
+                                                                                    {parsedItem.rank}
+                                                                                </p>
+                                                                            )
+                                                                        }
+                                                                    </div>
+                                                                );
+                                                            })
+                                                        }
+                                                    </div>
+                                                </details>
+                                                <div class="mt-5 sm:mt-6 hidden md:grid gap-3 text-left">
+                                                    {
+                                                        spotlight.items.map((item) => {
+                                                            const parsedItem =
+                                                                parseRankingItem(item);
+
+                                                            return (
+                                                                <div class="flex min-h-[3.75rem] items-center gap-3 rounded-[1.05rem] border border-gray-100 bg-gray-50/80 px-3.5 py-3.5 dark:border-gray-700 dark:bg-gray-900/60">
+                                                                    <div class="mt-0.5 flex h-6 w-6 flex-shrink-0 items-center justify-center rounded-full bg-gradient-to-r from-[#1055C9] to-[#05339C] text-white shadow-md">
+                                                                        <svg
+                                                                            class="h-3.5 w-3.5"
+                                                                            fill="none"
+                                                                            stroke="currentColor"
+                                                                            viewBox="0 0 24 24"
+                                                                        >
+                                                                            <path
+                                                                                stroke-linecap="round"
+                                                                                stroke-linejoin="round"
+                                                                                stroke-width="2.5"
+                                                                                d="M5 13l4 4L19 7"
+                                                                            ></path>
+                                                                        </svg>
+                                                                    </div>
+                                                                    <div class="grid w-full grid-cols-[minmax(0,1fr)_auto] items-center gap-2 sm:gap-3">
+                                                                        <p class="text-sm font-medium leading-relaxed text-gray-700 dark:text-gray-300 md:text-base">
+                                                                            {parsedItem.label}
+                                                                        </p>
+                                                                        {
+                                                                            parsedItem.rank && (
+                                                                                <span class="inline-flex w-fit items-center justify-center rounded-full border border-slate-200 bg-white px-2.5 py-1 text-[11px] sm:px-3 sm:text-xs font-bold uppercase tracking-[0.08em] sm:tracking-wide text-slate-700 shadow-sm dark:border-slate-600 dark:bg-slate-900 dark:text-slate-200">
+                                                                                    {parsedItem.rank}
+                                                                                </span>
+                                                                            )
+                                                                        }
+                                                                    </div>
                                                                 </div>
-                                                                <div class="grid w-full grid-cols-[minmax(0,1fr)_auto] items-center gap-2 sm:gap-3">
-                                                                    <p class="text-sm font-medium leading-relaxed text-gray-700 dark:text-gray-300 md:text-base">
-                                                                        {parsedItem.label}
-                                                                    </p>
-                                                                    {
-                                                                        parsedItem.rank && (
-                                                                            <span
-                                                                                class="inline-flex w-fit items-center justify-center rounded-full border border-slate-200 bg-white px-2.5 py-1 text-[11px] sm:px-3 sm:text-xs font-bold uppercase tracking-[0.08em] sm:tracking-wide text-slate-700 shadow-sm dark:border-slate-600 dark:bg-slate-900 dark:text-slate-200"
-                                                                            >
-                                                                                {parsedItem.rank}
-                                                                            </span>
-                                                                        )
-                                                                    }
-                                                                </div>
-                                                            </div>
-                                                        );
-                                                    })
-                                                }
-                                            </div>
+                                                            );
+                                                        })
+                                                    }
+                                                </div>
+                                            </>
                                         )
                                     }
                                 </div>
@@ -734,3 +903,6 @@ const parseRankingItem = (item: string) => {
         </div>
     </div>
 </section>
+
+
+
