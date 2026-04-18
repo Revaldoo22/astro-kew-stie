@@ -123,41 +123,46 @@ const fallbackQuotaData = {
                             stroke-width="2"
                             d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M9 19l3 3m0 0l3-3m-3 3V10"
                         ></path>
+                    </svg>
+                    Download Brosur
+                </button>
+            </div>
+        </div>
 
         <!-- Kuota Update Sticky -->
-        <div class="fixed bottom-4 left-3 z-40 w-[44vw] max-w-[11rem] sm:bottom-6 sm:left-6 sm:w-72 sm:max-w-none scale-110 origin-bottom-left">
+        <div class="fixed bottom-4 left-3 z-40 w-[44vw] max-w-[11rem] sm:bottom-6 sm:left-6 sm:w-72 sm:max-w-none">
             <div class="rounded-xl border border-blue-200/70 bg-white/95 p-3 text-left shadow-[0_24px_55px_-20px_rgba(16,85,201,0.6)] backdrop-blur sm:rounded-2xl sm:p-4 dark:border-blue-900/60 dark:bg-gray-900/90">
                 <div class="flex items-start justify-between gap-2">
-                    <p class="text-sm sm:text-base font-extrabold uppercase tracking-[0.06em] sm:tracking-[0.1em] leading-tight text-[#05339C] dark:text-blue-300">
+                    <p class="text-sm sm:text-base lg:text-[0.95rem] font-extrabold uppercase tracking-[0.06em] sm:tracking-[0.1em] leading-tight text-[#05339C] dark:text-blue-300">
                         Update Kuota
                     </p>
                     <span class="mt-1 h-2.5 w-2.5 rounded-full bg-emerald-500 animate-pulse"></span>
                 </div>
                 <p
                     id="sticky-quota-update-date"
-                    class="mt-1.5 text-xs sm:text-sm font-semibold leading-tight text-gray-500 dark:text-gray-400"
+                    class="mt-1.5 text-xs sm:text-sm lg:text-[0.83rem] font-semibold leading-tight text-gray-500 dark:text-gray-400"
                 >
                     {fallbackQuotaData.updateDate}
                 </p>
                 <p
                     id="sticky-quota-progress"
-                    class="mt-1.5 text-xs sm:text-sm font-bold leading-tight text-[#05339C] dark:text-blue-300"
+                    class="mt-1.5 text-xs sm:text-sm lg:text-[0.83rem] font-bold leading-tight text-[#05339C] dark:text-blue-300"
                 >
                     {fallbackQuotaData.registered} / {fallbackQuotaData.capacity} (+{fallbackQuotaData.bonusQuota})
                 </p>
                 <p
                     id="sticky-quota-available"
-                    class="mt-2 text-sm sm:text-xl font-black leading-tight text-emerald-700 dark:text-emerald-400"
+                    class="mt-2 text-sm sm:text-xl lg:text-[1.19rem] font-black leading-tight text-emerald-700 dark:text-emerald-400"
                 >
                     Tersedia {fallbackQuotaData.available}
                 </p>
-                <p class="mt-1.5 text-[11px] sm:text-sm font-semibold leading-tight text-amber-700 dark:text-amber-300">
+                <p class="mt-1.5 text-[11px] sm:text-sm lg:text-[0.83rem] font-semibold leading-tight text-amber-700 dark:text-amber-300">
                     &#9888;&#65039; Kuota Setiap Prodi Berbeda
                 </p>
                 <a
                     id="sticky-quota-daftar"
                     href="#promokelaskaryawan"
-                    class="mt-2.5 inline-flex w-full items-center justify-center rounded-md sm:rounded-lg bg-gradient-to-r from-green-500 to-emerald-600 px-2.5 py-1.5 text-xs sm:text-base font-bold text-white shadow-md transition-all hover:from-green-600 hover:to-emerald-700"
+                    class="mt-2.5 inline-flex w-full items-center justify-center rounded-md sm:rounded-lg bg-gradient-to-r from-green-500 to-emerald-600 px-2.5 py-1.5 text-xs sm:text-base lg:text-[0.95rem] font-bold text-white shadow-md transition-all hover:from-green-600 hover:to-emerald-700"
                 >
                     Daftar
                 </a>
