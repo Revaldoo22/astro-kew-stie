@@ -88,18 +88,13 @@ const metaTags = {
                             stroke="currentColor"
                             viewBox="0 0 24 24"
                         >
-                            <path
-                                stroke-linecap="round"
-                                stroke-linejoin="round"
-                                stroke-width="2"
-                                d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"
-                            ></path>
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5.121 17.804A9 9 0 1118.88 17.8M15 10a3 3 0 11-6 0 3 3 0 016 0M7 20a5 5 0 0110 0"></path>
                         </svg>
                     </div>
                     <h3
                         class="text-xl font-bold text-center mb-2 text-gray-900 dark:text-white"
                     >
-                        Email
+                        Admin
                     </h3>
                     <p
                         class="text-center text-gray-600 dark:text-gray-400 mb-3"
@@ -154,11 +149,18 @@ const metaTags = {
                 <div
                     class="bg-white dark:bg-gray-800 rounded-xl shadow-lg p-8 border border-gray-200 dark:border-gray-700"
                 >
-                    <h2
-                        class="text-2xl font-bold mb-6 text-gray-900 dark:text-white"
-                    >
-                        Kirim Pesan
+                    <h2 class="text-2xl font-bold mb-4 text-gray-900 dark:text-white flex items-center gap-2">
+                        <svg class="w-6 h-6 text-[#1055C9]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l3.414 3.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path>
+                        </svg>
+                        Form Pengaduan
                     </h2>
+                    <p class="text-gray-600 dark:text-gray-400 mb-2">
+                        Konten pada situs ini disusun berdasarkan data publik, referensi umum, serta sistem navigasi menuju sumber informasi resmi atau hasil pencarian publik.
+                    </p>
+                    <p class="text-gray-600 dark:text-gray-400 mb-6">
+                        Apabila terdapat kekeliruan data, keberatan penggunaan nama institusi, atau permohonan penghapusan halaman tertentu, silakan ajukan melalui formulir berikut untuk proses verifikasi dan peninjauan internal.
+                    </p>
                     <form class="space-y-4">
                         <div>
                             <label
@@ -178,72 +180,102 @@ const metaTags = {
                         </div>
                         <div>
                             <label
-                                for="email"
+                                for="position"
                                 class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2"
                             >
-                                Email
-                            </label>
-                            <input
-                                type="email"
-                                id="email"
-                                name="email"
-                                class="w-full px-4 py-3 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-[#1055C9] focus:border-transparent bg-white dark:bg-gray-700 text-gray-900 dark:text-white transition-all"
-                                placeholder="nama@email.com"
-                                required
-                            />
-                        </div>
-                        <div>
-                            <label
-                                for="phone"
-                                class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2"
-                            >
-                                Nomor Telepon
-                            </label>
-                            <input
-                                type="tel"
-                                id="phone"
-                                name="phone"
-                                class="w-full px-4 py-3 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-[#1055C9] focus:border-transparent bg-white dark:bg-gray-700 text-gray-900 dark:text-white transition-all"
-                                placeholder="+62 812-3456-7890"
-                                required
-                            />
-                        </div>
-                        <div>
-                            <label
-                                for="subject"
-                                class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2"
-                            >
-                                Subjek
+                                Jabatan / Posisi
                             </label>
                             <input
                                 type="text"
-                                id="subject"
-                                name="subject"
+                                id="position"
+                                name="position"
                                 class="w-full px-4 py-3 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-[#1055C9] focus:border-transparent bg-white dark:bg-gray-700 text-gray-900 dark:text-white transition-all"
-                                placeholder="Perihal pesan Anda"
+                                placeholder="Contoh: Humas, Legal Officer, Staff Akademik"
                                 required
                             />
+                        </div>
+                        <div>
+                            <label
+                                for="institution"
+                                class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2"
+                            >
+                                Nama Institusi / Organisasi
+                            </label>
+                            <input
+                                type="text"
+                                id="institution"
+                                name="institution"
+                                class="w-full px-4 py-3 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-[#1055C9] focus:border-transparent bg-white dark:bg-gray-700 text-gray-900 dark:text-white transition-all"
+                                placeholder="Masukkan nama institusi / organisasi"
+                                required
+                            />
+                        </div>
+                        <div>
+                            <label
+                                for="wa"
+                                class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2"
+                            >
+                                Nomor WA yang dapat dihubungi
+                            </label>
+                            <input
+                                type="tel"
+                                id="wa"
+                                name="wa"
+                                class="w-full px-4 py-3 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-[#1055C9] focus:border-transparent bg-white dark:bg-gray-700 text-gray-900 dark:text-white transition-all"
+                                placeholder="Contoh: 0812xxxxxxx"
+                                required
+                            />
+                        </div>
+                        <div>
+                            <label
+                                for="requestType"
+                                class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2"
+                            >
+                                Pilih jenis permintaan
+                            </label>
+                            <select
+                                id="requestType"
+                                name="requestType"
+                                class="w-full px-4 py-3 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-[#1055C9] focus:border-transparent bg-white dark:bg-gray-700 text-gray-900 dark:text-white transition-all"
+                                required
+                            >
+                                <option value="" disabled selected>Pilih jenis permintaan</option>
+                                <option value="kekeliruan-informasi">Kekeliruan Informasi</option>
+                                <option value="penghapusan-halaman">Penghapusan Halaman</option>
+                            </select>
                         </div>
                         <div>
                             <label
                                 for="message"
                                 class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2"
                             >
-                                Pesan
+                                Penjelasan Detail (Dokumen pendukung bisa disertakan dalam bentuk URL Google Drive)
                             </label>
                             <textarea
                                 id="message"
                                 name="message"
                                 rows="5"
                                 class="w-full px-4 py-3 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-[#1055C9] focus:border-transparent bg-white dark:bg-gray-700 text-gray-900 dark:text-white transition-all resize-none"
-                                placeholder="Tulis pesan Anda di sini..."
+                                placeholder="Jelaskan detail pengaduan Anda di sini..."
                                 required></textarea>
+                        </div>
+                        <div class="flex items-start gap-3 pt-1">
+                            <input
+                                id="agreement"
+                                name="agreement"
+                                type="checkbox"
+                                class="mt-1 h-4 w-4 rounded border-gray-300 text-[#1055C9] focus:ring-[#1055C9]"
+                                required
+                            />
+                            <label for="agreement" class="text-sm text-gray-700 dark:text-gray-300">
+                                Saya telah membaca dan memahami <a href="/privacy-policy" class="text-[#1055C9] hover:underline">Privacy Policy</a> &amp; <a href="/terms-of-service" class="text-[#1055C9] hover:underline">Terms of Use</a>.
+                            </label>
                         </div>
                         <button
                             type="submit"
                             class="w-full bg-[#1055C9] hover:bg-[#05339C] text-white font-semibold py-3 px-6 rounded-lg transition-colors duration-300 shadow-md hover:shadow-lg"
                         >
-                            Kirim Pesan
+                            SUBMIT
                         </button>
                     </form>
                 </div>

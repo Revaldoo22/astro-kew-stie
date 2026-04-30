@@ -30,16 +30,13 @@ const { websiteInfo } = Astro.props;
                 <div
                     class="bg-white/10 backdrop-blur-sm rounded-2xl p-4 border border-white/20"
                 >
-                    <div
-                        class="rounded-xl overflow-hidden shadow-2xl bg-white w-full"
-                    >
-                        <blockquote
-                            class="instagram-media"
-                            data-instgrm-permalink={websiteInfo.igEmbed}
-                            data-instgrm-version="14"
-                            style="background:#FFF; border:0; border-radius:3px; box-shadow:0 0 1px 0 rgba(0,0,0,0.5),0 1px 10px 0 rgba(0,0,0,0.15); margin: 0 auto; padding:0; width:100% !important; max-width:100% !important;"
-                        >
-                        </blockquote>
+                    <div class="rounded-xl overflow-hidden shadow-2xl bg-white w-full">
+                        <img
+                            src="/assets/brosur/adsluarjateng.png"
+                            alt="Ads Luar Jateng"
+                            class="w-full h-auto object-cover"
+                            loading="lazy"
+                        />
                     </div>
                 </div>
             </div>
@@ -201,12 +198,6 @@ const { websiteInfo } = Astro.props;
 </section>
 
 <script define:vars={{ countdownEndDate: websiteInfo.promo.countdownEndDate }}>
-    // Instagram embed script
-    const script = document.createElement("script");
-    script.async = true;
-    script.src = "//www.instagram.com/embed.js";
-    document.body.appendChild(script);
-
     // Countdown Timer - Configurable from info.ts
     // Parse the countdown end date from config (format: "YYYY-MM-DD HH:mm:ss" in WIB/GMT+7)
     const parseCountdownDate = (dateStr) => {

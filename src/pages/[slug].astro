@@ -7,21 +7,30 @@ import BrochureRequestFormModal from "@components/blog/BrochureRequestFormModal.
 
 // Get slug from URL
 const { slug } = Astro.params;
+const blockedSlugs = new Set([
+    "kuliah-online-sekolah-tinggi-teologi-saat-2026",
+    "kuliah-cepat-rpl-sekolah-tinggi-teologi-saat-2026",
+    "kuliah-kelas-sore-sekolah-tinggi-teologi-saat-2026",
+    "kuliah-kelas-karyawan-sekolah-tinggi-teologi-saat-2026",
+    "biaya-kuliah-online-sekolah-tinggi-teologi-saat-2026",
+    "biaya-kuliah-kelas-sore-sekolah-tinggi-teologi-saat-2026",
+]);
+const isBlockedSlug = !!slug && blockedSlugs.has(slug);
 
 // Fetch all posts to find the one with matching slug
 const blogApi = new BlogApi();
-const projectsResponse = await blogApi.fetchProjects(1, 10, "published");
+const projectsResponse = isBlockedSlug ? null : await blogApi.fetchProjects(1, 10, "published");
 const allPosts = projectsResponse?.data || [];
 
 // Fetch full content details
-const fullContent = await blogApi.fetchContentById(slug || "");
+const fullContent = isBlockedSlug ? null : await blogApi.fetchContentById(slug || "");
 
-if (!fullContent) {
+if (!isBlockedSlug && !fullContent) {
     return Astro.redirect('/blog');
 }
 
 // Fetch categories for sidebar
-const categoriesResponse = await blogApi.fetchCategories();
+const categoriesResponse = isBlockedSlug ? null : await blogApi.fetchCategories();
 const categories = categoriesResponse?.data || [];
 
 // Get related posts (same category, exclude current post)
@@ -32,17 +41,19 @@ const relatedPosts = allPosts
 const breadcrumbs = [
     { label: "Home", href: "/" },
     { label: "Blog", href: "/blog" },
-    { label: fullContent.title, href: `/blog/${slug}` },
+    { label: fullContent?.title || "Artikel", href: `/blog/${slug}` },
 ];
 
 const metaTags = {
-    title: fullContent.title || "Blog",
-    description: fullContent.metaDescription || (fullContent.content ? fullContent.content.replace(/<[^>]*>/g, '').substring(0, 160) : "Artikel blog"),
-    keywords: fullContent.tags || "blog, artikel, " + (fullContent.title || ""),
-    image: fullContent.thumbnailUrl || "",
+    title: isBlockedSlug ? "Artikel Tidak Tersedia" : (fullContent?.title || "Blog"),
+    description: isBlockedSlug
+        ? "Artikel tidak tersedia. Silakan kembali ke Home."
+        : (fullContent?.metaDescription || (fullContent?.content ? fullContent.content.replace(/<[^>]*>/g, '').substring(0, 160) : "Artikel blog")),
+    keywords: fullContent?.tags || "blog, artikel, " + (fullContent?.title || ""),
+    image: fullContent?.thumbnailUrl || "",
 };
 
-const formattedTitle = fullContent.title 
+const formattedTitle = fullContent?.title
     ? fullContent.title.toLowerCase().replace(/[^a-z0-9]+/g, '+').replace(/(^\+|\+$)/g, '') 
     : '';
 
@@ -141,12 +152,25 @@ const adDiv = `
 </a>
 `;
 
-let modifiedContent = fullContent.content || "";
+let modifiedContent = fullContent?.content || "";
 modifiedContent = modifiedContent.replace(/<\/p>/i, `</p>\n${adDiv}`);
 
 ---
 
 
+{isBlockedSlug ? (
+    <LayoutBlog metaTags={metaTags}>
+        <div class="min-h-screen relative bg-gray-100">
+            <div class="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/50">
+                <div class="max-w-md w-full bg-white rounded-2xl shadow-2xl border border-gray-200 p-6 text-center">
+                    <h1 class="text-xl font-bold text-gray-900 mb-3">Artikel Tidak Tersedia</h1>
+                    <p class="text-gray-600 mb-5">Silakan kembali ke Home.</p>
+                    <a href="/" class="inline-block px-5 py-2.5 bg-[#1055C9] text-white rounded-lg font-semibold hover:bg-[#0d4aa8] transition-colors">Kembali ke Home</a>
+                </div>
+            </div>
+        </div>
+    </LayoutBlog>
+) : (
 <LayoutBlog metaTags={metaTags}>
     <!-- Brochure Request Form Modal - Auto Open -->
     <BrochureRequestFormModal autoOpen={true} />
@@ -404,4 +428,5 @@ modifiedContent = modifiedContent.replace(/<\/p>/i, `</p>\n${adDiv}`);
     </div>
 
 </LayoutBlog>
+)}
 

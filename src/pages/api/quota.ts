@@ -17,7 +17,7 @@ const PMB_BEARER_TOKEN =
     "8|aL0DhDhcgqh4P7uQNa3sz1ylBzdaQzTIhCuHaUYV9073c0e9";
 const CAPACITY = 500;
 const BONUS_QUOTA = 100;
-const FALLBACK_REGISTERED = 204;
+const FALLBACK_REGISTERED = 550;
 
 const getStartOfCurrentMonthJakarta = (): string => {
     const formatter = new Intl.DateTimeFormat("en-CA", {
