@@ -188,11 +188,11 @@ modifiedContent = modifiedContent.replace(/<\/p>/i, `</p>\n${adDiv}`);
                 <!-- Main Content -->
                 <article class="lg:col-span-9">
                     <!-- Featured Image -->
-                    {fullContent.thumbnailUrl && (
+                    {fullContent?.thumbnailUrl && (
                         <div class="relative rounded-2xl overflow-hidden mb-8 shadow-2xl">
                             <img
-                                src={fullContent.thumbnailUrl}
-                                alt={fullContent.title}
+                                src={fullContent?.thumbnailUrl}
+                                alt={fullContent?.title}
                                 class="w-full h-full object-cover"
                             />
                         </div>
@@ -208,7 +208,7 @@ modifiedContent = modifiedContent.replace(/<\/p>/i, `</p>\n${adDiv}`);
                     <div class="bg-white dark:bg-gray-800 rounded-2xl shadow-lg p-8 mb-8">
                         <!-- Title -->
                         <h1 class="text-4xl lg:text-5xl font-extrabold text-gray-900 dark:text-white mb-6 leading-tight">
-                            {fullContent.title}
+                            {fullContent?.title}
                         </h1>
 
                         <!-- Meta Info -->
@@ -229,11 +229,11 @@ modifiedContent = modifiedContent.replace(/<\/p>/i, `</p>\n${adDiv}`);
                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"/>
                                 </svg>
                                 <span>
-                                    {new Date(fullContent.createdAt).toLocaleDateString("id-ID", {
+                                    {fullContent?.createdAt ? new Date(fullContent.createdAt).toLocaleDateString("id-ID", {
                                         year: "numeric",
                                         month: "long",
                                         day: "numeric",
-                                    })}
+                                    }) : ''}
                                 </span>
                             </div>
 
@@ -242,7 +242,7 @@ modifiedContent = modifiedContent.replace(/<\/p>/i, `</p>\n${adDiv}`);
                                 <svg class="w-4 h-4 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"/>
                                 </svg>
-                                <span>{fullContent.content ? Math.ceil(fullContent.content.split(' ').length / 200) : 1} menit baca</span>
+                                <span>{fullContent?.content ? Math.ceil(fullContent.content.split(' ').length / 200) : 1} menit baca</span>
                             </div>
 
                             <!-- Views -->
@@ -279,7 +279,7 @@ modifiedContent = modifiedContent.replace(/<\/p>/i, `</p>\n${adDiv}`);
 
                                 <!-- Twitter -->
                                 <a
-                                    href={`https://twitter.com/intent/tweet?url=${Astro.url.href}&text=${fullContent.title}`}
+                                    href={`https://twitter.com/intent/tweet?url=${Astro.url.href}&text=${fullContent?.title}`}
                                     target="_blank"
                                     rel="noopener noreferrer"
                                     class="inline-flex items-center gap-2 px-4 py-2 bg-sky-500 text-white rounded-lg hover:bg-sky-600 transition-colors"
@@ -292,7 +292,7 @@ modifiedContent = modifiedContent.replace(/<\/p>/i, `</p>\n${adDiv}`);
 
                                 <!-- WhatsApp -->
                                 <a
-                                    href={`https://wa.me/?text=${fullContent.title} ${Astro.url.href}`}
+                                    href={`https://wa.me/?text=${fullContent?.title} ${Astro.url.href}`}
                                     target="_blank"
                                     rel="noopener noreferrer"
                                     class="inline-flex items-center gap-2 px-4 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700 transition-colors"

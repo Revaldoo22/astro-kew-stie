@@ -49,21 +49,12 @@ const parseRankingItem = (item: string) => {
         rankNumber: Number(match[2]),
     };
 };
-const currentQuotaDate = new Intl.DateTimeFormat("id-ID", {
-    day: "2-digit",
-    month: "long",
-    year: "numeric",
-    timeZone: "Asia/Jakarta",
-})
-    .format(new Date())
-    .toUpperCase();
-
 const fallbackQuotaData = {
-    updateDate: currentQuotaDate,
-    registered: 550,
+    updateDate: "04 MEI 2026",
+    registered: 44,
     capacity: 500,
     bonusQuota: 100,
-    available: 500 - 550 + 100,
+    available: 556,
 };
 ---
 
@@ -148,13 +139,13 @@ const fallbackQuotaData = {
                     id="sticky-quota-progress"
                     class="mt-1.5 text-xs sm:text-sm lg:text-[0.83rem] font-bold leading-tight text-[#05339C] dark:text-blue-300"
                 >
-                    {fallbackQuotaData.registered} / {fallbackQuotaData.capacity} (+{fallbackQuotaData.bonusQuota})
+                    -/- (-)
                 </p>
                 <p
                     id="sticky-quota-available"
                     class="mt-2 text-sm sm:text-xl lg:text-[1.19rem] font-black leading-tight text-emerald-700 dark:text-emerald-400"
                 >
-                    Tersedia {fallbackQuotaData.available}
+                    Tersedia -
                 </p>
                 <p class="mt-1.5 text-[11px] sm:text-sm lg:text-[0.83rem] font-semibold leading-tight text-amber-700 dark:text-amber-300">
                     &#9888;&#65039; Kuota Setiap Prodi Berbeda
