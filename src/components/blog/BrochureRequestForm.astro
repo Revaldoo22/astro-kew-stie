@@ -457,6 +457,40 @@ const brochureLink = websiteInfo.brosur.pmb;
             return true;
         }
 
+        function normalizePhone(value: string): string {
+            const phone = value.trim();
+            if (phone.startsWith("08")) {
+                return `62${phone.slice(1)}`;
+            }
+            return phone;
+        }
+
+        function buildSourcePage(hostname: string): string {
+            const params = new URLSearchParams(window.location.search);
+            const source = (params.get("utm_source") || "").trim();
+            const medium = (params.get("utm_medium") || "").trim();
+
+            const readableSource =
+                source.length > 0
+                    ? source
+                          .split(/[-_ ]+/)
+                          .map(
+                              (part) =>
+                                  part.charAt(0).toUpperCase() +
+                                  part.slice(1).toLowerCase(),
+                          )
+                          .join(" ")
+                    : "Direct";
+
+            const brand = hostname.includes("kew.stekom.ac.id")
+                ? "KEW"
+                : hostname;
+
+            return medium
+                ? `${readableSource} (${medium}), ${brand}`
+                : `${readableSource}, ${brand}`;
+        }
+
         function showError(
             input: HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement,
             errorElement: HTMLElement | null,
@@ -626,6 +660,39 @@ const brochureLink = websiteInfo.brosur.pmb;
                     const response = await fetch(urlWithParams, {
                         method: "GET",
                         redirect: "follow",
+                    });
+                    if (!response.ok) {
+                        throw new Error(
+                            "Pengiriman data gagal. Silakan coba beberapa saat lagi.",
+                        );
+                    }
+
+                    // Send lead to tracking database (non-blocking)
+                    const trackingPayload = {
+                        source_page: buildSourcePage(hostname),
+                        nama: (data.fullName as string) || "",
+                        email: (data.email as string) || "",
+                        phone: normalizePhone((data.phone as string) || ""),
+                        data: JSON.stringify({
+                            form: "Permintaan Brosur KEW",
+                            studyProgram: (data.studyProgram as string) || "",
+                            studyMethod: (data.studyMethod as string) || "",
+                            address: (data.address as string) || "",
+                            slug: currentUrl,
+                            source: "Permintaan Brosur KEW",
+                            timestamp: new Date().toISOString(),
+                        }),
+                    };
+
+                    const trackingUrl = `${window.location.origin}/tracking/submit-direct`;
+                    fetch(trackingUrl, {
+                        method: "POST",
+                        headers: {
+                            "Content-Type": "application/json",
+                        },
+                        body: JSON.stringify(trackingPayload),
+                    }).catch(() => {
+                        // Intentionally ignore tracking errors to keep brochure flow successful
                     });
 
                     // console.log("Response received:", response);
