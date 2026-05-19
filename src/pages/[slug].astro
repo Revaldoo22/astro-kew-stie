@@ -15,7 +15,19 @@ const blockedSlugs = new Set([
     "biaya-kuliah-online-sekolah-tinggi-teologi-saat-2026",
     "biaya-kuliah-kelas-sore-sekolah-tinggi-teologi-saat-2026",
 ]);
-const isBlockedSlug = !!slug && blockedSlugs.has(slug);
+
+// Blokir juga jika URL mengandung salah satu dari keyword berikut (format slug)
+const blockedKeywords = [
+    "stt-saat-malang",
+    "stt-brea-salatiga",
+    "universitas-islam-ahmad-dahlan",
+    "universitas-al-irsyad-cilacap"
+];
+
+const isBlockedSlug = !!slug && (
+    blockedSlugs.has(slug) || 
+    blockedKeywords.some(keyword => slug.includes(keyword))
+);
 
 // Fetch all posts to find the one with matching slug
 const blogApi = new BlogApi();
@@ -45,9 +57,9 @@ const breadcrumbs = [
 ];
 
 const metaTags = {
-    title: isBlockedSlug ? "Artikel Tidak Tersedia" : (fullContent?.title || "Blog"),
+    title: isBlockedSlug ? "Konten Tidak Tersedia" : (fullContent?.title || "Blog"),
     description: isBlockedSlug
-        ? "Artikel tidak tersedia. Silakan kembali ke Home."
+        ? "Konten tidak tersedia. Silakan kembali ke Home."
         : (fullContent?.metaDescription || (fullContent?.content ? fullContent.content.replace(/<[^>]*>/g, '').substring(0, 160) : "Artikel blog")),
     keywords: fullContent?.tags || "blog, artikel, " + (fullContent?.title || ""),
     image: fullContent?.thumbnailUrl || "",
@@ -160,12 +172,37 @@ modifiedContent = modifiedContent.replace(/<\/p>/i, `</p>\n${adDiv}`);
 
 {isBlockedSlug ? (
     <LayoutBlog metaTags={metaTags}>
-        <div class="min-h-screen relative bg-gray-100">
-            <div class="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/50">
-                <div class="max-w-md w-full bg-white rounded-2xl shadow-2xl border border-gray-200 p-6 text-center">
-                    <h1 class="text-xl font-bold text-gray-900 mb-3">Artikel Tidak Tersedia</h1>
-                    <p class="text-gray-600 mb-5">Silakan kembali ke Home.</p>
-                    <a href="/" class="inline-block px-5 py-2.5 bg-[#1055C9] text-white rounded-lg font-semibold hover:bg-[#0d4aa8] transition-colors">Kembali ke Home</a>
+        <BrochureRequestFormModal autoOpen={false} />
+        
+        <div class="min-h-screen bg-gray-50 flex flex-col items-center justify-center p-4">
+            <div class="max-w-2xl w-full bg-white rounded-3xl shadow-xl border border-gray-100 p-10 md:p-16 text-center">
+                <!-- Icon -->
+                <div class="mx-auto flex items-center justify-center h-24 w-24 rounded-full bg-orange-100 mb-8">
+                    <svg class="h-12 w-12 text-orange-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"/>
+                    </svg>
+                </div>
+                
+                <h1 class="text-3xl md:text-4xl font-extrabold text-gray-900 mb-4 tracking-tight">Konten Tidak Tersedia</h1>
+                
+                <p class="text-lg text-gray-600 mb-10 max-w-lg mx-auto">
+                    Mohon maaf, konten yang Anda cari saat ini tidak tersedia. Silakan kembali ke halaman utama atau minta brosur informasi lengkap tentang program kami.
+                </p>
+                
+                <div class="flex flex-col sm:flex-row items-center justify-center gap-4">
+                    <a href="/" class="w-full sm:w-auto px-8 py-3.5 bg-gray-100 text-gray-800 rounded-xl font-bold hover:bg-gray-200 transition-all duration-300">
+                        Kembali ke Home
+                    </a>
+                    
+                    <button 
+                        onclick="window.openBrochureFormModal && window.openBrochureFormModal()"
+                        class="w-full sm:w-auto px-8 py-3.5 bg-gradient-to-r from-orange-500 to-orange-600 text-white rounded-xl font-bold hover:from-orange-600 hover:to-orange-700 transition-all duration-300 shadow-lg hover:shadow-xl transform hover:-translate-y-0.5 flex items-center justify-center gap-2"
+                    >
+                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path>
+                        </svg>
+                        Minta Brosur
+                    </button>
                 </div>
             </div>
         </div>
