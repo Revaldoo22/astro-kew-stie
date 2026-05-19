@@ -464,11 +464,58 @@ const metaTags = {
             </div> -->
     </div>
   </div>
+  
+  <Fragment slot="modals">
+    <!-- Modal Sukses Pengaduan -->
+    <div id="success-modal" class="hidden fixed inset-0 z-[100] flex items-center justify-center p-4">
+      <div class="absolute inset-0 bg-gray-900/50 backdrop-blur-sm" id="success-modal-backdrop"></div>
+      <div class="relative bg-white dark:bg-gray-800 rounded-2xl shadow-xl w-full max-w-md p-6 text-center transform transition-all scale-95 opacity-0 duration-300" id="success-modal-content">
+        <div class="w-16 h-16 bg-green-100 dark:bg-green-900/30 text-green-500 rounded-full flex items-center justify-center mx-auto mb-4">
+          <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M5 13l4 4L19 7"></path>
+          </svg>
+        </div>
+        <h3 class="text-xl font-bold text-gray-900 dark:text-white mb-2">Terima Kasih!</h3>
+        <p class="text-gray-600 dark:text-gray-400 mb-6">Data pengaduan Anda telah berhasil dikirim dan akan segera kami proses.</p>
+        <button type="button" id="close-success-modal" class="w-full bg-[#1055C9] hover:bg-[#05339C] text-white font-semibold py-3 px-6 rounded-lg transition-colors duration-300">
+          Tutup
+        </button>
+      </div>
+    </div>
+  </Fragment>
 </Layout>
 
 <script>
   document.addEventListener("DOMContentLoaded", () => {
     const form = document.getElementById("contact-form") as HTMLFormElement;
+    
+    // Modal elements
+    const successModal = document.getElementById("success-modal");
+    const successModalContent = document.getElementById("success-modal-content");
+    const successModalBackdrop = document.getElementById("success-modal-backdrop");
+    const closeSuccessModalBtn = document.getElementById("close-success-modal");
+
+    const showModal = () => {
+      if (!successModal || !successModalContent) return;
+      successModal.classList.remove("hidden");
+      // Trigger reflow for transition
+      void successModal.offsetWidth;
+      successModalContent.classList.remove("scale-95", "opacity-0");
+      successModalContent.classList.add("scale-100", "opacity-100");
+    };
+
+    const hideModal = () => {
+      if (!successModal || !successModalContent) return;
+      successModalContent.classList.remove("scale-100", "opacity-100");
+      successModalContent.classList.add("scale-95", "opacity-0");
+      setTimeout(() => {
+        successModal.classList.add("hidden");
+      }, 300);
+    };
+
+    if (closeSuccessModalBtn) closeSuccessModalBtn.addEventListener("click", hideModal);
+    if (successModalBackdrop) successModalBackdrop.addEventListener("click", hideModal);
+
     if (!form) return;
 
     form.addEventListener("submit", async (e) => {
@@ -513,7 +560,7 @@ const metaTags = {
 
         // Karena no-cors membuat response "opaque" (tidak bisa dibaca statusnya),
         // kita asumsikan berhasil jika tidak terlempar ke block catch.
-        alert("Terima kasih! Data pengaduan Anda telah berhasil dikirim.");
+        showModal();
         form.reset();
       } catch (error) {
         alert(
