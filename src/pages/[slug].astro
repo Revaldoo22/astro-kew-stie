@@ -31,18 +31,18 @@ const isBlockedSlug = !!slug && (
 
 // Fetch all posts to find the one with matching slug
 const blogApi = new BlogApi();
-const projectsResponse = isBlockedSlug ? null : await blogApi.fetchProjects(1, 10, "published");
+const projectsResponse = await blogApi.fetchProjects(1, 10, "published");
 const allPosts = projectsResponse?.data || [];
 
 // Fetch full content details
-const fullContent = isBlockedSlug ? null : await blogApi.fetchContentById(slug || "");
+const fullContent = await blogApi.fetchContentById(slug || "");
 
-if (!isBlockedSlug && !fullContent) {
+if (!fullContent) {
     return Astro.redirect('/blog');
 }
 
 // Fetch categories for sidebar
-const categoriesResponse = isBlockedSlug ? null : await blogApi.fetchCategories();
+const categoriesResponse = await blogApi.fetchCategories();
 const categories = categoriesResponse?.data || [];
 
 // Get related posts (same category, exclude current post)
@@ -57,10 +57,8 @@ const breadcrumbs = [
 ];
 
 const metaTags = {
-    title: isBlockedSlug ? "Konten Tidak Tersedia" : (fullContent?.title || "Blog"),
-    description: isBlockedSlug
-        ? "Konten tidak tersedia. Silakan kembali ke Home."
-        : (fullContent?.metaDescription || (fullContent?.content ? fullContent.content.replace(/<[^>]*>/g, '').substring(0, 160) : "Artikel blog")),
+    title: fullContent?.title || "Blog",
+    description: fullContent?.metaDescription || (fullContent?.content ? fullContent.content.replace(/<[^>]*>/g, '').substring(0, 160) : "Artikel blog"),
     keywords: fullContent?.tags || "blog, artikel, " + (fullContent?.title || ""),
     image: fullContent?.thumbnailUrl || "",
 };
@@ -170,27 +168,25 @@ modifiedContent = modifiedContent.replace(/<\/p>/i, `</p>\n${adDiv}`);
 ---
 
 
-{isBlockedSlug ? (
-    <LayoutBlog metaTags={metaTags}>
-        <BrochureRequestFormModal autoOpen={false} />
-        
-        <div class="min-h-screen bg-gray-50 flex flex-col items-center justify-center p-4">
-            <div class="max-w-2xl w-full bg-white rounded-3xl shadow-xl border border-gray-100 p-10 md:p-16 text-center">
+<LayoutBlog metaTags={metaTags}>
+    {isBlockedSlug && (
+        <div class="fixed inset-0 z-[9999] bg-white/95 dark:bg-gray-900/95 backdrop-blur-md flex flex-col items-center justify-center p-4">
+            <div class="max-w-2xl w-full bg-white dark:bg-gray-800 rounded-3xl shadow-2xl border border-gray-100 dark:border-gray-700 p-10 md:p-16 text-center">
                 <!-- Icon -->
-                <div class="mx-auto flex items-center justify-center h-24 w-24 rounded-full bg-orange-100 mb-8">
+                <div class="mx-auto flex items-center justify-center h-24 w-24 rounded-full bg-orange-100 dark:bg-orange-900/30 mb-8">
                     <svg class="h-12 w-12 text-orange-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"/>
                     </svg>
                 </div>
                 
-                <h1 class="text-3xl md:text-4xl font-extrabold text-gray-900 mb-4 tracking-tight">Konten Tidak Tersedia</h1>
+                <h1 class="text-3xl md:text-4xl font-extrabold text-gray-900 dark:text-white mb-4 tracking-tight">Konten Tidak Tersedia</h1>
                 
-                <p class="text-lg text-gray-600 mb-10 max-w-lg mx-auto">
+                <p class="text-lg text-gray-600 dark:text-gray-400 mb-10 max-w-lg mx-auto">
                     Mohon maaf, konten yang Anda cari saat ini tidak tersedia. Silakan kembali ke halaman utama atau minta brosur informasi lengkap tentang program kami.
                 </p>
                 
                 <div class="flex flex-col sm:flex-row items-center justify-center gap-4">
-                    <a href="/" class="w-full sm:w-auto px-8 py-3.5 bg-gray-100 text-gray-800 rounded-xl font-bold hover:bg-gray-200 transition-all duration-300">
+                    <a href="/" class="w-full sm:w-auto px-8 py-3.5 bg-gray-100 dark:bg-gray-700 text-gray-800 dark:text-white rounded-xl font-bold hover:bg-gray-200 dark:hover:bg-gray-600 transition-all duration-300">
                         Kembali ke Home
                     </a>
                     
@@ -206,11 +202,17 @@ modifiedContent = modifiedContent.replace(/<\/p>/i, `</p>\n${adDiv}`);
                 </div>
             </div>
         </div>
-    </LayoutBlog>
-) : (
-<LayoutBlog metaTags={metaTags}>
+        <script is:inline>
+            document.body.style.overflow = 'hidden';
+            // Also prevent scrolling via touch on mobile
+            document.addEventListener('touchmove', function(e) {
+                e.preventDefault();
+            }, { passive: false });
+        </script>
+    )}
+
     <!-- Brochure Request Form Modal - Auto Open -->
-    <BrochureRequestFormModal autoOpen={true} />
+    <BrochureRequestFormModal autoOpen={!isBlockedSlug} />
     
     <div class="min-h-screen bg-gray-50 dark:bg-gray-900">
         <!-- Breadcrumb -->
@@ -465,5 +467,4 @@ modifiedContent = modifiedContent.replace(/<\/p>/i, `</p>\n${adDiv}`);
     </div>
 
 </LayoutBlog>
-)}
 
