@@ -102,12 +102,11 @@ const metaTags = {
           <p class="text-center text-gray-600 dark:text-gray-400 mb-3">
             Kirim email kepada kami
           </p>
-          <a
-            href={`mailto:${websiteInfo.email}`}
-            class="block text-center text-[#1055C9] hover:text-[#05339C] font-semibold transition-colors"
+          <span
+            class="block text-center text-[#1055C9] font-semibold transition-colors"
           >
-            {websiteInfo.email}
-          </a>
+            -
+          </span>
         </div>
 
         <div
@@ -385,18 +384,8 @@ const metaTags = {
                 </h3>
                 <div class="space-y-2 text-gray-600 dark:text-gray-400">
                   <div class="flex justify-between">
-                    <span class="font-medium">Senin - Jumat</span>
-                    <span>{websiteInfo.officeHours.weekdays}</span>
-                  </div>
-                  <div class="flex justify-between">
-                    <span class="font-medium">Sabtu</span>
-                    <span>{websiteInfo.officeHours.saturday}</span>
-                  </div>
-                  <div class="flex justify-between">
-                    <span class="font-medium">Minggu</span>
-                    <span class="text-red-500 dark:text-red-400"
-                      >{websiteInfo.officeHours.sunday}</span
-                    >
+                    <span class="font-medium">Senin - Minggu</span>
+                    <span>24 Jam</span>
                   </div>
                 </div>
               </div>
