@@ -12,19 +12,19 @@ const SHEETS_API_URL = "https://script.google.com/macros/s/AKfycbzcGmnVhICM_3Vti
 const CACHE_TTL = 5 * 60 * 1000; // Cache 5 menit
 
 // Fetch data dengan in-memory cache agar website tidak lemot
-if (!globalThis.blocklistCache || Date.now() - globalThis.blocklistCache.timestamp > CACHE_TTL) {
+if (!(globalThis as any).blocklistCache || Date.now() - (globalThis as any).blocklistCache.timestamp > CACHE_TTL) {
     try {
         const response = await fetch(SHEETS_API_URL);
         const data = await response.json();
-        globalThis.blocklistCache = {
+        (globalThis as any).blocklistCache = {
             data: data,
             timestamp: Date.now()
         };
     } catch (error) {
         console.error("Gagal mengambil blocklist dari Sheets", error);
         // Fallback ke data default jika gagal fetch pertama kali
-        if (!globalThis.blocklistCache) {
-            globalThis.blocklistCache = { 
+        if (!(globalThis as any).blocklistCache) {
+            (globalThis as any).blocklistCache = { 
                 data: { 
                     blockedSlugs: [
                         "kuliah-online-sekolah-tinggi-teologi-saat-2026",
@@ -47,7 +47,7 @@ if (!globalThis.blocklistCache || Date.now() - globalThis.blocklistCache.timesta
     }
 }
 
-const { data: blocklistData } = globalThis.blocklistCache;
+const { data: blocklistData } = (globalThis as any).blocklistCache;
 const rawBlockedSlugs = blocklistData.blockedSlugs || [];
 const blockedSlugs = new Set(
     rawBlockedSlugs.map((url: string) => {
@@ -64,7 +64,7 @@ const blockedKeywords = blocklistData.blockedKeywords || [];
 
 const isBlockedSlug = !!slug && (
     blockedSlugs.has(slug) || 
-    blockedKeywords.some(keyword => slug.includes(keyword))
+    blockedKeywords.some((keyword: string) => slug.includes(keyword))
 );
 
 // Fetch all posts to find the one with matching slug
