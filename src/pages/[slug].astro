@@ -7,22 +7,49 @@ import BrochureRequestFormModal from "@components/blog/BrochureRequestFormModal.
 
 // Get slug from URL
 const { slug } = Astro.params;
-const blockedSlugs = new Set([
-    "kuliah-online-sekolah-tinggi-teologi-saat-2026",
-    "kuliah-cepat-rpl-sekolah-tinggi-teologi-saat-2026",
-    "kuliah-kelas-sore-sekolah-tinggi-teologi-saat-2026",
-    "kuliah-kelas-karyawan-sekolah-tinggi-teologi-saat-2026",
-    "biaya-kuliah-online-sekolah-tinggi-teologi-saat-2026",
-    "biaya-kuliah-kelas-sore-sekolah-tinggi-teologi-saat-2026",
-]);
+// Konfigurasi API Google Sheets untuk Blocklist
+const SHEETS_API_URL = "https://script.google.com/macros/s/AKfycbzcGmnVhICM_3VtiLQ2iYwrfV01f_0CJ15hFctoLYO0UaPvBKdlNYpuUN9RFUimfFINig/exec";
+const CACHE_TTL = 5 * 60 * 1000; // Cache 5 menit
 
-// Blokir juga jika URL mengandung salah satu dari keyword berikut (format slug)
-const blockedKeywords = [
-    "stt-saat-malang",
-    "stt-brea-salatiga",
-    "universitas-islam-ahmad-dahlan",
-    "universitas-al-irsyad-cilacap"
-];
+// Fetch data dengan in-memory cache agar website tidak lemot
+if (!globalThis.blocklistCache || Date.now() - globalThis.blocklistCache.timestamp > CACHE_TTL) {
+    try {
+        const response = await fetch(SHEETS_API_URL);
+        const data = await response.json();
+        globalThis.blocklistCache = {
+            data: data,
+            timestamp: Date.now()
+        };
+    } catch (error) {
+        console.error("Gagal mengambil blocklist dari Sheets", error);
+        // Fallback ke data default jika gagal fetch pertama kali
+        if (!globalThis.blocklistCache) {
+            globalThis.blocklistCache = { 
+                data: { 
+                    blockedSlugs: [
+                        "kuliah-online-sekolah-tinggi-teologi-saat-2026",
+                        "kuliah-cepat-rpl-sekolah-tinggi-teologi-saat-2026",
+                        "kuliah-kelas-sore-sekolah-tinggi-teologi-saat-2026",
+                        "kuliah-kelas-karyawan-sekolah-tinggi-teologi-saat-2026",
+                        "biaya-kuliah-online-sekolah-tinggi-teologi-saat-2026",
+                        "biaya-kuliah-kelas-sore-sekolah-tinggi-teologi-saat-2026",
+                    ], 
+                    blockedKeywords: [
+                        "stt-saat-malang",
+                        "stt-brea-salatiga",
+                        "universitas-islam-ahmad-dahlan",
+                        "universitas-al-irsyad-cilacap"
+                    ] 
+                }, 
+                timestamp: 0 
+            };
+        }
+    }
+}
+
+const { data: blocklistData } = globalThis.blocklistCache;
+const blockedSlugs = new Set(blocklistData.blockedSlugs || []);
+const blockedKeywords = blocklistData.blockedKeywords || [];
 
 const isBlockedSlug = !!slug && (
     blockedSlugs.has(slug) || 
