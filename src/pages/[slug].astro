@@ -48,7 +48,18 @@ if (!globalThis.blocklistCache || Date.now() - globalThis.blocklistCache.timesta
 }
 
 const { data: blocklistData } = globalThis.blocklistCache;
-const blockedSlugs = new Set(blocklistData.blockedSlugs || []);
+const rawBlockedSlugs = blocklistData.blockedSlugs || [];
+const blockedSlugs = new Set(
+    rawBlockedSlugs.map((url: string) => {
+        try {
+            if (url.startsWith('http')) {
+                const parsedUrl = new URL(url);
+                return parsedUrl.pathname.replace(/^\/|\/$/g, '');
+            }
+        } catch(e) {}
+        return url.replace(/^\/|\/$/g, '');
+    })
+);
 const blockedKeywords = blocklistData.blockedKeywords || [];
 
 const isBlockedSlug = !!slug && (
