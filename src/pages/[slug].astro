@@ -170,8 +170,8 @@ modifiedContent = modifiedContent.replace(/<\/p>/i, `</p>\n${adDiv}`);
 
 <LayoutBlog metaTags={metaTags}>
     {isBlockedSlug && (
-        <div class="fixed inset-0 z-[9999] bg-white/95 dark:bg-gray-900/95 backdrop-blur-md flex flex-col items-center justify-center p-4">
-            <div class="max-w-2xl w-full bg-white dark:bg-gray-800 rounded-3xl shadow-2xl border border-gray-100 dark:border-gray-700 p-10 md:p-16 text-center">
+        <div class="min-h-[80vh] bg-gray-50 dark:bg-gray-900 flex flex-col items-center justify-center p-4">
+            <div class="max-w-2xl w-full bg-white dark:bg-gray-800 rounded-3xl shadow-xl border border-gray-100 dark:border-gray-700 p-10 md:p-16 text-center">
                 <!-- Icon -->
                 <div class="mx-auto flex items-center justify-center h-24 w-24 rounded-full bg-orange-100 dark:bg-orange-900/30 mb-8">
                     <svg class="h-12 w-12 text-orange-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -202,19 +202,12 @@ modifiedContent = modifiedContent.replace(/<\/p>/i, `</p>\n${adDiv}`);
                 </div>
             </div>
         </div>
-        <script is:inline>
-            document.body.style.overflow = 'hidden';
-            // Also prevent scrolling via touch on mobile
-            document.addEventListener('touchmove', function(e) {
-                e.preventDefault();
-            }, { passive: false });
-        </script>
     )}
 
     <!-- Brochure Request Form Modal - Auto Open -->
     <BrochureRequestFormModal autoOpen={!isBlockedSlug} />
     
-    <div class="min-h-screen bg-gray-50 dark:bg-gray-900">
+    <div class={isBlockedSlug ? "sr-only" : "min-h-screen bg-gray-50 dark:bg-gray-900"}>
         <!-- Breadcrumb -->
         <div class="bg-white dark:bg-gray-800 border-b border-gray-200 dark:border-gray-700">
             <div class="max-w-screen-xl mx-auto px-4 py-4">
