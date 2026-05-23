@@ -14,11 +14,11 @@
  * API Key for SEO Master API authentication
  * Used for authorized access to SEO Master project content system
  */
-export const API_KEY_SEO_MASTER = "6fc35ed055bee7b49f9e5dc260fc9177690ec186c38581104600cdefe9fe5cac"; // Replace with actual API key
+export const API_KEY_SEO_MASTER = "cc890d56be617a17e845988e56cf9acc25d153386965b2d4e4233c3fc3b0e757";
 
 /**
  * Organization UUID for SEO Master identification
  * Unique identifier for the organization in SEO Master system
  */
-export const ORGANIZATION_UUID_SEO_MASTER = "d624bb30-74db-4f1b-aeee-0345d9977c8f";
+export const ORGANIZATION_UUID_SEO_MASTER = "87f08ac5-a490-45ad-b7cb-a08299ed9075";
 
