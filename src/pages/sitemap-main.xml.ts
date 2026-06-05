@@ -8,7 +8,7 @@ export const GET: APIRoute = async () => {
     const categoriesResponse = await blogApi.fetchCategories();
     const categories = categoriesResponse?.data || [];
 
-    const baseUrl = "https://kew.stekom.ac.id";
+    const baseUrl = "https://kew.stiestekom.ac.id";
 
     // Generate XML sitemap
     const sitemap = `<?xml version="1.0" encoding="UTF-8"?>

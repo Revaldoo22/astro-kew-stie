@@ -3,254 +3,225 @@ const { websiteInfo } = Astro.props;
 ---
 
 <section
-    id="promo"
-    class="relative bg-gradient-to-br from-[#1055C9] via-[#05339C] to-[#0046FF] text-white py-10 md:py-16"
+  id="promo"
+  class="relative bg-gradient-to-br from-[#FF8C00] via-[#E67300] to-[#FFA500] text-white py-10 md:py-16"
 >
-    <div class="absolute inset-0 bg-black/10"></div>
-    <div class="relative max-w-screen-xl mx-auto px-4">
-        <!-- Header Title -->
-        <div class="text-center mb-12">
-            <h1 class="text-3xl md:text-4xl lg:text-5xl font-bold">
-                {websiteInfo.name}
-            </h1>
-            <p class="mt-4">
-                Kuliah Kelas Karyawan adalah program pendidikan tinggi bagi
-                karyawan atau pekerja, kelas karyawan merupakan perkuliahan
-                dengan jadwal atau Waktu yang fleksibel, jadwal kelas karyawan
-                yaitu sore, malam, atau pada akhir pekan, dan kelas karyawan
-                ialah solusi untuk yang ingin berkuliah tanpa mengganggu jam
-                kerja.
-            </p>
-        </div>
-
-        <!-- Main Content Grid -->
-        <div class="grid grid-cols-1 lg:grid-cols-5 gap-8 items-start">
-            <!-- Left: Instagram Embed (2 columns - 40%) -->
-            <div class="relative lg:col-span-2">
-                <div
-                    class="bg-white/10 backdrop-blur-sm rounded-2xl p-4 border border-white/20"
-                >
-                    <div class="rounded-xl overflow-hidden shadow-2xl bg-white w-full">
-                        <img
-                            src="/assets/brosur/adsluarjateng.jpg"
-                            alt="Ads Luar Jateng"
-                            class="w-full h-auto object-cover"
-                            loading="lazy"
-                        />
-                    </div>
-                </div>
-            </div>
-
-            <!-- Right: Promo Content (3 columns - 60%) -->
-            <div class="space-y-6 lg:col-span-3">
-                <!-- Subtitle -->
-                <div class="text-center">
-                    <p class="text-2xl md:text-3xl text-yellow-300 font-bold">
-                        Promo Kelas Karyawan
-                    </p>
-                </div>
-
-                <!-- Countdown Timer -->
-                <div
-                    class="bg-white rounded-2xl p-6 border-2 border-white/30 shadow-xl"
-                >
-                    <p class="text-base mb-4 text-center">
-                        <span class="text-red-600 font-bold"
-                            >Berlaku hingga / sampai kuota penuh :</span
-                        >
-                    </p>
-                    <div
-                        id="countdown"
-                        class="grid grid-cols-4 gap-3 text-center"
-                    >
-                        <div
-                            class="bg-gradient-to-br from-[#1055C9] to-[#05339C] rounded-lg p-3"
-                        >
-                            <div
-                                class="text-2xl md:text-3xl font-bold text-white"
-                                id="days"
-                            >
-                                00
-                            </div>
-                            <div class="text-xs md:text-sm text-white/90 mt-1">
-                                HARI
-                            </div>
-                        </div>
-                        <div
-                            class="bg-gradient-to-br from-[#1055C9] to-[#05339C] rounded-lg p-3"
-                        >
-                            <div
-                                class="text-2xl md:text-3xl font-bold text-white"
-                                id="hours"
-                            >
-                                00
-                            </div>
-                            <div class="text-xs md:text-sm text-white/90 mt-1">
-                                JAM
-                            </div>
-                        </div>
-                        <div
-                            class="bg-gradient-to-br from-[#1055C9] to-[#05339C] rounded-lg p-3"
-                        >
-                            <div
-                                class="text-2xl md:text-3xl font-bold text-white"
-                                id="minutes"
-                            >
-                                00
-                            </div>
-                            <div class="text-xs md:text-sm text-white/90 mt-1">
-                                MENIT
-                            </div>
-                        </div>
-                        <div
-                            class="bg-gradient-to-br from-[#1055C9] to-[#05339C] rounded-lg p-3"
-                        >
-                            <div
-                                class="text-2xl md:text-3xl font-bold text-white"
-                                id="seconds"
-                            >
-                                00
-                            </div>
-                            <div class="text-xs md:text-sm text-white/90 mt-1">
-                                DETIK
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Promo Features -->
-                <div
-                    class="bg-white/10 backdrop-blur-sm rounded-xl p-5 border border-white/20"
-                >
-                    <ul class="space-y-3">
-                        <li class="flex items-start gap-3">
-                            <span class="text-yellow-300 text-lg flex-shrink-0"
-                                >•</span
-                            >
-                            <span class="text-base md:text-2xl font-semibold"
-                                >DAPAT GRATIS 7.000.000,00</span
-                            >
-                        </li>
-                        <li class="flex items-start gap-3">
-                            <span class="text-yellow-300 text-lg flex-shrink-0"
-                                >•</span
-                            >
-                            <span class="text-base md:text-lg"
-                                >Biaya kuliah hanya <strong
-                                    class="text-yellow-300 text-base md:text-2xl"
-                                    >498 rb / Bulan</strong
-                                ></span
-                            >
-                        </li>
-                        <li class="flex items-start gap-3">
-                            <span class="text-yellow-300 text-lg flex-shrink-0"
-                                >•</span
-                            >
-                            <span class="text-sm md:text-base"
-                                >Biaya Kuliah Bisa Dipilih Sesuai Keinginan dan
-                                Dicicil Sesuai Kemampuan, Tersedia Pilihan <strong
-                                    class="text-yellow-300 text-base md:text-2xl"
-                                    >GRATIS Biaya SPI/ Uang Pangkal</strong
-                                > Semua Jurusan!</span
-                            >
-                        </li>
-                    </ul>
-                </div>
-
-                <!-- CTA Text -->
-                <div class="text-center">
-                    <p class="text-xl md:text-3xl font-bold leading-tight">
-                        <span class="text-yellow-300">AMANKAN SEKARANG !!!</span
-                        ><br />
-                        <span class="text-white">DAFTAR HANYA 150 RIBU</span><br
-                        />
-                        <span class="text-yellow-300"
-                            >TANPA UJIAN TES MASUK!</span
-                        >
-                    </p>
-                </div>
-
-                <!-- CTA Button -->
-                <div class="text-center">
-                    <a
-                        href="#promokelaskaryawan"
-                        class="inline-flex items-center justify-center bg-white text-[#1055C9] hover:bg-gray-100 px-8 py-4 rounded-xl font-bold text-lg transition-all duration-300 shadow-2xl hover:shadow-white/50 hover:scale-105"
-                    >
-                        <svg
-                            class="w-6 h-6 mr-2"
-                            fill="none"
-                            stroke="currentColor"
-                            viewBox="0 0 24 24"
-                        >
-                            <path
-                                stroke-linecap="round"
-                                stroke-linejoin="round"
-                                stroke-width="2"
-                                d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"
-                            ></path>
-                        </svg>
-                        DAFTAR SEKARANG
-                    </a>
-                </div>
-            </div>
-        </div>
+  <div class="absolute inset-0 bg-black/10"></div>
+  <div class="relative max-w-screen-xl mx-auto px-4">
+    <!-- Header Title -->
+    <div class="text-center mb-12">
+      <h1 class="text-3xl md:text-4xl lg:text-5xl font-bold">
+        {websiteInfo.name}
+      </h1>
+      <p class="mt-4">
+        Kuliah Kelas Karyawan adalah program pendidikan tinggi bagi karyawan
+        atau pekerja, kelas karyawan merupakan perkuliahan dengan jadwal atau
+        Waktu yang fleksibel, jadwal kelas karyawan yaitu sore, malam, atau pada
+        akhir pekan, dan kelas karyawan ialah solusi untuk yang ingin berkuliah
+        tanpa mengganggu jam kerja.
+      </p>
     </div>
+
+    <!-- Main Content Grid -->
+    <div class="grid grid-cols-1 lg:grid-cols-5 gap-8 items-start">
+      <!-- Left: Instagram Embed (2 columns - 40%) -->
+      <div class="relative lg:col-span-2">
+        <div
+          class="bg-white/10 backdrop-blur-sm rounded-2xl p-4 border border-white/20"
+        >
+          <div class="rounded-xl overflow-hidden shadow-2xl bg-white w-full">
+            <img
+              src="/assets/brosur/adsluarjateng.jpg"
+              alt="Ads Luar Jateng"
+              class="w-full h-auto object-cover"
+              loading="lazy"
+            />
+          </div>
+        </div>
+      </div>
+
+      <!-- Right: Promo Content (3 columns - 60%) -->
+      <div class="space-y-6 lg:col-span-3">
+        <!-- Subtitle -->
+        <div class="text-center">
+          <p class="text-2xl md:text-3xl text-yellow-300 font-bold">
+            Promo Kelas Karyawan
+          </p>
+        </div>
+
+        <!-- Countdown Timer -->
+        <div
+          class="bg-white rounded-2xl p-6 border-2 border-white/30 shadow-xl"
+        >
+          <p class="text-base mb-4 text-center">
+            <span class="text-red-600 font-bold"
+              >Berlaku hingga / sampai kuota penuh :</span
+            >
+          </p>
+          <div id="countdown" class="grid grid-cols-4 gap-3 text-center">
+            <div
+              class="bg-gradient-to-br from-[#FF8C00] to-[#E67300] rounded-lg p-3"
+            >
+              <div class="text-2xl md:text-3xl font-bold text-white" id="days">
+                00
+              </div>
+              <div class="text-xs md:text-sm text-white/90 mt-1">HARI</div>
+            </div>
+            <div
+              class="bg-gradient-to-br from-[#FF8C00] to-[#E67300] rounded-lg p-3"
+            >
+              <div class="text-2xl md:text-3xl font-bold text-white" id="hours">
+                00
+              </div>
+              <div class="text-xs md:text-sm text-white/90 mt-1">JAM</div>
+            </div>
+            <div
+              class="bg-gradient-to-br from-[#FF8C00] to-[#E67300] rounded-lg p-3"
+            >
+              <div
+                class="text-2xl md:text-3xl font-bold text-white"
+                id="minutes"
+              >
+                00
+              </div>
+              <div class="text-xs md:text-sm text-white/90 mt-1">MENIT</div>
+            </div>
+            <div
+              class="bg-gradient-to-br from-[#FF8C00] to-[#E67300] rounded-lg p-3"
+            >
+              <div
+                class="text-2xl md:text-3xl font-bold text-white"
+                id="seconds"
+              >
+                00
+              </div>
+              <div class="text-xs md:text-sm text-white/90 mt-1">DETIK</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Promo Features -->
+        <div
+          class="bg-white/10 backdrop-blur-sm rounded-xl p-5 border border-white/20"
+        >
+          <ul class="space-y-3">
+            <li class="flex items-start gap-3">
+              <span class="text-yellow-300 text-lg flex-shrink-0">•</span>
+              <span class="text-base md:text-2xl font-semibold"
+                >DAPAT GRATIS 7.000.000,00</span
+              >
+            </li>
+            <li class="flex items-start gap-3">
+              <span class="text-yellow-300 text-lg flex-shrink-0">•</span>
+              <span class="text-base md:text-lg"
+                >Biaya kuliah hanya <strong
+                  class="text-yellow-300 text-base md:text-2xl"
+                  >498 rb / Bulan</strong
+                >
+              </span>
+            </li>
+            <li class="flex items-start gap-3">
+              <span class="text-yellow-300 text-lg flex-shrink-0">•</span>
+              <span class="text-sm md:text-base"
+                >Biaya Kuliah Bisa Dipilih Sesuai Keinginan dan Dicicil Sesuai
+                Kemampuan, Tersedia Pilihan <strong
+                  class="text-yellow-300 text-base md:text-2xl"
+                  >GRATIS Biaya SPI/ Uang Pangkal</strong
+                > Semua Jurusan!</span
+              >
+            </li>
+          </ul>
+        </div>
+
+        <!-- CTA Text -->
+        <div class="text-center">
+          <p class="text-xl md:text-3xl font-bold leading-tight">
+            <span class="text-yellow-300">AMANKAN SEKARANG !!!</span><br />
+            <span class="text-white">DAFTAR HANYA 150 RIBU</span><br />
+            <span class="text-yellow-300">TANPA UJIAN TES MASUK!</span>
+          </p>
+        </div>
+
+        <!-- CTA Button -->
+        <div class="text-center">
+          <a
+            href="#promokelaskaryawan"
+            class="inline-flex items-center justify-center bg-white text-[#FF8C00] hover:bg-gray-100 px-8 py-4 rounded-xl font-bold text-lg transition-all duration-300 shadow-2xl hover:shadow-white/50 hover:scale-105"
+          >
+            <svg
+              class="w-6 h-6 mr-2"
+              fill="none"
+              stroke="currentColor"
+              viewBox="0 0 24 24"
+            >
+              <path
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                stroke-width="2"
+                d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+            </svg>
+            DAFTAR SEKARANG
+          </a>
+        </div>
+      </div>
+    </div>
+  </div>
 </section>
 
 <script define:vars={{ countdownEndDate: websiteInfo.promo.countdownEndDate }}>
-    // Countdown Timer - Configurable from info.ts
-    // Parse the countdown end date from config (format: "YYYY-MM-DD HH:mm:ss" in WIB/GMT+7)
-    const parseCountdownDate = (dateStr) => {
-        // If no date is provided, default to 1 month from now
-        if (!dateStr || dateStr.trim() === "") {
-            return new Date().getTime() + 30 * 24 * 60 * 60 * 1000; // 30 days
-        }
-
-        // Parse date string in format "YYYY-MM-DD HH:mm:ss"
-        const [datePart, timePart] = dateStr.split(" ");
-        const [year, month, day] = datePart.split("-").map(Number);
-        const [hours, minutes, seconds] = timePart.split(":").map(Number);
-
-        // Create date in WIB timezone (GMT+7)
-        // JavaScript Date uses local timezone, so we create UTC and adjust
-        const date = new Date(
-            Date.UTC(year, month - 1, day, hours - 7, minutes, seconds),
-        );
-        return date.getTime();
-    };
-
-    const countdownDate = parseCountdownDate(countdownEndDate);
-
-    function updateCountdown() {
-        const now = new Date().getTime();
-        const distance = countdownDate - now;
-
-        const days = Math.floor(distance / (1000 * 60 * 60 * 24));
-        const hours = Math.floor(
-            (distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60),
-        );
-        const minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
-        const seconds = Math.floor((distance % (1000 * 60)) / 1000);
-
-        const daysEl = document.getElementById("days");
-        const hoursEl = document.getElementById("hours");
-        const minutesEl = document.getElementById("minutes");
-        const secondsEl = document.getElementById("seconds");
-
-        if (daysEl) daysEl.textContent = String(days).padStart(2, "0");
-        if (hoursEl) hoursEl.textContent = String(hours).padStart(2, "0");
-        if (minutesEl) minutesEl.textContent = String(minutes).padStart(2, "0");
-        if (secondsEl) secondsEl.textContent = String(seconds).padStart(2, "0");
-
-        if (distance < 0) {
-            clearInterval(countdownInterval);
-            if (daysEl) daysEl.textContent = "00";
-            if (hoursEl) hoursEl.textContent = "00";
-            if (minutesEl) minutesEl.textContent = "00";
-            if (secondsEl) secondsEl.textContent = "00";
-        }
+  // Countdown Timer - Configurable from info.ts
+  // Parse the countdown end date from config (format: "YYYY-MM-DD HH:mm:ss" in WIB/GMT+7)
+  const parseCountdownDate = (dateStr) => {
+    // If no date is provided, default to 1 month from now
+    if (!dateStr || dateStr.trim() === "") {
+      return new Date().getTime() + 30 * 24 * 60 * 60 * 1000; // 30 days
     }
 
-    const countdownInterval = setInterval(updateCountdown, 1000);
-    updateCountdown();
+    // Parse date string in format "YYYY-MM-DD HH:mm:ss"
+    const [datePart, timePart] = dateStr.split(" ");
+    const [year, month, day] = datePart.split("-").map(Number);
+    const [hours, minutes, seconds] = timePart.split(":").map(Number);
+
+    // Create date in WIB timezone (GMT+7)
+    // JavaScript Date uses local timezone, so we create UTC and adjust
+    const date = new Date(
+      Date.UTC(year, month - 1, day, hours - 7, minutes, seconds),
+    );
+    return date.getTime();
+  };
+
+  const countdownDate = parseCountdownDate(countdownEndDate);
+
+  function updateCountdown() {
+    const now = new Date().getTime();
+    const distance = countdownDate - now;
+
+    const days = Math.floor(distance / (1000 * 60 * 60 * 24));
+    const hours = Math.floor(
+      (distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60),
+    );
+    const minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
+    const seconds = Math.floor((distance % (1000 * 60)) / 1000);
+
+    const daysEl = document.getElementById("days");
+    const hoursEl = document.getElementById("hours");
+    const minutesEl = document.getElementById("minutes");
+    const secondsEl = document.getElementById("seconds");
+
+    if (daysEl) daysEl.textContent = String(days).padStart(2, "0");
+    if (hoursEl) hoursEl.textContent = String(hours).padStart(2, "0");
+    if (minutesEl) minutesEl.textContent = String(minutes).padStart(2, "0");
+    if (secondsEl) secondsEl.textContent = String(seconds).padStart(2, "0");
+
+    if (distance < 0) {
+      clearInterval(countdownInterval);
+      if (daysEl) daysEl.textContent = "00";
+      if (hoursEl) hoursEl.textContent = "00";
+      if (minutesEl) minutesEl.textContent = "00";
+      if (secondsEl) secondsEl.textContent = "00";
+    }
+  }
+
+  const countdownInterval = setInterval(updateCountdown, 1000);
+  updateCountdown();
 </script>

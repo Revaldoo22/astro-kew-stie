@@ -3,586 +3,610 @@ const { websiteInfo } = Astro.props;
 import BrochureRequestFormModal from "@components/blog/BrochureRequestFormModal.astro";
 
 const spotlightRanks = [
-    {
-        rank: "#1",
-        label: "PTS Jawa Tengah",
-        source: "UniRank 2026",
-        accent: "from-[#1055C9] to-[#05339C]",
-        description: "Peringkat 1 PTS Jawa Tengah versi UniRank 2026 yang menguatkan reputasi STEKOM.",
-        items: [
-            "PTS di Semarang Peringkat 1",
-            "PTS di Jawa Tengah Peringkat 1",
-            "PTS di Indonesia Peringkat 13",
-            "PTN & PTS di Semarang Peringkat 3",
-            "PTN & PTS di Jawa Tengah Peringkat 5",
-        ],
-    },
-    {
-        rank: "#4",
-        label: "PTS Jawa Tengah",
-        source: "Webometrics Impact Rank 2026",
-        accent: "from-slate-900 to-[#1055C9]",
-        description: "Peringkat 4 PTS Jawa Tengah versi Webometrics 2026 yang menguatkan visibilitas STEKOM.",
-        items: [
-            "PTS di Semarang Peringkat 2",
-            "PTS di Jawa Tengah Peringkat 4",
-            "PTS di Indonesia Peringkat 32",
-            "PTN & PTS di Semarang Peringkat 4",
-            "PTN & PTS di Jawa Tengah Peringkat 8",
-        ],
-    },
+  {
+    rank: "#1",
+    label: "PTS Jawa Tengah",
+    source: "UniRank 2026",
+    accent: "from-[#FF8C00] to-[#E67300]",
+    description:
+      "Peringkat 1 PTS Jawa Tengah versi UniRank 2026 yang menguatkan reputasi STEKOM.",
+    items: [
+      "PTS di Semarang Peringkat 1",
+      "PTS di Jawa Tengah Peringkat 1",
+      "PTS di Indonesia Peringkat 13",
+      "PTN & PTS di Semarang Peringkat 3",
+      "PTN & PTS di Jawa Tengah Peringkat 5",
+    ],
+  },
+  {
+    rank: "#4",
+    label: "PTS Jawa Tengah",
+    source: "Webometrics Impact Rank 2026",
+    accent: "from-slate-900 to-[#FF8C00]",
+    description:
+      "Peringkat 4 PTS Jawa Tengah versi Webometrics 2026 yang menguatkan visibilitas STEKOM.",
+    items: [
+      "PTS di Semarang Peringkat 2",
+      "PTS di Jawa Tengah Peringkat 4",
+      "PTS di Indonesia Peringkat 32",
+      "PTN & PTS di Semarang Peringkat 4",
+      "PTN & PTS di Jawa Tengah Peringkat 8",
+    ],
+  },
 ];
 
 const parseRankingItem = (item: string) => {
-    const match = item.match(/^(.*)\sPeringkat\s(\d+)$/);
+  const match = item.match(/^(.*)\sPeringkat\s(\d+)$/);
 
-    if (!match) {
-        return {
-            label: item,
-            rank: null,
-        };
-    }
-
+  if (!match) {
     return {
-        label: match[1].trim(),
-        rank: `Peringkat ${match[2]}`,
-        rankNumber: Number(match[2]),
+      label: item,
+      rank: null,
     };
+  }
+
+  return {
+    label: match[1].trim(),
+    rank: `Peringkat ${match[2]}`,
+    rankNumber: Number(match[2]),
+  };
 };
-const fallbackQuotaData = {
-    updateDate: "04 MEI 2026",
-    registered: 44,
-    capacity: 500,
-    bonusQuota: 100,
-    available: 556,
+const getInitialQuotaData = () => {
+  const updateDate = new Intl.DateTimeFormat("id-ID", {
+    day: "2-digit",
+    month: "long",
+    year: "numeric",
+    timeZone: "Asia/Jakarta",
+  })
+    .format(new Date())
+    .toUpperCase();
+
+  const CAPACITY = 500;
+  const BONUS_QUOTA = 500;
+  const BASE_REGISTERED = 5;
+  const DAILY_INCREMENT = 3;
+
+  const parts = new Intl.DateTimeFormat("en-US", {
+    timeZone: "Asia/Jakarta",
+    hour12: false,
+    hourCycle: "h23",
+    day: "numeric",
+    hour: "numeric",
+  }).formatToParts(new Date());
+
+  const dayPart = parts.find((p) => p.type === "day")?.value;
+  const hourPart = parts.find((p) => p.type === "hour")?.value;
+
+  const day = dayPart ? Number(dayPart) : 1;
+  const hour = hourPart ? Number(hourPart) : 0;
+
+  const dayIndex = hour >= 8 ? day : day - 1;
+  const registered = BASE_REGISTERED + Math.max(0, dayIndex) * DAILY_INCREMENT;
+  const available = Math.max(CAPACITY - registered + BONUS_QUOTA, 0);
+
+  return {
+    updateDate,
+    registered,
+    capacity: CAPACITY,
+    bonusQuota: BONUS_QUOTA,
+    available,
+  };
 };
+
+const initialQuotaData = getInitialQuotaData();
 ---
 
 <!-- Brochure Request Form Modal - placed in modals slot to avoid z-index issues -->
 <BrochureRequestFormModal slot="modals" autoOpen={false} />
 
 <section class="py-16 bg-gray-50 dark:bg-gray-900">
-    <div class="max-w-screen-xl mx-auto px-4">
-        <div class="text-center mb-12">
-            <h2 class="text-3xl md:text-4xl lg:text-5xl font-bold mb-4">
-                <span class="text-gray-900 dark:text-white">Kelas Karyawan</span
-                >
-                <span
-                    class="bg-gradient-to-r from-[#1055C9] to-[#05339C] bg-clip-text text-transparent"
-                    >Kampus Terbaik</span
-                >
-            </h2>
+  <div class="max-w-screen-xl mx-auto px-4">
+    <div class="text-center mb-12">
+      <h2 class="text-3xl md:text-4xl lg:text-5xl font-bold mb-4">
+        <span class="text-gray-900 dark:text-white">Kelas Karyawan</span>
+        <span
+          class="bg-gradient-to-r from-[#FF8C00] to-[#E67300] bg-clip-text text-transparent"
+          >Kampus Terbaik</span
+        >
+      </h2>
+    </div>
+
+    <!-- YouTube Video Section -->
+    <div class="mb-12 max-w-3xl mx-auto">
+      <div
+        class="bg-white dark:bg-gray-800 rounded-xl p-4 md:p-6 border border-gray-200 dark:border-gray-700"
+      >
+        <div class="aspect-video rounded-lg overflow-hidden">
+          <iframe
+            width="100%"
+            height="100%"
+            src={websiteInfo.youtubeVideoUrl}
+            title="Profile STIE STEKOM 2025"
+            frameborder="0"
+            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+            referrerpolicy="strict-origin-when-cross-origin"
+            allowfullscreen
+            class="w-full h-full"></iframe>
         </div>
+        <p
+          class="text-center mt-4 text-sm font-semibold text-gray-700 dark:text-gray-300"
+        >
+          Profile STIE STEKOM 2025
+        </p>
+      </div>
+      <div class="text-center mt-6">
+        <button
+          id="scroll-to-brochure-form"
+          class="inline-flex items-center justify-center bg-gradient-to-r from-[#FF8C00] to-[#E67300] hover:from-[#E67300] hover:to-[#FF8C00] text-white px-8 py-4 rounded-lg font-bold text-base transition-all duration-300 shadow-lg hover:shadow-xl transform hover:-translate-y-0.5"
+        >
+          <svg
+            class="w-5 h-5 mr-2"
+            fill="none"
+            stroke="currentColor"
+            viewBox="0 0 24 24"
+          >
+            <path
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              stroke-width="2"
+              d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M9 19l3 3m0 0l3-3m-3 3V10"
+            ></path>
+          </svg>
+          Download Brosur
+        </button>
+      </div>
+    </div>
 
-        <!-- YouTube Video Section -->
-        <div class="mb-12 max-w-3xl mx-auto">
-            <div
-                class="bg-white dark:bg-gray-800 rounded-xl p-4 md:p-6 border border-gray-200 dark:border-gray-700"
-            >
-                <div class="aspect-video rounded-lg overflow-hidden">
-                    <iframe
-                        width="100%"
-                        height="100%"
-                        src={websiteInfo.youtubeVideoUrl}
-                        title="Profile Universitas STEKOM 2025"
-                        frameborder="0"
-                        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
-                        referrerpolicy="strict-origin-when-cross-origin"
-                        allowfullscreen
-                        class="w-full h-full"></iframe>
-                </div>
-                <p
-                    class="text-center mt-4 text-sm font-semibold text-gray-700 dark:text-gray-300"
-                >
-                    Profile Universitas STEKOM 2025
-                </p>
-            </div>
-            <div class="text-center mt-6">
-                <button
-                    id="scroll-to-brochure-form"
-                    class="inline-flex items-center justify-center bg-gradient-to-r from-[#1055C9] to-[#05339C] hover:from-[#05339C] hover:to-[#1055C9] text-white px-8 py-4 rounded-lg font-bold text-base transition-all duration-300 shadow-lg hover:shadow-xl transform hover:-translate-y-0.5"
-                >
-                    <svg
-                        class="w-5 h-5 mr-2"
-                        fill="none"
-                        stroke="currentColor"
-                        viewBox="0 0 24 24"
-                    >
-                        <path
-                            stroke-linecap="round"
-                            stroke-linejoin="round"
-                            stroke-width="2"
-                            d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M9 19l3 3m0 0l3-3m-3 3V10"
-                        ></path>
-                    </svg>
-                    Download Brosur
-                </button>
-            </div>
+    <!-- Kuota Update Sticky -->
+    <div
+      class="fixed bottom-4 left-3 z-40 w-[44vw] max-w-[11rem] sm:bottom-6 sm:left-6 sm:w-72 sm:max-w-none"
+    >
+      <div
+        class="rounded-xl border border-orange-200/70 bg-white/95 p-3 text-left shadow-[0_24px_55px_-20px_rgba(230,115,0,0.4)] backdrop-blur sm:rounded-2xl sm:p-4 dark:border-orange-950/60 dark:bg-gray-900/90"
+      >
+        <div class="flex items-start justify-between gap-2">
+          <p
+            class="text-sm sm:text-base lg:text-[0.95rem] font-extrabold uppercase tracking-[0.06em] sm:tracking-[0.1em] leading-tight text-[#E67300] dark:text-blue-300"
+          >
+            Update Kuota
+          </p>
+          <span
+            class="mt-1 h-2.5 w-2.5 rounded-full bg-emerald-500 animate-pulse"
+          ></span>
         </div>
+        <p
+          id="sticky-quota-update-date"
+          class="mt-1.5 text-xs sm:text-sm lg:text-[0.83rem] font-semibold leading-tight text-gray-500 dark:text-gray-400"
+        >
+          {initialQuotaData.updateDate}
+        </p>
+        <p
+          id="sticky-quota-progress"
+          class="mt-1.5 text-xs sm:text-sm lg:text-[0.83rem] font-bold leading-tight text-[#E67300] dark:text-blue-300"
+        >
+          {new Intl.NumberFormat("id-ID").format(initialQuotaData.registered)} / {new Intl.NumberFormat("id-ID").format(initialQuotaData.capacity)} (+{new Intl.NumberFormat("id-ID").format(initialQuotaData.bonusQuota)})
+        </p>
+        <p
+          id="sticky-quota-available"
+          class="mt-2 text-sm sm:text-xl lg:text-[1.19rem] font-black leading-tight text-emerald-700 dark:text-emerald-400"
+        >
+          Tersedia {new Intl.NumberFormat("id-ID").format(initialQuotaData.available)}
+        </p>
+        <p
+          class="mt-1.5 text-[11px] sm:text-sm lg:text-[0.83rem] font-semibold leading-tight text-amber-700 dark:text-amber-300"
+        >
+          &#9888;&#65039; Kuota Setiap Prodi Berbeda
+        </p>
+        <a
+          id="sticky-quota-daftar"
+          href="#promokelaskaryawan"
+          class="mt-2.5 inline-flex w-full items-center justify-center rounded-md sm:rounded-lg bg-gradient-to-r from-green-500 to-emerald-600 px-2.5 py-1.5 text-xs sm:text-base lg:text-[0.95rem] font-bold text-white shadow-md transition-all hover:from-green-600 hover:to-emerald-700"
+        >
+          Daftar
+        </a>
+      </div>
+    </div>
+    <script>
+      function initScrollButton() {
+        const scrollButton = document.getElementById("scroll-to-brochure-form");
 
-        <!-- Kuota Update Sticky -->
-        <div class="fixed bottom-4 left-3 z-40 w-[44vw] max-w-[11rem] sm:bottom-6 sm:left-6 sm:w-72 sm:max-w-none">
-            <div class="rounded-xl border border-blue-200/70 bg-white/95 p-3 text-left shadow-[0_24px_55px_-20px_rgba(16,85,201,0.6)] backdrop-blur sm:rounded-2xl sm:p-4 dark:border-blue-900/60 dark:bg-gray-900/90">
-                <div class="flex items-start justify-between gap-2">
-                    <p class="text-sm sm:text-base lg:text-[0.95rem] font-extrabold uppercase tracking-[0.06em] sm:tracking-[0.1em] leading-tight text-[#05339C] dark:text-blue-300">
-                        Update Kuota
-                    </p>
-                    <span class="mt-1 h-2.5 w-2.5 rounded-full bg-emerald-500 animate-pulse"></span>
-                </div>
-                <p
-                    id="sticky-quota-update-date"
-                    class="mt-1.5 text-xs sm:text-sm lg:text-[0.83rem] font-semibold leading-tight text-gray-500 dark:text-gray-400"
-                >
-                    {fallbackQuotaData.updateDate}
-                </p>
-                <p
-                    id="sticky-quota-progress"
-                    class="mt-1.5 text-xs sm:text-sm lg:text-[0.83rem] font-bold leading-tight text-[#05339C] dark:text-blue-300"
-                >
-                    -/- (-)
-                </p>
-                <p
-                    id="sticky-quota-available"
-                    class="mt-2 text-sm sm:text-xl lg:text-[1.19rem] font-black leading-tight text-emerald-700 dark:text-emerald-400"
-                >
-                    Tersedia -
-                </p>
-                <p class="mt-1.5 text-[11px] sm:text-sm lg:text-[0.83rem] font-semibold leading-tight text-amber-700 dark:text-amber-300">
-                    &#9888;&#65039; Kuota Setiap Prodi Berbeda
-                </p>
-                <a
-                    id="sticky-quota-daftar"
-                    href="#promokelaskaryawan"
-                    class="mt-2.5 inline-flex w-full items-center justify-center rounded-md sm:rounded-lg bg-gradient-to-r from-green-500 to-emerald-600 px-2.5 py-1.5 text-xs sm:text-base lg:text-[0.95rem] font-bold text-white shadow-md transition-all hover:from-green-600 hover:to-emerald-700"
-                >
-                    Daftar
-                </a>
-            </div>
-        </div>
-        <script>
-            function initScrollButton() {
-                const scrollButton = document.getElementById(
-                    "scroll-to-brochure-form",
-                );
-
-                if (scrollButton) {
-                    scrollButton.addEventListener("click", function () {
-                        // Open brochure form modal
-                        if (
-                            typeof window.openBrochureFormModal === "function"
-                        ) {
-                            window.openBrochureFormModal();
-                        } else {
-                            console.error(
-                                "❌ openBrochureFormModal function not found!",
-                            );
-                        }
-                    });
-                }
-            }
-
-            function formatIdNumber(value: number) {
-                return new Intl.NumberFormat("id-ID").format(
-                    Math.max(0, Math.round(value)),
-                );
-            }
-
-            async function initQuotaData() {
-                const stickyDate = document.getElementById(
-                    "sticky-quota-update-date",
-                );
-                const stickyProgress = document.getElementById(
-                    "sticky-quota-progress",
-                );
-                const stickyAvailable = document.getElementById(
-                    "sticky-quota-available",
-                );
-
-                if (!stickyDate || !stickyProgress || !stickyAvailable) {
-                    return;
-                }
-
-                try {
-                    const response = await fetch("/api/quota");
-
-                    if (!response.ok) {
-                        throw new Error("Failed to fetch quota data");
-                    }
-
-                    const data = await response.json();
-                    const nextRegistered = Number(data.registered) || 0;
-                    const nextCapacity = Number(data.capacity) || 500;
-                    const nextBonusQuota = Number(data.bonusQuota) || 100;
-                    const nextAvailable = Number(data.available) || 0;
-
-                    stickyDate.textContent = data.updateDate;
-                    stickyProgress.textContent = `${formatIdNumber(nextRegistered)} / ${formatIdNumber(nextCapacity)} (+${formatIdNumber(nextBonusQuota)})`;
-                    stickyAvailable.textContent = `Tersedia ${formatIdNumber(nextAvailable)}`;
-                } catch (error) {
-                    console.error("Failed to load quota data:", error);
-                }
-            }
-
-            function startQuotaAutoRefresh() {
-                const refreshIntervalMs = 60_000;
-
-                initQuotaData();
-                window.setInterval(() => {
-                    initQuotaData();
-                }, refreshIntervalMs);
-
-                document.addEventListener("visibilitychange", () => {
-                    if (document.visibilityState === "visible") {
-                        initQuotaData();
-                    }
-                });
-
-                window.addEventListener("focus", () => {
-                    initQuotaData();
-                });
-            }
-
-            function initStickyDaftarButton() {
-                const stickyDaftarButton = document.getElementById("sticky-quota-daftar");
-                if (!stickyDaftarButton) {
-                    return;
-                }
-
-                stickyDaftarButton.addEventListener("click", function (event) {
-                    event.preventDefault();
-                    const targetSection = document.getElementById("promokelaskaryawan");
-                    if (!targetSection) {
-                        return;
-                    }
-
-                    targetSection.scrollIntoView({
-                        behavior: "smooth",
-                        block: "start",
-                    });
-                });
-            }
-
-            // Run initialization when DOM is ready
-            if (document.readyState === "loading") {
-                document.addEventListener("DOMContentLoaded", function () {
-                    initScrollButton();
-                    initStickyDaftarButton();
-                    startQuotaAutoRefresh();
-                });
+        if (scrollButton) {
+          scrollButton.addEventListener("click", function () {
+            // Open brochure form modal
+            if (typeof window.openBrochureFormModal === "function") {
+              window.openBrochureFormModal();
             } else {
-                // DOM already loaded, run immediately
-                initScrollButton();
-                initStickyDaftarButton();
-                startQuotaAutoRefresh();
+              console.error("❌ openBrochureFormModal function not found!");
             }
-        </script>
+          });
+        }
+      }
 
-        <!-- Info Section -->
-        <div class="max-w-5xl mx-auto mt-6 md:mt-8 mb-10 md:mb-12">
-            <div
-                class="relative overflow-hidden rounded-[1.5rem] md:rounded-[2rem] border border-blue-100 bg-gradient-to-br from-white via-blue-50 to-white p-5 sm:p-6 md:p-10 shadow-[0_25px_80px_-30px_rgba(16,85,201,0.35)] dark:border-blue-900/40 dark:from-gray-800 dark:via-slate-900 dark:to-gray-900"
-            >
-                <div class="absolute inset-0 opacity-80">
-                    <div
-                        class="absolute -top-12 right-0 h-24 w-24 rounded-full bg-blue-200/40 blur-3xl md:-top-16 md:h-40 md:w-40 dark:bg-blue-500/10"
-                    >
-                    </div>
-                    <div
-                        class="absolute -bottom-10 left-0 h-20 w-20 rounded-full bg-indigo-200/40 blur-3xl md:-bottom-12 md:h-32 md:w-32 dark:bg-indigo-500/10"
-                    >
-                    </div>
-                </div>
-                <div class="relative text-center max-w-4xl mx-auto">
-                    <div
-                        class="inline-flex items-center rounded-full border border-blue-200 bg-white/80 px-3 py-1.5 text-xs sm:px-4 sm:py-2 sm:text-sm font-semibold text-[#1055C9] shadow-sm backdrop-blur dark:border-blue-800 dark:bg-gray-800/80 dark:text-blue-300"
-                    >
-                        Peringkat Kampus 2026
-                    </div>
-                    <h3
-                        class="mt-4 sm:mt-5 text-xl sm:text-2xl md:text-4xl font-bold leading-tight"
-                    >
-                        <span
-                            class="bg-gradient-to-r from-[#1055C9] to-[#05339C] bg-clip-text text-transparent"
-                        >
-                            Diselenggarakan Oleh PTS Terbaik Peringkat 1 Jawa
-                            Tengah 2026
-                        </span>
-                    </h3>
-                    <p
-                        class="mt-4 sm:mt-5 text-sm sm:text-base md:text-xl text-gray-700 dark:text-gray-300 leading-relaxed"
-                    >
-                        Universitas Sains &amp; Teknologi Komputer (Universitas
-                        STEKOM) meraih Peringkat 1 PTS Jawa Tengah versi
-                        UniRank 2026 dan tampil unggul pada Webometrics Impact
-                        Rank 2026, memperkuat reputasinya sebagai kampus
-                        unggulan.
-                    </p>
+      function formatIdNumber(value: number) {
+        return new Intl.NumberFormat("id-ID").format(
+          Math.max(0, Math.round(value)),
+        );
+      }
 
-                    <div class="mt-6 sm:mt-8 grid grid-cols-1 gap-4 sm:gap-5 md:grid-cols-2">
-                        {
-                            spotlightRanks.map((spotlight) => (
-                                <div class="rounded-[1.35rem] sm:rounded-[1.75rem] border border-white/70 bg-white/85 p-4 sm:p-6 md:p-7 text-center sm:text-left shadow-[0_24px_55px_-25px_rgba(15,23,42,0.35)] backdrop-blur dark:border-gray-700/80 dark:bg-gray-800/80">
-                                    <div class="flex flex-col items-center gap-4 sm:flex-row sm:items-start sm:justify-between sm:gap-5">
-                                        <div class="flex flex-col items-center sm:items-start md:min-h-[7.25rem] md:justify-between">
-                                            <p class="text-[11px] sm:text-sm md:text-base font-semibold uppercase leading-tight tracking-[0.18em] sm:tracking-[0.22em] text-gray-500 dark:text-gray-400">
-                                                {spotlight.source}
-                                            </p>
-                                            <h4 class="mt-3 sm:mt-4 text-xl sm:text-2xl md:text-3xl font-bold text-gray-900 dark:text-white">
-                                                {spotlight.label}
-                                            </h4>
-                                        </div>
-                                        <div
-                                            class={`inline-flex self-center sm:self-auto min-h-16 min-w-16 sm:min-h-20 sm:min-w-20 items-center justify-center rounded-[1.2rem] sm:rounded-[1.5rem] bg-gradient-to-r px-4 py-2.5 sm:px-5 sm:py-3 text-3xl sm:text-4xl md:min-h-24 md:min-w-24 md:text-5xl font-black text-white shadow-[0_18px_35px_-15px_rgba(16,85,201,0.75)] ${spotlight.accent}`}
-                                        >
-                                            {spotlight.rank}
-                                        </div>
-                                    </div>
-                                    <p class="mt-4 sm:mt-5 md:min-h-[3.8rem] text-sm sm:text-base md:text-lg leading-relaxed text-gray-600 dark:text-gray-300">
-                                        {spotlight.description}
-                                    </p>
-                                    {
-                                        spotlight.items && (
-                                            <>
-                                                <details class="group mt-5 sm:mt-6 rounded-[1.05rem] border border-gray-100 bg-gray-50/80 px-3.5 py-3 dark:border-gray-700 dark:bg-gray-900/60 md:hidden">
-                                                    <summary class="flex cursor-pointer list-none items-center justify-between gap-3">
-                                                        <p class="text-sm font-semibold leading-relaxed text-gray-700 dark:text-gray-300">
-                                                            Lihat Detail Peringkat
-                                                        </p>
-                                                        <svg
-                                                            class="h-4 w-4 flex-shrink-0 text-[#05339C] transition-transform duration-200 group-open:rotate-180 dark:text-blue-300"
-                                                            fill="none"
-                                                            stroke="currentColor"
-                                                            viewBox="0 0 24 24"
-                                                        >
-                                                            <path
-                                                                stroke-linecap="round"
-                                                                stroke-linejoin="round"
-                                                                stroke-width="2.5"
-                                                                d="M19 9l-7 7-7-7"
-                                                            ></path>
-                                                        </svg>
-                                                    </summary>
-                                                    <div class="mt-3 grid gap-3">
-                                                        {
-                                                            spotlight.items.map((item) => {
-                                                                const parsedItem =
-                                                                    parseRankingItem(item);
+      async function initQuotaData() {
+        const stickyDate = document.getElementById("sticky-quota-update-date");
+        const stickyProgress = document.getElementById("sticky-quota-progress");
+        const stickyAvailable = document.getElementById(
+          "sticky-quota-available",
+        );
 
-                                                                return (
-                                                                    <div class="rounded-xl border border-gray-100 bg-white px-3 py-2.5 dark:border-gray-700 dark:bg-gray-800/70">
-                                                                        <p class="text-sm font-semibold leading-relaxed text-gray-700 dark:text-gray-200">
-                                                                            {parsedItem.label}
-                                                                        </p>
-                                                                        {
-                                                                            parsedItem.rank && (
-                                                                                <p class="mt-1 text-sm font-bold text-[#05339C] dark:text-blue-300">
-                                                                                    {parsedItem.rank}
-                                                                                </p>
-                                                                            )
-                                                                        }
-                                                                    </div>
-                                                                );
-                                                            })
-                                                        }
-                                                    </div>
-                                                </details>
-                                                <div class="mt-5 sm:mt-6 hidden md:grid gap-3 text-left">
-                                                    {
-                                                        spotlight.items.map((item) => {
-                                                            const parsedItem =
-                                                                parseRankingItem(item);
+        if (!stickyDate || !stickyProgress || !stickyAvailable) {
+          return;
+        }
 
-                                                            return (
-                                                                <div class="flex min-h-[3.75rem] items-center gap-3 rounded-[1.05rem] border border-gray-100 bg-gray-50/80 px-3.5 py-3.5 dark:border-gray-700 dark:bg-gray-900/60">
-                                                                    <div class="mt-0.5 flex h-6 w-6 flex-shrink-0 items-center justify-center rounded-full bg-gradient-to-r from-[#1055C9] to-[#05339C] text-white shadow-md">
-                                                                        <svg
-                                                                            class="h-3.5 w-3.5"
-                                                                            fill="none"
-                                                                            stroke="currentColor"
-                                                                            viewBox="0 0 24 24"
-                                                                        >
-                                                                            <path
-                                                                                stroke-linecap="round"
-                                                                                stroke-linejoin="round"
-                                                                                stroke-width="2.5"
-                                                                                d="M5 13l4 4L19 7"
-                                                                            ></path>
-                                                                        </svg>
-                                                                    </div>
-                                                                    <div class="grid w-full grid-cols-[minmax(0,1fr)_auto] items-center gap-2 sm:gap-3">
-                                                                        <p class="text-sm font-medium leading-relaxed text-gray-700 dark:text-gray-300 md:text-base">
-                                                                            {parsedItem.label}
-                                                                        </p>
-                                                                        {
-                                                                            parsedItem.rank && (
-                                                                                <span class="inline-flex w-fit items-center justify-center rounded-full border border-slate-200 bg-white px-2.5 py-1 text-[11px] sm:px-3 sm:text-xs font-bold uppercase tracking-[0.08em] sm:tracking-wide text-slate-700 shadow-sm dark:border-slate-600 dark:bg-slate-900 dark:text-slate-200">
-                                                                                    {parsedItem.rank}
-                                                                                </span>
-                                                                            )
-                                                                        }
-                                                                    </div>
-                                                                </div>
-                                                            );
-                                                        })
-                                                    }
-                                                </div>
-                                            </>
-                                        )
-                                    }
-                                </div>
-                            ))
-                        }
-                    </div>
-                </div>
-            </div>
+        try {
+          const response = await fetch("/api/quota");
+
+          if (!response.ok) {
+            throw new Error("Failed to fetch quota data");
+          }
+
+          const data = await response.json();
+          const nextRegistered = Number(data.registered) || 0;
+          const nextCapacity = Number(data.capacity) || 500;
+          const nextBonusQuota = Number(data.bonusQuota) || 500;
+          const nextAvailable = Number(data.available) || 0;
+
+          stickyDate.textContent = data.updateDate;
+          stickyProgress.textContent = `${formatIdNumber(
+            nextRegistered,
+          )} / ${formatIdNumber(nextCapacity)} (+${formatIdNumber(
+            nextBonusQuota,
+          )})`;
+          stickyAvailable.textContent = `Tersedia ${formatIdNumber(
+            nextAvailable,
+          )}`;
+        } catch (error) {
+          console.error("Failed to load quota data:", error);
+        }
+      }
+
+      function startQuotaAutoRefresh() {
+        const refreshIntervalMs = 60_000;
+
+        initQuotaData();
+        window.setInterval(() => {
+          initQuotaData();
+        }, refreshIntervalMs);
+
+        document.addEventListener("visibilitychange", () => {
+          if (document.visibilityState === "visible") {
+            initQuotaData();
+          }
+        });
+
+        window.addEventListener("focus", () => {
+          initQuotaData();
+        });
+      }
+
+      function initStickyDaftarButton() {
+        const stickyDaftarButton = document.getElementById(
+          "sticky-quota-daftar",
+        );
+        if (!stickyDaftarButton) {
+          return;
+        }
+
+        stickyDaftarButton.addEventListener("click", function (event) {
+          event.preventDefault();
+          const targetSection = document.getElementById("promokelaskaryawan");
+          if (!targetSection) {
+            return;
+          }
+
+          targetSection.scrollIntoView({
+            behavior: "smooth",
+            block: "start",
+          });
+        });
+      }
+
+      // Run initialization when DOM is ready
+      if (document.readyState === "loading") {
+        document.addEventListener("DOMContentLoaded", function () {
+          initScrollButton();
+          initStickyDaftarButton();
+          startQuotaAutoRefresh();
+        });
+      } else {
+        // DOM already loaded, run immediately
+        initScrollButton();
+        initStickyDaftarButton();
+        startQuotaAutoRefresh();
+      }
+    </script>
+
+    <!-- Info Section -->
+    <div class="max-w-5xl mx-auto mt-6 md:mt-8 mb-10 md:mb-12">
+      <div
+        class="relative overflow-hidden rounded-[1.5rem] md:rounded-[2rem] border border-blue-100 bg-gradient-to-br from-white via-blue-50 to-white p-5 sm:p-6 md:p-10 shadow-[0_25px_80px_-30px_rgba(16,85,201,0.35)] dark:border-blue-900/40 dark:from-gray-800 dark:via-slate-900 dark:to-gray-900"
+      >
+        <div class="absolute inset-0 opacity-80">
+          <div
+            class="absolute -top-12 right-0 h-24 w-24 rounded-full bg-blue-200/40 blur-3xl md:-top-16 md:h-40 md:w-40 dark:bg-blue-500/10"
+          >
+          </div>
+          <div
+            class="absolute -bottom-10 left-0 h-20 w-20 rounded-full bg-indigo-200/40 blur-3xl md:-bottom-12 md:h-32 md:w-32 dark:bg-indigo-500/10"
+          >
+          </div>
         </div>
+        <div class="relative text-center max-w-4xl mx-auto">
+          <div
+            class="inline-flex items-center rounded-full border border-blue-200 bg-white/80 px-3 py-1.5 text-xs sm:px-4 sm:py-2 sm:text-sm font-semibold text-[#FF8C00] shadow-sm backdrop-blur dark:border-blue-800 dark:bg-gray-800/80 dark:text-blue-300"
+          >
+            Peringkat Kampus 2026
+          </div>
+          <h3
+            class="mt-4 sm:mt-5 text-xl sm:text-2xl md:text-4xl font-bold leading-tight"
+          >
+            <span
+              class="bg-gradient-to-r from-[#FF8C00] to-[#E67300] bg-clip-text text-transparent"
+            >
+              Diselenggarakan Oleh PTS Terbaik Peringkat 1 Jawa Tengah 2026
+            </span>
+          </h3>
+          <p
+            class="mt-4 sm:mt-5 text-sm sm:text-base md:text-xl text-gray-700 dark:text-gray-300 leading-relaxed"
+          >
+            Universitas Sains &amp; Teknologi Komputer (Universitas STEKOM)
+            meraih Peringkat 1 PTS Jawa Tengah versi UniRank 2026 dan tampil
+            unggul pada Webometrics Impact Rank 2026, memperkuat reputasinya
+            sebagai kampus unggulan.
+          </p>
 
-        <!-- Features Section -->
-        <div class="max-w-4xl mx-auto space-y-8 mt-16">
-            <!-- Perkuliahan Fleksibel -->
-            <div
+          <div
+            class="mt-6 sm:mt-8 grid grid-cols-1 gap-4 sm:gap-5 md:grid-cols-2"
+          >
+            {
+              spotlightRanks.map((spotlight) => (
+                <div class="rounded-[1.35rem] sm:rounded-[1.75rem] border border-white/70 bg-white/85 p-4 sm:p-6 md:p-7 text-center sm:text-left shadow-[0_24px_55px_-25px_rgba(15,23,42,0.35)] backdrop-blur dark:border-gray-700/80 dark:bg-gray-800/80">
+                  <div class="flex flex-col items-center gap-4 sm:flex-row sm:items-start sm:justify-between sm:gap-5">
+                    <div class="flex flex-col items-center sm:items-start md:min-h-[7.25rem] md:justify-between">
+                      <p class="text-[11px] sm:text-sm md:text-base font-semibold uppercase leading-tight tracking-[0.18em] sm:tracking-[0.22em] text-gray-500 dark:text-gray-400">
+                        {spotlight.source}
+                      </p>
+                      <h4 class="mt-3 sm:mt-4 text-xl sm:text-2xl md:text-3xl font-bold text-gray-900 dark:text-white">
+                        {spotlight.label}
+                      </h4>
+                    </div>
+                    <div
+                      class={`inline-flex self-center sm:self-auto min-h-16 min-w-16 sm:min-h-20 sm:min-w-20 items-center justify-center rounded-[1.2rem] sm:rounded-[1.5rem] bg-gradient-to-r px-4 py-2.5 sm:px-5 sm:py-3 text-3xl sm:text-4xl md:min-h-24 md:min-w-24 md:text-5xl font-black text-white shadow-[0_18px_35px_-15px_rgba(16,85,201,0.75)] ${spotlight.accent}`}
+                    >
+                      {spotlight.rank}
+                    </div>
+                  </div>
+                  <p class="mt-4 sm:mt-5 md:min-h-[3.8rem] text-sm sm:text-base md:text-lg leading-relaxed text-gray-600 dark:text-gray-300">
+                    {spotlight.description}
+                  </p>
+                  {spotlight.items && (
+                    <>
+                      <details class="group mt-5 sm:mt-6 rounded-[1.05rem] border border-gray-100 bg-gray-50/80 px-3.5 py-3 dark:border-gray-700 dark:bg-gray-900/60 md:hidden">
+                        <summary class="flex cursor-pointer list-none items-center justify-between gap-3">
+                          <p class="text-sm font-semibold leading-relaxed text-gray-700 dark:text-gray-300">
+                            Lihat Detail Peringkat
+                          </p>
+                          <svg
+                            class="h-4 w-4 flex-shrink-0 text-[#E67300] transition-transform duration-200 group-open:rotate-180 dark:text-blue-300"
+                            fill="none"
+                            stroke="currentColor"
+                            viewBox="0 0 24 24"
+                          >
+                            <path
+                              stroke-linecap="round"
+                              stroke-linejoin="round"
+                              stroke-width="2.5"
+                              d="M19 9l-7 7-7-7"
+                            />
+                          </svg>
+                        </summary>
+                        <div class="mt-3 grid gap-3">
+                          {spotlight.items.map((item) => {
+                            const parsedItem = parseRankingItem(item);
+
+                            return (
+                              <div class="rounded-xl border border-gray-100 bg-white px-3 py-2.5 dark:border-gray-700 dark:bg-gray-800/70">
+                                <p class="text-sm font-semibold leading-relaxed text-gray-700 dark:text-gray-200">
+                                  {parsedItem.label}
+                                </p>
+                                {parsedItem.rank && (
+                                  <p class="mt-1 text-sm font-bold text-[#E67300] dark:text-blue-300">
+                                    {parsedItem.rank}
+                                  </p>
+                                )}
+                              </div>
+                            );
+                          })}
+                        </div>
+                      </details>
+                      <div class="mt-5 sm:mt-6 hidden md:grid gap-3 text-left">
+                        {spotlight.items.map((item) => {
+                          const parsedItem = parseRankingItem(item);
+
+                          return (
+                            <div class="flex min-h-[3.75rem] items-center gap-3 rounded-[1.05rem] border border-gray-100 bg-gray-50/80 px-3.5 py-3.5 dark:border-gray-700 dark:bg-gray-900/60">
+                              <div class="mt-0.5 flex h-6 w-6 flex-shrink-0 items-center justify-center rounded-full bg-gradient-to-r from-[#FF8C00] to-[#E67300] text-white shadow-md">
+                                <svg
+                                  class="h-3.5 w-3.5"
+                                  fill="none"
+                                  stroke="currentColor"
+                                  viewBox="0 0 24 24"
+                                >
+                                  <path
+                                    stroke-linecap="round"
+                                    stroke-linejoin="round"
+                                    stroke-width="2.5"
+                                    d="M5 13l4 4L19 7"
+                                  />
+                                </svg>
+                              </div>
+                              <div class="grid w-full grid-cols-[minmax(0,1fr)_auto] items-center gap-2 sm:gap-3">
+                                <p class="text-sm font-medium leading-relaxed text-gray-700 dark:text-gray-300 md:text-base">
+                                  {parsedItem.label}
+                                </p>
+                                {parsedItem.rank && (
+                                  <span class="inline-flex w-fit items-center justify-center rounded-full border border-slate-200 bg-white px-2.5 py-1 text-[11px] sm:px-3 sm:text-xs font-bold uppercase tracking-[0.08em] sm:tracking-wide text-slate-700 shadow-sm dark:border-slate-600 dark:bg-slate-900 dark:text-slate-200">
+                                    {parsedItem.rank}
+                                  </span>
+                                )}
+                              </div>
+                            </div>
+                          );
+                        })}
+                      </div>
+                    </>
+                  )}
+                </div>
+              ))
+            }
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Features Section -->
+    <div class="max-w-4xl mx-auto space-y-8 mt-16">
+      <!-- Perkuliahan Fleksibel -->
+      <div
+        class="bg-white dark:bg-gray-800 rounded-2xl p-6 md:p-8 shadow-lg border border-gray-200 dark:border-gray-700"
+      >
+        <h3
+          class="text-xl md:text-2xl font-bold mb-4 bg-gradient-to-r from-[#FF8C00] to-[#E67300] bg-clip-text text-transparent"
+        >
+          Perkuliahan Fleksibel
+        </h3>
+        <ul class="space-y-3">
+          <li class="flex items-start gap-3">
+            <svg
+              class="w-6 h-6 text-green-500 flex-shrink-0 mt-0.5"
+              fill="none"
+              stroke="currentColor"
+              viewBox="0 0 24 24"
+            >
+              <path
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                stroke-width="2"
+                d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+            </svg>
+            <span class="text-gray-700 dark:text-gray-300"
+              >Kuliah Sambil Kerja, 6000+ Mahasiswa Aktif Kelas Karyawan</span
+            >
+          </li>
+          <li class="flex items-start gap-3">
+            <svg
+              class="w-6 h-6 text-green-500 flex-shrink-0 mt-0.5"
+              fill="none"
+              stroke="currentColor"
+              viewBox="0 0 24 24"
+            >
+              <path
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                stroke-width="2"
+                d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+            </svg>
+            <span class="text-gray-700 dark:text-gray-300"
+              >90-95% Mahasiswa Belum Wisuda Sudah Dapat Kerja</span
+            >
+          </li>
+          <li class="flex items-start gap-3">
+            <svg
+              class="w-6 h-6 text-green-500 flex-shrink-0 mt-0.5"
+              fill="none"
+              stroke="currentColor"
+              viewBox="0 0 24 24"
+            >
+              <path
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                stroke-width="2"
+                d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+            </svg>
+            <span class="text-gray-700 dark:text-gray-300"
+              >Kuliah bisa full online, hybrid, atau tatap muka sesuai kebutuhan</span
+            >
+          </li>
+          <li class="flex items-start gap-3">
+            <svg
+              class="w-6 h-6 text-green-500 flex-shrink-0 mt-0.5"
+              fill="none"
+              stroke="currentColor"
+              viewBox="0 0 24 24"
+            >
+              <path
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                stroke-width="2"
+                d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+            </svg>
+            <span class="text-gray-700 dark:text-gray-300"
+              >Jadwal fleksibel weekend (sabtu/minggu) atau malam hari, tidak
+              mengganggu jam kerja</span
+            >
+          </li>
+        </ul>
+      </div>
+
+      <!-- Biaya Fleksibel -->
+      <div
+        class="bg-white dark:bg-gray-800 rounded-2xl p-6 md:p-8 shadow-lg border border-gray-200 dark:border-gray-700"
+      >
+        <h3
+          class="text-xl md:text-2xl font-bold mb-4 bg-gradient-to-r from-[#FF8C00] to-[#E67300] bg-clip-text text-transparent"
+        >
+          Biaya Fleksibel
+        </h3>
+        <ul class="space-y-3">
+          <li class="flex items-start gap-3">
+            <svg
+              class="w-6 h-6 text-green-500 flex-shrink-0 mt-0.5"
+              fill="none"
+              stroke="currentColor"
+              viewBox="0 0 24 24"
+            >
+              <path
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                stroke-width="2"
+                d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+            </svg>
+            <span class="text-gray-700 dark:text-gray-300"
+              >Bisa dipilih sesuai keinginan dan kebutuhan karyawan</span
+            >
+          </li>
+          <li class="flex items-start gap-3">
+            <svg
+              class="w-6 h-6 text-green-500 flex-shrink-0 mt-0.5"
+              fill="none"
+              stroke="currentColor"
+              viewBox="0 0 24 24"
+            >
+              <path
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                stroke-width="2"
+                d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+            </svg>
+            <span class="text-gray-700 dark:text-gray-300"
+              >Dapat dicicil sesuai kemampuan, mulai 498rb/bulan</span
+            >
+          </li>
+        </ul>
+      </div>
+
+      <!-- Akreditasi -->
+      <!-- <div
                 class="bg-white dark:bg-gray-800 rounded-2xl p-6 md:p-8 shadow-lg border border-gray-200 dark:border-gray-700"
             >
                 <h3
-                    class="text-xl md:text-2xl font-bold mb-4 bg-gradient-to-r from-[#1055C9] to-[#05339C] bg-clip-text text-transparent"
-                >
-                    Perkuliahan Fleksibel
-                </h3>
-                <ul class="space-y-3">
-                    <li class="flex items-start gap-3">
-                        <svg
-                            class="w-6 h-6 text-green-500 flex-shrink-0 mt-0.5"
-                            fill="none"
-                            stroke="currentColor"
-                            viewBox="0 0 24 24"
-                        >
-                            <path
-                                stroke-linecap="round"
-                                stroke-linejoin="round"
-                                stroke-width="2"
-                                d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"
-                            ></path>
-                        </svg>
-                        <span class="text-gray-700 dark:text-gray-300"
-                            >Kuliah Sambil Kerja, 6000+ Mahasiswa Aktif Kelas
-                            Karyawan</span
-                        >
-                    </li>
-                    <li class="flex items-start gap-3">
-                        <svg
-                            class="w-6 h-6 text-green-500 flex-shrink-0 mt-0.5"
-                            fill="none"
-                            stroke="currentColor"
-                            viewBox="0 0 24 24"
-                        >
-                            <path
-                                stroke-linecap="round"
-                                stroke-linejoin="round"
-                                stroke-width="2"
-                                d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"
-                            ></path>
-                        </svg>
-                        <span class="text-gray-700 dark:text-gray-300"
-                            >90-95% Mahasiswa Belum Wisuda Sudah Dapat Kerja</span
-                        >
-                    </li>
-                    <li class="flex items-start gap-3">
-                        <svg
-                            class="w-6 h-6 text-green-500 flex-shrink-0 mt-0.5"
-                            fill="none"
-                            stroke="currentColor"
-                            viewBox="0 0 24 24"
-                        >
-                            <path
-                                stroke-linecap="round"
-                                stroke-linejoin="round"
-                                stroke-width="2"
-                                d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"
-                            ></path>
-                        </svg>
-                        <span class="text-gray-700 dark:text-gray-300"
-                            >Kuliah bisa full online, hybrid, atau tatap muka
-                            sesuai kebutuhan</span
-                        >
-                    </li>
-                    <li class="flex items-start gap-3">
-                        <svg
-                            class="w-6 h-6 text-green-500 flex-shrink-0 mt-0.5"
-                            fill="none"
-                            stroke="currentColor"
-                            viewBox="0 0 24 24"
-                        >
-                            <path
-                                stroke-linecap="round"
-                                stroke-linejoin="round"
-                                stroke-width="2"
-                                d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"
-                            ></path>
-                        </svg>
-                        <span class="text-gray-700 dark:text-gray-300"
-                            >Jadwal fleksibel weekend (sabtu/minggu) atau malam
-                            hari, tidak mengganggu jam kerja</span
-                        >
-                    </li>
-                </ul>
-            </div>
-
-            <!-- Biaya Fleksibel -->
-            <div
-                class="bg-white dark:bg-gray-800 rounded-2xl p-6 md:p-8 shadow-lg border border-gray-200 dark:border-gray-700"
-            >
-                <h3
-                    class="text-xl md:text-2xl font-bold mb-4 bg-gradient-to-r from-[#1055C9] to-[#05339C] bg-clip-text text-transparent"
-                >
-                    Biaya Fleksibel
-                </h3>
-                <ul class="space-y-3">
-                    <li class="flex items-start gap-3">
-                        <svg
-                            class="w-6 h-6 text-green-500 flex-shrink-0 mt-0.5"
-                            fill="none"
-                            stroke="currentColor"
-                            viewBox="0 0 24 24"
-                        >
-                            <path
-                                stroke-linecap="round"
-                                stroke-linejoin="round"
-                                stroke-width="2"
-                                d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"
-                            ></path>
-                        </svg>
-                        <span class="text-gray-700 dark:text-gray-300"
-                            >Bisa dipilih sesuai keinginan dan kebutuhan
-                            karyawan</span
-                        >
-                    </li>
-                    <li class="flex items-start gap-3">
-                        <svg
-                            class="w-6 h-6 text-green-500 flex-shrink-0 mt-0.5"
-                            fill="none"
-                            stroke="currentColor"
-                            viewBox="0 0 24 24"
-                        >
-                            <path
-                                stroke-linecap="round"
-                                stroke-linejoin="round"
-                                stroke-width="2"
-                                d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"
-                            ></path>
-                        </svg>
-                        <span class="text-gray-700 dark:text-gray-300"
-                            >Dapat dicicil sesuai kemampuan, mulai 498rb/bulan</span
-                        >
-                    </li>
-                </ul>
-            </div>
-
-            <!-- Akreditasi -->
-            <!-- <div
-                class="bg-white dark:bg-gray-800 rounded-2xl p-6 md:p-8 shadow-lg border border-gray-200 dark:border-gray-700"
-            >
-                <h3
-                    class="text-xl md:text-2xl font-bold mb-4 bg-gradient-to-r from-[#1055C9] to-[#05339C] bg-clip-text text-transparent"
+                    class="text-xl md:text-2xl font-bold mb-4 bg-gradient-to-r from-[#FF8C00] to-[#E67300] bg-clip-text text-transparent"
                 >
                     Institusi dan Program Studi Terakreditasi BAN-PT
                 </h3>
@@ -593,327 +617,304 @@ const fallbackQuotaData = {
                 </p>
             </div> -->
 
-            <!-- Dijamin Lulus Tepat Waktu -->
-            <div
-                class="bg-white dark:bg-gray-800 rounded-2xl p-6 md:p-8 shadow-lg border border-gray-200 dark:border-gray-700"
+      <!-- Dijamin Lulus Tepat Waktu -->
+      <div
+        class="bg-white dark:bg-gray-800 rounded-2xl p-6 md:p-8 shadow-lg border border-gray-200 dark:border-gray-700"
+      >
+        <h3
+          class="text-xl md:text-2xl font-bold mb-4 bg-gradient-to-r from-[#FF8C00] to-[#E67300] bg-clip-text text-transparent"
+        >
+          Kuliah Cepat Lulus Bisa Tanpa Skripsi
+        </h3>
+        <ul class="space-y-3">
+          <li class="flex items-start gap-3">
+            <svg
+              class="w-6 h-6 text-green-500 flex-shrink-0 mt-0.5"
+              fill="none"
+              stroke="currentColor"
+              viewBox="0 0 24 24"
             >
-                <h3
-                    class="text-xl md:text-2xl font-bold mb-4 bg-gradient-to-r from-[#1055C9] to-[#05339C] bg-clip-text text-transparent"
-                >
-                    Kuliah Cepat Lulus Bisa Tanpa Skripsi
-                </h3>
-                <ul class="space-y-3">
-                    <li class="flex items-start gap-3">
-                        <svg
-                            class="w-6 h-6 text-green-500 flex-shrink-0 mt-0.5"
-                            fill="none"
-                            stroke="currentColor"
-                            viewBox="0 0 24 24"
-                        >
-                            <path
-                                stroke-linecap="round"
-                                stroke-linejoin="round"
-                                stroke-width="2"
-                                d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"
-                            ></path>
-                        </svg>
-                        <span class="text-gray-700 dark:text-gray-300"
-                            >Kuliah lebih cepat,100% pasti lulus tanpa skripsi</span
-                        >
-                    </li>
-                </ul>
-            </div>
+              <path
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                stroke-width="2"
+                d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+            </svg>
+            <span class="text-gray-700 dark:text-gray-300"
+              >Kuliah lebih cepat,100% pasti lulus tanpa skripsi</span
+            >
+          </li>
+        </ul>
+      </div>
 
-            <!-- Eksklusif Penunjang Karir -->
-            <div
-                class="bg-white dark:bg-gray-800 rounded-2xl p-6 md:p-8 shadow-lg border border-gray-200 dark:border-gray-700"
+      <!-- Eksklusif Penunjang Karir -->
+      <div
+        class="bg-white dark:bg-gray-800 rounded-2xl p-6 md:p-8 shadow-lg border border-gray-200 dark:border-gray-700"
+      >
+        <h3
+          class="text-xl md:text-2xl font-bold mb-4 bg-gradient-to-r from-[#FF8C00] to-[#E67300] bg-clip-text text-transparent"
+        >
+          Eksklusif Penunjang Karir dan Usaha
+        </h3>
+        <ul class="space-y-3">
+          <li class="flex items-start gap-3">
+            <svg
+              class="w-6 h-6 text-green-500 flex-shrink-0 mt-0.5"
+              fill="none"
+              stroke="currentColor"
+              viewBox="0 0 24 24"
             >
-                <h3
-                    class="text-xl md:text-2xl font-bold mb-4 bg-gradient-to-r from-[#1055C9] to-[#05339C] bg-clip-text text-transparent"
-                >
-                    Eksklusif Penunjang Karir dan Usaha
-                </h3>
-                <ul class="space-y-3">
-                    <li class="flex items-start gap-3">
-                        <svg
-                            class="w-6 h-6 text-green-500 flex-shrink-0 mt-0.5"
-                            fill="none"
-                            stroke="currentColor"
-                            viewBox="0 0 24 24"
-                        >
-                            <path
-                                stroke-linecap="round"
-                                stroke-linejoin="round"
-                                stroke-width="2"
-                                d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"
-                            ></path>
-                        </svg>
-                        <span class="text-gray-700 dark:text-gray-300"
-                            >Saat Kuliah Dibantu Dicarikan Kerja</span
-                        >
-                    </li>
-                    <li class="flex items-start gap-3">
-                        <svg
-                            class="w-6 h-6 text-green-500 flex-shrink-0 mt-0.5"
-                            fill="none"
-                            stroke="currentColor"
-                            viewBox="0 0 24 24"
-                        >
-                            <path
-                                stroke-linecap="round"
-                                stroke-linejoin="round"
-                                stroke-width="2"
-                                d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"
-                            ></path>
-                        </svg>
-                        <span class="text-gray-700 dark:text-gray-300"
-                            >500,000+ Relasi Mitra Industri Se-Indonesia</span
-                        >
-                    </li>
-                    <li class="flex items-start gap-3">
-                        <svg
-                            class="w-6 h-6 text-green-500 flex-shrink-0 mt-0.5"
-                            fill="none"
-                            stroke="currentColor"
-                            viewBox="0 0 24 24"
-                        >
-                            <path
-                                stroke-linecap="round"
-                                stroke-linejoin="round"
-                                stroke-width="2"
-                                d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"
-                            ></path>
-                        </svg>
-                        <span class="text-gray-700 dark:text-gray-300"
-                            >Akses 1000+ Info Loker Terbaru Setiap Hari</span
-                        >
-                    </li>
-                    <li class="flex items-start gap-3">
-                        <svg
-                            class="w-6 h-6 text-green-500 flex-shrink-0 mt-0.5"
-                            fill="none"
-                            stroke="currentColor"
-                            viewBox="0 0 24 24"
-                        >
-                            <path
-                                stroke-linecap="round"
-                                stroke-linejoin="round"
-                                stroke-width="2"
-                                d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"
-                            ></path>
-                        </svg>
-                        <span class="text-gray-700 dark:text-gray-300"
-                            >Live TikTok Lowongan Kerja Setiap Hari</span
-                        >
-                    </li>
-                    <li class="flex items-start gap-3">
-                        <svg
-                            class="w-6 h-6 text-green-500 flex-shrink-0 mt-0.5"
-                            fill="none"
-                            stroke="currentColor"
-                            viewBox="0 0 24 24"
-                        >
-                            <path
-                                stroke-linecap="round"
-                                stroke-linejoin="round"
-                                stroke-width="2"
-                                d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"
-                            ></path>
-                        </svg>
-                        <span class="text-gray-700 dark:text-gray-300"
-                            >Rekrutmen Perusahaan Setiap Minggu</span
-                        >
-                    </li>
-                    <li class="flex items-start gap-3">
-                        <svg
-                            class="w-6 h-6 text-green-500 flex-shrink-0 mt-0.5"
-                            fill="none"
-                            stroke="currentColor"
-                            viewBox="0 0 24 24"
-                        >
-                            <path
-                                stroke-linecap="round"
-                                stroke-linejoin="round"
-                                stroke-width="2"
-                                d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"
-                            ></path>
-                        </svg>
-                        <span class="text-gray-700 dark:text-gray-300"
-                            >Pelatihan HRD Setiap Minggu</span
-                        >
-                    </li>
-                    <li class="flex items-start gap-3">
-                        <svg
-                            class="w-6 h-6 text-green-500 flex-shrink-0 mt-0.5"
-                            fill="none"
-                            stroke="currentColor"
-                            viewBox="0 0 24 24"
-                        >
-                            <path
-                                stroke-linecap="round"
-                                stroke-linejoin="round"
-                                stroke-width="2"
-                                d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"
-                            ></path>
-                        </svg>
-                        <span class="text-gray-700 dark:text-gray-300"
-                            >Jobfair Provinsi Setiap Minggu</span
-                        >
-                    </li>
-                    <li class="flex items-start gap-3">
-                        <svg
-                            class="w-6 h-6 text-green-500 flex-shrink-0 mt-0.5"
-                            fill="none"
-                            stroke="currentColor"
-                            viewBox="0 0 24 24"
-                        >
-                            <path
-                                stroke-linecap="round"
-                                stroke-linejoin="round"
-                                stroke-width="2"
-                                d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"
-                            ></path>
-                        </svg>
-                        <span class="text-gray-700 dark:text-gray-300"
-                            >Jobfair Nasional Setiap Bulan</span
-                        >
-                    </li>
-                    <li class="flex items-start gap-3">
-                        <svg
-                            class="w-6 h-6 text-green-500 flex-shrink-0 mt-0.5"
-                            fill="none"
-                            stroke="currentColor"
-                            viewBox="0 0 24 24"
-                        >
-                            <path
-                                stroke-linecap="round"
-                                stroke-linejoin="round"
-                                stroke-width="2"
-                                d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"
-                            ></path>
-                        </svg>
-                        <span class="text-gray-700 dark:text-gray-300"
-                            >Lulus Dapat Pengalaman Bukan Hanya Ijazah</span
-                        >
-                    </li>
-                    <li class="flex items-start gap-3">
-                        <svg
-                            class="w-6 h-6 text-green-500 flex-shrink-0 mt-0.5"
-                            fill="none"
-                            stroke="currentColor"
-                            viewBox="0 0 24 24"
-                        >
-                            <path
-                                stroke-linecap="round"
-                                stroke-linejoin="round"
-                                stroke-width="2"
-                                d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"
-                            ></path>
-                        </svg>
-                        <span class="text-gray-700 dark:text-gray-300"
-                            >Dijamin Lulus Tepat Waktu</span
-                        >
-                    </li>
-                    <li class="flex items-start gap-3">
-                        <svg
-                            class="w-6 h-6 text-green-500 flex-shrink-0 mt-0.5"
-                            fill="none"
-                            stroke="currentColor"
-                            viewBox="0 0 24 24"
-                        >
-                            <path
-                                stroke-linecap="round"
-                                stroke-linejoin="round"
-                                stroke-width="2"
-                                d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"
-                            ></path>
-                        </svg>
-                        <span class="text-gray-700 dark:text-gray-300"
-                            >Webinar Rutin Internasional</span
-                        >
-                    </li>
-                    <li class="flex items-start gap-3">
-                        <svg
-                            class="w-6 h-6 text-green-500 flex-shrink-0 mt-0.5"
-                            fill="none"
-                            stroke="currentColor"
-                            viewBox="0 0 24 24"
-                        >
-                            <path
-                                stroke-linecap="round"
-                                stroke-linejoin="round"
-                                stroke-width="2"
-                                d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"
-                            ></path>
-                        </svg>
-                        <span class="text-gray-700 dark:text-gray-300"
-                            >Webinar Rutin Nasional</span
-                        >
-                    </li>
-                    <li class="flex items-start gap-3">
-                        <svg
-                            class="w-6 h-6 text-green-500 flex-shrink-0 mt-0.5"
-                            fill="none"
-                            stroke="currentColor"
-                            viewBox="0 0 24 24"
-                        >
-                            <path
-                                stroke-linecap="round"
-                                stroke-linejoin="round"
-                                stroke-width="2"
-                                d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"
-                            ></path>
-                        </svg>
-                        <span class="text-gray-700 dark:text-gray-300"
-                            >Webinar Rutin Kewirausahaan</span
-                        >
-                    </li>
-                </ul>
-            </div>
+              <path
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                stroke-width="2"
+                d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+            </svg>
+            <span class="text-gray-700 dark:text-gray-300"
+              >Saat Kuliah Dibantu Dicarikan Kerja</span
+            >
+          </li>
+          <li class="flex items-start gap-3">
+            <svg
+              class="w-6 h-6 text-green-500 flex-shrink-0 mt-0.5"
+              fill="none"
+              stroke="currentColor"
+              viewBox="0 0 24 24"
+            >
+              <path
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                stroke-width="2"
+                d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+            </svg>
+            <span class="text-gray-700 dark:text-gray-300"
+              >500,000+ Relasi Mitra Industri Se-Indonesia</span
+            >
+          </li>
+          <li class="flex items-start gap-3">
+            <svg
+              class="w-6 h-6 text-green-500 flex-shrink-0 mt-0.5"
+              fill="none"
+              stroke="currentColor"
+              viewBox="0 0 24 24"
+            >
+              <path
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                stroke-width="2"
+                d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+            </svg>
+            <span class="text-gray-700 dark:text-gray-300"
+              >Akses 1000+ Info Loker Terbaru Setiap Hari</span
+            >
+          </li>
+          <li class="flex items-start gap-3">
+            <svg
+              class="w-6 h-6 text-green-500 flex-shrink-0 mt-0.5"
+              fill="none"
+              stroke="currentColor"
+              viewBox="0 0 24 24"
+            >
+              <path
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                stroke-width="2"
+                d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+            </svg>
+            <span class="text-gray-700 dark:text-gray-300"
+              >Live TikTok Lowongan Kerja Setiap Hari</span
+            >
+          </li>
+          <li class="flex items-start gap-3">
+            <svg
+              class="w-6 h-6 text-green-500 flex-shrink-0 mt-0.5"
+              fill="none"
+              stroke="currentColor"
+              viewBox="0 0 24 24"
+            >
+              <path
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                stroke-width="2"
+                d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+            </svg>
+            <span class="text-gray-700 dark:text-gray-300"
+              >Rekrutmen Perusahaan Setiap Minggu</span
+            >
+          </li>
+          <li class="flex items-start gap-3">
+            <svg
+              class="w-6 h-6 text-green-500 flex-shrink-0 mt-0.5"
+              fill="none"
+              stroke="currentColor"
+              viewBox="0 0 24 24"
+            >
+              <path
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                stroke-width="2"
+                d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+            </svg>
+            <span class="text-gray-700 dark:text-gray-300"
+              >Pelatihan HRD Setiap Minggu</span
+            >
+          </li>
+          <li class="flex items-start gap-3">
+            <svg
+              class="w-6 h-6 text-green-500 flex-shrink-0 mt-0.5"
+              fill="none"
+              stroke="currentColor"
+              viewBox="0 0 24 24"
+            >
+              <path
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                stroke-width="2"
+                d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+            </svg>
+            <span class="text-gray-700 dark:text-gray-300"
+              >Jobfair Provinsi Setiap Minggu</span
+            >
+          </li>
+          <li class="flex items-start gap-3">
+            <svg
+              class="w-6 h-6 text-green-500 flex-shrink-0 mt-0.5"
+              fill="none"
+              stroke="currentColor"
+              viewBox="0 0 24 24"
+            >
+              <path
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                stroke-width="2"
+                d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+            </svg>
+            <span class="text-gray-700 dark:text-gray-300"
+              >Jobfair Nasional Setiap Bulan</span
+            >
+          </li>
+          <li class="flex items-start gap-3">
+            <svg
+              class="w-6 h-6 text-green-500 flex-shrink-0 mt-0.5"
+              fill="none"
+              stroke="currentColor"
+              viewBox="0 0 24 24"
+            >
+              <path
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                stroke-width="2"
+                d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+            </svg>
+            <span class="text-gray-700 dark:text-gray-300"
+              >Lulus Dapat Pengalaman Bukan Hanya Ijazah</span
+            >
+          </li>
+          <li class="flex items-start gap-3">
+            <svg
+              class="w-6 h-6 text-green-500 flex-shrink-0 mt-0.5"
+              fill="none"
+              stroke="currentColor"
+              viewBox="0 0 24 24"
+            >
+              <path
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                stroke-width="2"
+                d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+            </svg>
+            <span class="text-gray-700 dark:text-gray-300"
+              >Dijamin Lulus Tepat Waktu</span
+            >
+          </li>
+          <li class="flex items-start gap-3">
+            <svg
+              class="w-6 h-6 text-green-500 flex-shrink-0 mt-0.5"
+              fill="none"
+              stroke="currentColor"
+              viewBox="0 0 24 24"
+            >
+              <path
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                stroke-width="2"
+                d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+            </svg>
+            <span class="text-gray-700 dark:text-gray-300"
+              >Webinar Rutin Internasional</span
+            >
+          </li>
+          <li class="flex items-start gap-3">
+            <svg
+              class="w-6 h-6 text-green-500 flex-shrink-0 mt-0.5"
+              fill="none"
+              stroke="currentColor"
+              viewBox="0 0 24 24"
+            >
+              <path
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                stroke-width="2"
+                d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+            </svg>
+            <span class="text-gray-700 dark:text-gray-300"
+              >Webinar Rutin Nasional</span
+            >
+          </li>
+          <li class="flex items-start gap-3">
+            <svg
+              class="w-6 h-6 text-green-500 flex-shrink-0 mt-0.5"
+              fill="none"
+              stroke="currentColor"
+              viewBox="0 0 24 24"
+            >
+              <path
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                stroke-width="2"
+                d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+            </svg>
+            <span class="text-gray-700 dark:text-gray-300"
+              >Webinar Rutin Kewirausahaan</span
+            >
+          </li>
+        </ul>
+      </div>
 
-            <!-- TopLoker VVIP -->
-            <div
-                class="bg-white dark:bg-gray-800 rounded-2xl p-6 md:p-8 shadow-lg border border-gray-200 dark:border-gray-700"
-            >
-                <h3
-                    class="text-xl md:text-2xl font-bold mb-4 bg-gradient-to-r from-[#1055C9] to-[#05339C] bg-clip-text text-transparent"
-                >
-                    Keanggotaan Eksklusif VVIP di TopLoker.com Mitra Resmi
-                    Kementerian Ketenagakerjaan RI 500.000++ Perusahaan Menanti
-                </h3>
-                <p class="text-gray-700 dark:text-gray-300 leading-relaxed">
-                    Mahasiswa STEKOM mendapatkan keanggotaan eksklusif VVIP di
-                    TopLoker.com Mitra Resmi Kementerian Ketenagakerjaan RI
-                    secara gratis selamanya. Platform pencarian kerja yang
-                    mendapat penghargaan Juara 1 StartUp4Industri 2022 dari
-                    Kementrian Perindustrian.
-                </p>
-            </div>
+      <!-- TopLoker VVIP -->
+      <div
+        class="bg-white dark:bg-gray-800 rounded-2xl p-6 md:p-8 shadow-lg border border-gray-200 dark:border-gray-700"
+      >
+        <h3
+          class="text-xl md:text-2xl font-bold mb-4 bg-gradient-to-r from-[#FF8C00] to-[#E67300] bg-clip-text text-transparent"
+        >
+          Keanggotaan Eksklusif VVIP di TopLoker.com Mitra Resmi Kementerian
+          Ketenagakerjaan RI 500.000++ Perusahaan Menanti
+        </h3>
+        <p class="text-gray-700 dark:text-gray-300 leading-relaxed">
+          Mahasiswa STEKOM mendapatkan keanggotaan eksklusif VVIP di
+          TopLoker.com Mitra Resmi Kementerian Ketenagakerjaan RI secara gratis
+          selamanya. Platform pencarian kerja yang mendapat penghargaan Juara 1
+          StartUp4Industri 2022 dari Kementrian Perindustrian.
+        </p>
+      </div>
 
-            <!-- Konsultasi Psikologi -->
-            <div
-                class="bg-white dark:bg-gray-800 rounded-2xl p-6 md:p-8 shadow-lg border border-gray-200 dark:border-gray-700"
-            >
-                <h3
-                    class="text-xl md:text-2xl font-bold mb-4 bg-gradient-to-r from-[#1055C9] to-[#05339C] bg-clip-text text-transparent"
-                >
-                    Konsultasi Psikologi (Support System Kuliah Sambil Kerja)
-                </h3>
-                <p class="text-gray-700 dark:text-gray-300 leading-relaxed">
-                    Universitas STEKOM menyediakan layanan bimbingan akademis
-                    dan konseling psikologi khusus untuk mendukung mahasiswa
-                    Kelas Karyawan, membantu konsultasi akademik, perencanaan
-                    karir, dan mengatasi tantangan pribadi selama kuliah sambil
-                    bekerja.
-                </p>
-            </div>
-        </div>
+      <!-- Konsultasi Psikologi -->
+      <div
+        class="bg-white dark:bg-gray-800 rounded-2xl p-6 md:p-8 shadow-lg border border-gray-200 dark:border-gray-700"
+      >
+        <h3
+          class="text-xl md:text-2xl font-bold mb-4 bg-gradient-to-r from-[#FF8C00] to-[#E67300] bg-clip-text text-transparent"
+        >
+          Konsultasi Psikologi (Support System Kuliah Sambil Kerja)
+        </h3>
+        <p class="text-gray-700 dark:text-gray-300 leading-relaxed">
+          STIE STEKOM menyediakan layanan bimbingan akademis dan konseling
+          psikologi khusus untuk mendukung mahasiswa Kelas Karyawan, membantu
+          konsultasi akademik, perencanaan karir, dan mengatasi tantangan
+          pribadi selama kuliah sambil bekerja.
+        </p>
+      </div>
     </div>
+  </div>
 </section>
-
-
-
-
-
-
-

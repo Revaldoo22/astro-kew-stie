@@ -6,7 +6,7 @@ import { slugify } from "@/utils/slug";
 export const GET: APIRoute = async () => {
   const blogApi = new BlogApi();
   const projects = await blogApi.fetchAllProjects();
-  const baseUrl = "https://kew.stekom.ac.id";
+  const baseUrl = "https://kew.stiestekom.ac.id";
 
   let projectSitemaps = "";
 

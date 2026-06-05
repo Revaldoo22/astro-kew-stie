@@ -15,7 +15,7 @@ const { badge, badgeIcon, title, titleGradient, description } = Astro.props;
     <!-- Badge -->
     <div class="inline-block mb-4">
         <span
-            class="inline-flex items-center px-4 py-2 rounded-full text-sm font-bold bg-gradient-to-r from-[#1055C9] to-[#05339C] text-white"
+            class="inline-flex items-center px-4 py-2 rounded-full text-sm font-bold bg-gradient-to-r from-[#FF8C00] to-[#E67300] text-white"
         >
             <svg
                 class="w-4 h-4 mr-2"
@@ -40,7 +40,7 @@ const { badge, badgeIcon, title, titleGradient, description } = Astro.props;
         {
             titleGradient ? (
                 <>
-                    <span class="bg-gradient-to-r from-[#1055C9] to-[#05339C] bg-clip-text text-transparent">
+                    <span class="bg-gradient-to-r from-[#FF8C00] to-[#E67300] bg-clip-text text-transparent">
                         {titleGradient}
                     </span>
                     {title && ` ${title}`}

@@ -30,10 +30,10 @@ const spaceX = "space-x-8";
                 <img
                   src={websiteInfo.logoLight}
                   alt={websiteInfo.name || "Logo"}
-                  class="h-20 w-auto block dark:hidden"
+                  class="h-24 w-auto block dark:hidden"
                 />
                 {/* <h1 class="text-2xl font-bold whitespace-nowrap block dark:hidden">
-                  <span class="bg-gradient-to-r from-[#1055C9] to-[#05339C] bg-clip-text text-transparent">
+                  <span class="bg-gradient-to-r from-[#FF8C00] to-[#E67300] bg-clip-text text-transparent">
                     Kuliah Kelas Karyawan
                   </span>
                 </h1> */}
@@ -41,13 +41,13 @@ const spaceX = "space-x-8";
             ) : (
               <div class="flex items-center gap-2 group block dark:hidden">
                 <div class="relative flex-shrink-0">
-                  <div class="relative bg-gradient-to-br from-[#1055C9] to-[#05339C] p-1.5 rounded-lg">
+                  <div class="relative bg-gradient-to-br from-[#FF8C00] to-[#E67300] p-1.5 rounded-lg">
                     <BookOpen class="w-5 h-5 text-white" />
                   </div>
                 </div>
                 <div class="min-w-0">
                   <h1 class="text-2xl font-bold whitespace-nowrap">
-                    <span class="bg-gradient-to-r from-[#1055C9] to-[#05339C] bg-clip-text text-transparent">
+                    <span class="bg-gradient-to-r from-[#FF8C00] to-[#E67300] bg-clip-text text-transparent">
                       Kuliah Kelas Karyawan
                     </span>
                   </h1>
@@ -61,7 +61,7 @@ const spaceX = "space-x-8";
                 <img
                   src={websiteInfo.logoDark}
                   alt={websiteInfo.name || "Logo"}
-                  class="h-20 w-auto"
+                  class="h-24 w-auto"
                 />
                 {/* <h1 class="text-2xl font-bold whitespace-nowrap text-white">
                   Kuliah Kelas Karyawan
@@ -69,7 +69,7 @@ const spaceX = "space-x-8";
               </div>
             ) : (
               <div class="flex items-center gap-2 group hidden dark:flex">
-                <div class="bg-gradient-to-br from-[#1055C9] to-[#05339C] p-1.5 rounded-lg">
+                <div class="bg-gradient-to-br from-[#FF8C00] to-[#E67300] p-1.5 rounded-lg">
                   <BookOpen class="w-5 h-5 text-white" />
                 </div>
                 <div class="min-w-0">
@@ -93,14 +93,14 @@ const spaceX = "space-x-8";
                 align_menu === "left"
                   ? "justify-start"
                   : align_menu === "center"
-                    ? "justify-center"
-                    : "justify-end"
+                  ? "justify-center"
+                  : "justify-end"
               }`}
             >
               {menuItems.map((item: MenuItem) =>
                 item.hasSubmenu ? (
                   <div class="relative group">
-                    <button class="text-black uppercase dark:text-white hover:text-[#1055C9] dark:hover:text-[#1055C9] transition-colors flex items-center cursor-pointer">
+                    <button class="text-black uppercase dark:text-white hover:text-[#FF8C00] dark:hover:text-[#FF8C00] transition-colors flex items-center cursor-pointer">
                       {item.label}
                       <svg
                         class="w-4 h-4 ml-1"
@@ -126,11 +126,15 @@ const spaceX = "space-x-8";
                             <>
                               <a
                                 href={subItem.href}
-                                class={`block px-4 py-3 text-base text-gray-700 dark:text-gray-300 hover:bg-[#1055C9]/10 dark:hover:bg-[#1055C9]/20 hover:text-[#1055C9] dark:hover:text-[#1055C9] transition-colors ${
+                                class={`block px-4 py-3 text-base text-gray-700 dark:text-gray-300 hover:bg-[#FF8C00]/10 dark:hover:bg-[#FF8C00]/20 hover:text-[#FF8C00] dark:hover:text-[#FF8C00] transition-colors ${
                                   currentPath === subItem.href
-                                    ? "bg-[#1055C9]/10 dark:bg-[#1055C9]/20 text-[#1055C9] dark:text-[#1055C9] font-semibold"
+                                    ? "bg-[#FF8C00]/10 dark:bg-[#FF8C00]/20 text-[#FF8C00] dark:text-[#FF8C00] font-semibold"
                                     : ""
-                                } ${index === 0 ? "first:rounded-t-lg" : ""} ${index === (item.items?.length || 0) - 1 ? "last:rounded-b-lg" : ""}`}
+                                } ${index === 0 ? "first:rounded-t-lg" : ""} ${
+                                  index === (item.items?.length || 0) - 1
+                                    ? "last:rounded-b-lg"
+                                    : ""
+                                }`}
                               >
                                 {subItem.label}
                               </a>
@@ -145,10 +149,10 @@ const spaceX = "space-x-8";
                 ) : (
                   <a
                     href={item.href}
-                    class={`text-black uppercase dark:text-white hover:text-[#1055C9] dark:hover:text-[#1055C9] transition-colors relative ${
+                    class={`text-black uppercase dark:text-white hover:text-[#FF8C00] dark:hover:text-[#FF8C00] transition-colors relative ${
                       currentPath === item.href ||
                       (item.href !== "/" && currentPath.startsWith(item.href))
-                        ? "text-[#1055C9] dark:text-[#1055C9] font-bold after:absolute after:bottom-0 after:left-0 after:right-0 after:h-0.5 after:bg-[#1055C9]"
+                        ? "text-[#FF8C00] dark:text-[#FF8C00] font-bold after:absolute after:bottom-0 after:left-0 after:right-0 after:h-0.5 after:bg-[#FF8C00]"
                         : ""
                     }`}
                   >
@@ -173,7 +177,7 @@ const spaceX = "space-x-8";
                 <span class="font-bold text-lg text-left text-gray-900 dark:text-white">
                   MENU
                 </span>
-                <div class="bg-[#1055C9] hover:bg-[#05339C] p-2 rounded transition-colors flex items-center justify-center">
+                <div class="bg-[#FF8C00] hover:bg-[#E67300] p-2 rounded transition-colors flex items-center justify-center">
                   <Menu class="w-5 h-5 text-white" />
                 </div>
               </button>
@@ -185,7 +189,7 @@ const spaceX = "space-x-8";
                   item.hasSubmenu ? (
                     <div class="space-y-1" data-submenu-id={item.submenuId}>
                       <button
-                        class="flex items-center justify-between w-full py-2 text-black dark:text-gray-200 hover:text-[#1055C9] hover:px-4 dark:hover:text-[#1055C9] hover:bg-[#1055C9]/10 dark:hover:bg-gray-700 rounded-lg transition-all duration-200"
+                        class="flex items-center justify-between w-full py-2 text-black dark:text-gray-200 hover:text-[#FF8C00] hover:px-4 dark:hover:text-[#FF8C00] hover:bg-[#FF8C00]/10 dark:hover:bg-gray-700 rounded-lg transition-all duration-200"
                         onclick={`toggleMobileSubmenu('${item.submenuId}')`}
                       >
                         <span class="font-medium text-base uppercase">
@@ -219,11 +223,17 @@ const spaceX = "space-x-8";
                               <>
                                 <a
                                   href={subItem.href}
-                                  class={`block px-4 py-3 text-base text-gray-700 dark:text-gray-300 hover:bg-[#1055C9]/10 dark:hover:bg-gray-700 hover:text-[#1055C9] dark:hover:text-[#1055C9] transition-colors ${
+                                  class={`block px-4 py-3 text-base text-gray-700 dark:text-gray-300 hover:bg-[#FF8C00]/10 dark:hover:bg-gray-700 hover:text-[#FF8C00] dark:hover:text-[#FF8C00] transition-colors ${
                                     currentPath === subItem.href
-                                      ? "bg-[#1055C9]/10 dark:bg-gray-700 text-[#1055C9] dark:text-[#1055C9] font-semibold"
+                                      ? "bg-[#FF8C00]/10 dark:bg-gray-700 text-[#FF8C00] dark:text-[#FF8C00] font-semibold"
                                       : ""
-                                  } ${index === 0 ? "first:rounded-t-lg" : ""} ${index === (item.items?.length || 0) - 1 ? "last:rounded-b-lg" : ""}`}
+                                  } ${
+                                    index === 0 ? "first:rounded-t-lg" : ""
+                                  } ${
+                                    index === (item.items?.length || 0) - 1
+                                      ? "last:rounded-b-lg"
+                                      : ""
+                                  }`}
                                 >
                                   {subItem.label}
                                 </a>
@@ -238,10 +248,10 @@ const spaceX = "space-x-8";
                   ) : (
                     <a
                       href={item.href}
-                      class={`block uppercase py-2 text-left text-base text-black dark:text-gray-200 hover:text-[#1055C9] dark:hover:text-[#1055C9] transition-colors ${
+                      class={`block uppercase py-2 text-left text-base text-black dark:text-gray-200 hover:text-[#FF8C00] dark:hover:text-[#FF8C00] transition-colors ${
                         currentPath === item.href ||
                         (item.href !== "/" && currentPath.startsWith(item.href))
-                          ? "text-[#1055C9] dark:text-[#1055C9] font-bold bg-[#1055C9]/10 dark:bg-[#1055C9]/20 px-4 rounded-lg"
+                          ? "text-[#FF8C00] dark:text-[#FF8C00] font-bold bg-[#FF8C00]/10 dark:bg-[#FF8C00]/20 px-4 rounded-lg"
                           : ""
                       }`}
                     >
@@ -259,13 +269,13 @@ const spaceX = "space-x-8";
       <div class="flex items-center space-x-4 lg:mt-0 lg:ml-8">
         <!-- Search button - hidden on mobile -->
         <button
-          class="hidden lg:block text-gray-600 hover:text-[#1055C9] transition-colors"
+          class="hidden lg:block text-gray-600 hover:text-[#FF8C00] transition-colors"
         >
           <Search class="w-5 h-5" />
         </button>
 
         <!-- Sidebar button - only visible on desktop -->
-        <!-- <button onclick="openSidebar()" class="hidden lg:block bg-[#1055C9] hover:bg-[#05339C] p-2 rounded transition-colors">
+        <!-- <button onclick="openSidebar()" class="hidden lg:block bg-[#FF8C00] hover:bg-[#E67300] p-2 rounded transition-colors">
           <Menu class="w-5 h-5 text-white" />
         </button> -->
       </div>

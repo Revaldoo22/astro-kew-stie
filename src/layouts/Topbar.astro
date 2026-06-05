@@ -17,7 +17,7 @@ interface QuickLink {
 
 const quickAccessLinks: Record<string, QuickLink[]> = {
   academic: [
-    { name: "PMB UNIVERSITAS STEKOM", url: "https://pmb.stekom.ac.id" },
+    { name: "PMB STIE STEKOM", url: "https://pmb.stekom.ac.id" },
   ],
   job: [
     { name: "TOPLOKER.COM", url: "https://toploker.com" },
@@ -69,9 +69,9 @@ const allQuickLinks: QuickLink[] = [
         <button
           id="call-center-toggle"
           class="w-12 h-12 rounded-xl shadow-md flex items-center justify-center transition-all duration-200 hover:shadow-lg"
-          style="background-color: #1055C9;"
-          onmouseover="this.style.backgroundColor='#05339C'"
-          onmouseout="this.style.backgroundColor='#1055C9'"
+          style="background-color: #FF8C00;"
+          onmouseover="this.style.backgroundColor='#E67300'"
+          onmouseout="this.style.backgroundColor='#FF8C00'"
           title="Call Center"
         >
           <Phone class="w-5 h-5 text-white" />
@@ -83,9 +83,9 @@ const allQuickLinks: QuickLink[] = [
             <button
               id="quick-access-toggle"
               class="w-12 h-12 rounded-xl shadow-md flex items-center justify-center transition-all duration-200 hover:shadow-lg"
-              style="background-color: #1055C9;"
-              onmouseover="this.style.backgroundColor='#05339C'"
-              onmouseout="this.style.backgroundColor='#1055C9'"
+              style="background-color: #FF8C00;"
+              onmouseover="this.style.backgroundColor='#E67300'"
+              onmouseout="this.style.backgroundColor='#FF8C00'"
               title="Quick Access"
             >
               <BookOpen class="w-5 h-5 text-white" />
@@ -98,13 +98,13 @@ const allQuickLinks: QuickLink[] = [
       <div id="call-center-content" class="hidden mt-6">
         <div
           class="rounded-xl p-4 border"
-          style="background-color: #f8e6ea; border-color: #1055C9;"
+          style="background-color: #f8e6ea; border-color: #FF8C00;"
         >
           <h3
             class="text-sm font-semibold mb-3 flex items-center"
-            style="color: #1055C9;"
+            style="color: #FF8C00;"
           >
-            <Phone class="w-4 h-4 mr-2" style="color: #1055C9;" />
+            <Phone class="w-4 h-4 mr-2" style="color: #FF8C00;" />
             Hubungi Kami
           </h3>
           <div class="space-y-3">
@@ -114,14 +114,14 @@ const allQuickLinks: QuickLink[] = [
                   <a
                     href={`https://wa.me/${phone.replace(/^0/, "62").replace(/-/g, "")}`}
                     class="flex items-center justify-between bg-white dark:bg-gray-800 p-3 rounded-lg border transition-colors group"
-                    style="border-color: #1055C9;"
+                    style="border-color: #FF8C00;"
                   >
                     <div class="flex items-center">
                       <div
                         class="w-8 h-8 rounded-full flex items-center justify-center mr-3"
                         style="background-color: #f8e6ea;"
                       >
-                        <Phone class="w-4 h-4" style="color: #1055C9;" />
+                        <Phone class="w-4 h-4" style="color: #FF8C00;" />
                       </div>
                       <span class="text-sm font-medium text-gray-800 dark:text-gray-200">
                         {phone}
@@ -140,13 +140,13 @@ const allQuickLinks: QuickLink[] = [
           <div id="quick-access-content" class="hidden mt-6">
             <div
               class="rounded-xl p-4 border shadow-lg"
-              style="background: linear-gradient(135deg, #f8e6ea 0%, #f3e6f8 100%); border-color: #1055C9;"
+              style="background: linear-gradient(135deg, #f8e6ea 0%, #f3e6f8 100%); border-color: #FF8C00;"
             >
               <h3
                 class="text-sm font-semibold mb-4 flex items-center"
-                style="color: #1055C9;"
+                style="color: #FF8C00;"
               >
-                <BookOpen class="w-4 h-4 mr-2" style="color: #1055C9;" />
+                <BookOpen class="w-4 h-4 mr-2" style="color: #FF8C00;" />
                 Akses Cepat
               </h3>
               <div class="grid grid-cols-2 gap-3">
@@ -154,9 +154,9 @@ const allQuickLinks: QuickLink[] = [
                   <a
                     href={link.url}
                     class="bg-white dark:bg-gray-700 p-4 rounded-xl border transition-all duration-200 group text-center shadow-sm hover:shadow-md transform hover:-translate-y-1"
-                    style="border-color: #1055C9;"
+                    style="border-color: #FF8C00;"
                   >
-                    <div class="text-xs font-bold text-gray-700 dark:text-gray-200 group-hover:text-[#1055C9] transition-colors uppercase tracking-wide">
+                    <div class="text-xs font-bold text-gray-700 dark:text-gray-200 group-hover:text-[#FF8C00] transition-colors uppercase tracking-wide">
                       {link.name}
                     </div>
                   </a>
@@ -184,7 +184,7 @@ const allQuickLinks: QuickLink[] = [
               <>
                 <div
                   class="hidden lg:flex items-center px-4 py-2 rounded-xl mr-6 w-[180px] shadow-md"
-                  style="background-color: #1055C9;"
+                  style="background-color: #FF8C00;"
                 >
                   <Phone class="w-4 h-4 mr-2 text-white" />
                   <span class="text-sm font-semibold text-white">
@@ -246,7 +246,7 @@ const allQuickLinks: QuickLink[] = [
   <!-- Quick Links Section -->
   {
     quickAccess && (
-      <div class="bg-gradient-to-r from-[#1055C9] to-[#05339C] dark:from-[#0d4299] dark:to-[#042a7a] border-b border-gray-600/50 py-4 shadow-sm">
+      <div class="bg-gradient-to-r from-[#FF8C00] to-[#E67300] dark:from-[#662c00] dark:to-[#331400] border-b border-gray-600/50 py-4 shadow-sm">
         <div class="max-w-screen-xl mx-auto px-4">
           <div class="flex flex-col lg:flex-row items-center justify-between">
             {/* Navigation Links with better organization */}

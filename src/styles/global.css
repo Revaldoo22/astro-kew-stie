@@ -9,22 +9,20 @@
 /* Enable dark mode support */
 @custom-variant dark (&:where(.dark, .dark *));
 
-/* Override Tailwind default blue colors */
-/* @layer base {
-  :root {
-    --color-blue-50: #f0f4f8;
-    --color-blue-100: #d9e2ec;
-    --color-blue-200: #bcccdc;
-    --color-blue-300: #9fb3c8;
-    --color-blue-400: #829ab1;
-    --color-blue-500: #212f55;
-    --color-blue-600: #1a2a4a;
-    --color-blue-700: #15203a;
-    --color-blue-800: #0f1a2a;
-    --color-blue-900: #0a121a;
-    --color-blue-950: #050a0f;
-  }
-} */
+/* Override Tailwind default blue colors with yellow-orange palette */
+@theme {
+  --color-blue-50: #fff7ed;
+  --color-blue-100: #ffedd5;
+  --color-blue-200: #fed7aa;
+  --color-blue-300: #fdbb2d;
+  --color-blue-400: #ffd700;
+  --color-blue-500: #ffa500;
+  --color-blue-600: #ff8c00;
+  --color-blue-700: #e67300;
+  --color-blue-800: #cc5c00;
+  --color-blue-900: #993d00;
+  --color-blue-950: #4d1a00;
+}
 
 .font-alan-sans {
     font-family: 'Source Sans Pro', sans-serif;
@@ -178,7 +176,7 @@
 }
 
 .gradient-text-red {
-    background: linear-gradient(135deg, #1055C9 0%, #b91c3c 100%);
+    background: linear-gradient(135deg, #FF8C00 0%, #b91c3c 100%);
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
     background-clip: text;
