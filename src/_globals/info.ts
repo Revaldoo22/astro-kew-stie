@@ -18,10 +18,10 @@ const getEndOfCurrentMonth = (): string => {
 
 export const websiteInfo = {
     name: "Kuliah Kelas Karyawan",
-    shortName: "KEW",
+    shortName: "STIE STEKOM",
     logoLight: "/assets/images/logo.png",
     logoDark: "/assets/images/logo.png",
-    description: "Informasi lengkap seputar kuliah kelas karyawan seperti biaya, jadwal, jurusan atau program studi di Universitas STEKOM",
+    description: "Informasi lengkap seputar kuliah kelas karyawan seperti biaya, jadwal, jurusan atau program studi di STIE STEKOM",
     keywords: "Kuliah Sambil Kerja, Kelas Karyawan, Kuliah Online, Kuliah Full Online, Kuliah Sambil Kerja",
 
     // Contact Information
@@ -31,9 +31,9 @@ export const websiteInfo = {
 
     // Address
     address: {
-        street: "Jl. Majapahit No. 605",
-        district: "Pedurungan Kidul, Kec. Pedurungan",
-        city: "Kota. Semarang, Jawa Tengah",
+        street: "Jl. Diponegoro No.69 Dusun I",
+        district: "Wirogunan, Kec. Kartasura",
+        city: "Kabupaten Sukoharjo, Jawa Tengah 57166",
         country: "Indonesia"
     },
 
@@ -69,7 +69,7 @@ export const websiteInfo = {
     // Google Sheets API Configuration
     // URL dari Google Apps Script Web App untuk menyimpan data form
     // Lihat .docs/GOOGLE_SHEETS_SETUP.md untuk cara setup
-    googleSheetsApiUrl: "https://script.google.com/macros/s/AKfycbyAco-NbAvvqBTxi1icvElf6Nw9b78iMhlgI2OUjNrKYLAU5yTgWvfckpylGMU0Npk3xg/exec",
+    googleSheetsApiUrl: "https://script.google.com/macros/s/AKfycbxJugTPK3Fp_TtjyGDxGM_olGxn34xVrQdkVVuCjuSmi037KanxYGUbz0ozvHiPyWQC/exec",
 
     // Promo Configuration
     promo: {

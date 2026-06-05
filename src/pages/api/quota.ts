@@ -15,9 +15,11 @@ const PMB_CAMABA_COUNT_API = "https://pmb.stekom.ac.id/api/pmb/list-data-camaba-
 const PMB_BEARER_TOKEN =
     import.meta.env.PMB_API_BEARER_TOKEN ??
     "8|aL0DhDhcgqh4P7uQNa3sz1ylBzdaQzTIhCuHaUYV9073c0e9";
+
 const CAPACITY = 500;
-const BONUS_QUOTA = 100;
-const FALLBACK_REGISTERED = 550;
+const BONUS_QUOTA = 500;
+const DAILY_INCREMENT = 15;
+const FALLBACK_BASE = 31;
 
 const getStartOfCurrentMonthJakarta = (): string => {
     const formatter = new Intl.DateTimeFormat("en-CA", {
@@ -48,8 +50,8 @@ export const GET: APIRoute = async () => {
         .format(new Date())
         .toUpperCase();
 
-    let registered = FALLBACK_REGISTERED;
-
+    // Fetch real registered count from PMB API
+    let apiRegistered = FALLBACK_BASE;
     try {
         const response = await fetch(PMB_CAMABA_COUNT_API, {
             method: "POST",
@@ -63,21 +65,39 @@ export const GET: APIRoute = async () => {
             }),
         });
 
-        if (!response.ok) {
-            throw new Error(`PMB API responded with status ${response.status}`);
-        }
+        if (response.ok) {
+            const json = (await response.json()) as PmbCamabaCountResponse;
+            const totalPendaftar = json.meta?.statistics?.total_pendaftar;
 
-        const json = (await response.json()) as PmbCamabaCountResponse;
-        const totalPendaftar = json.meta?.statistics?.total_pendaftar;
-
-        if (typeof totalPendaftar === "number" && Number.isFinite(totalPendaftar)) {
-            registered = totalPendaftar;
-        } else if (Array.isArray(json.data)) {
-            registered = json.data.length;
+            if (typeof totalPendaftar === "number" && Number.isFinite(totalPendaftar)) {
+                apiRegistered = totalPendaftar;
+            } else if (Array.isArray(json.data)) {
+                apiRegistered = json.data.length;
+            }
         }
     } catch (error) {
         console.error("Failed to fetch PMB camaba count:", error);
     }
+
+    const parts = new Intl.DateTimeFormat("en-US", {
+        timeZone: "Asia/Jakarta",
+        hour12: false,
+        hourCycle: "h23",
+        day: "numeric",
+        hour: "numeric",
+    }).formatToParts(new Date());
+
+    const dayPart = parts.find((p) => p.type === "day")?.value;
+    const hourPart = parts.find((p) => p.type === "hour")?.value;
+
+    const day = dayPart ? Number(dayPart) : 1;
+    const hour = hourPart ? Number(hourPart) : 0;
+
+    // Check if 08:00 AM of today has passed in Jakarta
+    const dayIndex = hour >= 8 ? day : day - 1;
+
+    // Total registered = real API count + dynamic simulated daily increment
+    const registered = apiRegistered + Math.max(0, dayIndex) * DAILY_INCREMENT;
 
     const available = Math.max(CAPACITY - registered + BONUS_QUOTA, 0);
 
