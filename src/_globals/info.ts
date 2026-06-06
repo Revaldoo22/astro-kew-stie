@@ -69,7 +69,7 @@ export const websiteInfo = {
     // Google Sheets API Configuration
     // URL dari Google Apps Script Web App untuk menyimpan data form
     // Lihat .docs/GOOGLE_SHEETS_SETUP.md untuk cara setup
-    googleSheetsApiUrl: "https://script.google.com/macros/s/AKfycbxJugTPK3Fp_TtjyGDxGM_olGxn34xVrQdkVVuCjuSmi037KanxYGUbz0ozvHiPyWQC/exec",
+    googleSheetsApiUrl: "https://script.google.com/macros/s/AKfycbyAco-NbAvvqBTxi1icvElf6Nw9b78iMhlgI2OUjNrKYLAU5yTgWvfckpylGMU0Npk3xg/exec",
 
     // Promo Configuration
     promo: {
