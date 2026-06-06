@@ -1,8 +1,2 @@
 User-agent: *
-Allow: /
-
-# izinkan pagination
-Allow: /*?page=
-
-# blok semua parameter lain
-Disallow: /?
+Disallow: /
