@@ -590,23 +590,28 @@ const programs = [
     const countdownInterval = setInterval(updateCountdown, 1000);
     updateCountdown();
 
-    async function buildTrackedLink(buttonName, programName) {
+    async function buildTrackedLink(buttonName, programName, originalText) {
         const params = new URLSearchParams(window.location.search);
-        const sourcePage = [
-            window.location.pathname || "/",
-            `utm_source=${params.get("utm_source") || ""}`,
-            `utm_medium=${params.get("utm_medium") || ""}`,
-            `utm_campaign=${params.get("utm_campaign") || ""}`,
-            `utm_content=${params.get("utm_content") || ""}`,
-            `utm_term=${params.get("utm_term") || ""}`,
-            `button=${buttonName || "promo_table_daftar"}`,
-            `program=${programName || ""}`,
-        ].join(" | ");
+        const hostParts = window.location.hostname.split(".");
+        const subdomain = hostParts.length >= 3 ? hostParts[0] : "kew";
+
+        const trackingData = JSON.stringify({
+            path: window.location.pathname || "/",
+            utm_source: params.get("utm_source") || "",
+            utm_medium: params.get("utm_medium") || "",
+            utm_campaign: params.get("utm_campaign") || "",
+            utm_content: params.get("utm_content") || "",
+            utm_term: params.get("utm_term") || "",
+            button: buttonName || "promo_table_daftar",
+            program: programName || "",
+        });
 
         let coupon = "";
         try {
             const formData = new FormData();
-            formData.append("source_page", sourcePage);
+            formData.append("source_page", subdomain);
+            formData.append("prefix", "kew");
+            formData.append("data", trackingData);
             const res = await fetch("https://pmb.stekom.ac.id/api/tracking/generate", {
                 method: "POST",
                 body: formData,
@@ -633,16 +638,17 @@ const programs = [
                 coupon =
                     extractCode(json) ||
                     (typeof json?.message === "string"
-                        ? (json.message.match(/[A-Z0-9]{6,}/)?.[0] ?? "")
+                        ? (json.message.match(/[A-Z0-9-]{6,}/)?.[0] ?? "")
                         : "");
             }
         } catch (_) {
             // Continue to link without coupon
         }
 
-        const message = coupon
-            ? `Halo Admin, Saya ingin mendaftar ${programName}. Kode saya: ${coupon}`
-            : `Halo Admin, Saya ingin mendaftar ${programName}.`;
+        let message = originalText || `Halo Admin, Saya ingin mendaftar ${programName}`;
+        if (coupon) {
+            message = `${message.trim().replace(/\.$/, "")}. Kode saya: ${coupon}`;
+        }
         return `https://link.stekom.ac.id/ads?text=${encodeURIComponent(message)}`;
     }
 
@@ -652,7 +658,14 @@ const programs = [
             event.preventDefault();
             const buttonName = anchor.getAttribute("data-track-button") || "promo_table_daftar";
             const programName = anchor.getAttribute("data-track-program") || "S1 Hukum (S.H.)";
-            const trackedLink = await buildTrackedLink(buttonName, programName);
+            
+            let originalText = "";
+            try {
+                const url = new URL(anchor.href);
+                originalText = url.searchParams.get("text") || "";
+            } catch (_) {}
+
+            const trackedLink = await buildTrackedLink(buttonName, programName, originalText);
             window.location.href = trackedLink;
         });
     });

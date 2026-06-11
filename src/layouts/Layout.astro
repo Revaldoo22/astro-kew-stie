@@ -218,6 +218,22 @@ const imagePage = metaTags.image ? metaTags.image : websiteInfo.logoLight;
 			})(window, document, "ttq");
 		</script>
 		<!-- TikTok Pixel Code End -->
+		<!-- Google tag (gtag.js) -->
+		<script is:inline async src="https://www.googletagmanager.com/gtag/js?id=G-SVTS70HKD2"></script>
+		<script is:inline>
+			window.dataLayer = window.dataLayer || [];
+			function gtag(){dataLayer.push(arguments);}
+			gtag('js', new Date());
+			gtag('config', 'G-SVTS70HKD2');
+		</script>
+		<!-- Microsoft Clarity -->
+		<script is:inline type="text/javascript">
+			(function(c,l,a,r,i,t,y){
+				c[a]=c[a]||function(){(c[a].q=c[a].q||[]).push(arguments)};
+				t=l.createElement(r);t.async=1;t.src="https://www.clarity.ms/tag/"+i;
+				y=l.getElementsByTagName(r)[0];y.parentNode.insertBefore(t,y);
+			})(window, document, "clarity", "script", "x58rycveb8");
+		</script>
 		<noscript>
 			<img
 				height="1"
@@ -297,6 +313,120 @@ const imagePage = metaTags.image ? metaTags.image : websiteInfo.logoLight;
 
 		<!-- Modals slot - outside main to avoid z-index stacking context issues -->
 		<slot name="modals" />
+
+		<!-- Global WhatsApp Tracking Script -->
+		<script is:inline>
+			document.addEventListener("DOMContentLoaded", () => {
+				document.body.addEventListener("click", async (event) => {
+					const anchor = event.target.closest("a");
+					if (!anchor) return;
+
+					const href = anchor.getAttribute("href") || "";
+					if (href.includes("link.stekom.ac.id/ads")) {
+						// Skip if handled by local script
+						if (anchor.getAttribute("data-track-generate") === "1") return;
+
+						event.preventDefault();
+
+						// Determine button name
+						let buttonName = anchor.getAttribute("data-track-button") || anchor.id;
+						if (!buttonName) {
+							const textContent = anchor.textContent || "";
+							buttonName = textContent
+								.trim()
+								.toLowerCase()
+								.replace(/[^a-z0-9]+/g, "-")
+								.substring(0, 50);
+						}
+						if (!buttonName) {
+							buttonName = "whatsapp-general";
+						}
+
+						const hostParts = window.location.hostname.split(".");
+						const subdomain = hostParts.length >= 3 ? hostParts[0] : "kew";
+						const params = new URLSearchParams(window.location.search);
+
+						const trackingData = JSON.stringify({
+							path: window.location.pathname || "/",
+							utm_source: params.get("utm_source") || "",
+							utm_medium: params.get("utm_medium") || "",
+							utm_campaign: params.get("utm_campaign") || "",
+							utm_content: params.get("utm_content") || "",
+							utm_term: params.get("utm_term") || "",
+							button: buttonName,
+							program: anchor.getAttribute("data-track-program") || "",
+						});
+
+						let coupon = "";
+						try {
+							const formData = new FormData();
+							formData.append("source_page", subdomain);
+							formData.append("prefix", "kew");
+							formData.append("data", trackingData);
+
+							const res = await fetch("https://pmb.stekom.ac.id/api/tracking/generate", {
+								method: "POST",
+								body: formData,
+							});
+							if (res.ok) {
+								const json = await res.json();
+								const extractCode = (payload) => {
+									if (!payload || typeof payload !== "object") return "";
+									return (
+										payload.coupon_code ||
+										payload.couponCode ||
+										payload.code ||
+										payload.kode ||
+										payload.coupon ||
+										payload?.data?.coupon_code ||
+										payload?.data?.couponCode ||
+										payload?.data?.code ||
+										payload?.result?.coupon_code ||
+										payload?.result?.code ||
+										payload?.tracking_code ||
+										""
+									);
+								};
+								coupon =
+									extractCode(json) ||
+									(typeof json?.message === "string"
+										? (json.message.match(/[A-Z0-9-]{6,}/)?.[0] ?? "")
+										: "");
+							}
+						} catch (_) {
+							// Continue without coupon
+						}
+
+						try {
+							const targetUrl = new URL(href, window.location.origin);
+							let text = targetUrl.searchParams.get("text") || "";
+							if (coupon) {
+								if (text) {
+									text = text.trim().replace(/\.$/, "") + ". Kode saya: " + coupon;
+								} else {
+									text = "Kode saya: " + coupon;
+								}
+								targetUrl.searchParams.set("text", text);
+							}
+							
+							const target = anchor.getAttribute("target");
+							if (target === "_blank") {
+								window.open(targetUrl.toString(), "_blank", "noopener,noreferrer");
+							} else {
+								window.location.href = targetUrl.toString();
+							}
+						} catch (_) {
+							const target = anchor.getAttribute("target");
+							if (target === "_blank") {
+								window.open(href, "_blank", "noopener,noreferrer");
+							} else {
+								window.location.href = href;
+							}
+						}
+					}
+				});
+			});
+		</script>
 	</body>
 </html>
 

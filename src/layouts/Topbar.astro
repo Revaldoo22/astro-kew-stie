@@ -97,14 +97,12 @@ const allQuickLinks: QuickLink[] = [
       <!-- Call Center Content (Hidden by default) -->
       <div id="call-center-content" class="hidden mt-6">
         <div
-          class="rounded-xl p-4 border"
-          style="background-color: #f8e6ea; border-color: #FF8C00;"
+          class="rounded-xl p-4 border bg-orange-50 dark:bg-gray-800 border-[#FF8C00]"
         >
           <h3
-            class="text-sm font-semibold mb-3 flex items-center"
-            style="color: #FF8C00;"
+            class="text-sm font-semibold mb-3 flex items-center text-[#FF8C00]"
           >
-            <Phone class="w-4 h-4 mr-2" style="color: #FF8C00;" />
+            <Phone class="w-4 h-4 mr-2 text-[#FF8C00]" />
             Hubungi Kami
           </h3>
           <div class="space-y-3">
@@ -113,15 +111,13 @@ const allQuickLinks: QuickLink[] = [
                 websiteInfo.phone.split(",").map((phone: string) => (
                   <a
                     href={`https://wa.me/${phone.replace(/^0/, "62").replace(/-/g, "")}`}
-                    class="flex items-center justify-between bg-white dark:bg-gray-800 p-3 rounded-lg border transition-colors group"
-                    style="border-color: #FF8C00;"
+                    class="flex items-center justify-between bg-white dark:bg-gray-700 p-3 rounded-lg border border-[#FF8C00] transition-colors group"
                   >
                     <div class="flex items-center">
                       <div
-                        class="w-8 h-8 rounded-full flex items-center justify-center mr-3"
-                        style="background-color: #f8e6ea;"
+                        class="w-8 h-8 rounded-full flex items-center justify-center mr-3 bg-orange-100 dark:bg-gray-600"
                       >
-                        <Phone class="w-4 h-4" style="color: #FF8C00;" />
+                        <Phone class="w-4 h-4 text-[#FF8C00]" />
                       </div>
                       <span class="text-sm font-medium text-gray-800 dark:text-gray-200">
                         {phone}
@@ -139,22 +135,19 @@ const allQuickLinks: QuickLink[] = [
         quickAccess && (
           <div id="quick-access-content" class="hidden mt-6">
             <div
-              class="rounded-xl p-4 border shadow-lg"
-              style="background: linear-gradient(135deg, #f8e6ea 0%, #f3e6f8 100%); border-color: #FF8C00;"
+              class="rounded-xl p-4 border shadow-lg bg-gradient-to-br from-orange-50 to-purple-50 dark:from-gray-800 dark:to-gray-900 border-[#FF8C00]"
             >
               <h3
-                class="text-sm font-semibold mb-4 flex items-center"
-                style="color: #FF8C00;"
+                class="text-sm font-semibold mb-4 flex items-center text-[#FF8C00]"
               >
-                <BookOpen class="w-4 h-4 mr-2" style="color: #FF8C00;" />
+                <BookOpen class="w-4 h-4 mr-2 text-[#FF8C00]" />
                 Akses Cepat
               </h3>
               <div class="grid grid-cols-2 gap-3">
                 {allQuickLinks.map((link) => (
                   <a
                     href={link.url}
-                    class="bg-white dark:bg-gray-700 p-4 rounded-xl border transition-all duration-200 group text-center shadow-sm hover:shadow-md transform hover:-translate-y-1"
-                    style="border-color: #FF8C00;"
+                    class="bg-white dark:bg-gray-700 p-4 rounded-xl border border-[#FF8C00] transition-all duration-200 group text-center shadow-sm hover:shadow-md transform hover:-translate-y-1"
                   >
                     <div class="text-xs font-bold text-gray-700 dark:text-gray-200 group-hover:text-[#FF8C00] transition-colors uppercase tracking-wide">
                       {link.name}
