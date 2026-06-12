@@ -27,7 +27,7 @@ export const GET: APIRoute = async ({ params }) => {
 
     // Fetch contents for this project
     const contents = await blogApi.fetchContentsByProject(targetProject);
-    const baseUrl = "https://kew.stekom.ac.id";
+    const baseUrl = "https://kew.stiestekom.ac.id";
 
     const sitemap = `<?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
