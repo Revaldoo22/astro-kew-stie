@@ -39,7 +39,7 @@ export const menuItems: MenuItem[] = [
     },
     {
         label: "Hubungi Kami",
-        href: "http://link.stekom.ac.id/ads?text=Halo%20Admin,%20Saya%20ingin%20konsultasi%20terkait%20pendaftaran%20kuliah%20kelas%20karyawan",
+        href: "/hubungi-kami",
         submenuId: "menu-hubungi"
     }
 ];
