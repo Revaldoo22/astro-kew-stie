@@ -1,5 +1,6 @@
 ---
 import Layout from "@layouts/Layout.astro";
+import BrochureRequestFormModal from "@components/blog/BrochureRequestFormModal.astro";
 
 const metaTags = {
     title: 'Halaman Tidak Ditemukan - 404',
@@ -10,15 +11,16 @@ const metaTags = {
 ---
 
 <Layout metaTags={metaTags}>
-    <div class="min-h-screen bg-gradient-to-br from-gray-50 to-gray-100 dark:from-gray-900 dark:to-gray-800 flex items-center justify-center px-4 py-4">
+    <div class="min-h-screen bg-gradient-to-br from-blue-50 via-white to-orange-50 dark:from-gray-900 dark:via-gray-900 dark:to-gray-800 flex items-center justify-center px-4 py-12">
         <div class="max-w-lg mx-auto text-center">
-            <!-- 404 Illustration -->
-            <div class="mb-8">
-                <div class="text-6xl md:text-7xl font-bold gradient-text-blue opacity-80 mb-4">
-                    404
-                </div>
-                <!-- Simple sad face -->
-                <div class="text-6xl animate-float">😔</div>
+            <!-- Lottie Illustration -->
+            <div class="mb-8 flex justify-center">
+                <dotlottie-wc
+                    src="/lonely-404.lottie"
+                    autoplay
+                    loop
+                    style="width: 320px; height: 320px; max-width: 100%;"
+                ></dotlottie-wc>
             </div>
 
             <!-- Error message -->
@@ -33,22 +35,31 @@ const metaTags = {
 
             <!-- Action buttons -->
             <div class="flex flex-col sm:flex-row gap-4 justify-center">
-                <a 
-                    href="/" 
+                <a
+                    href="/"
                     class="bg-blue-600 hover:bg-blue-700 text-white px-6 py-3 rounded-lg transition-colors duration-200 font-medium"
                 >
                     Kembali ke Beranda
                 </a>
-                
-                <button 
-                    onclick="history.back()"
-                    class="bg-gray-600 hover:bg-gray-700 text-white px-6 py-3 rounded-lg transition-colors duration-200 font-medium"
+
+                <button
+                    onclick="window.openBrochureFormModal && window.openBrochureFormModal()"
+                    class="bg-gradient-to-r from-orange-500 to-orange-600 hover:from-orange-600 hover:to-orange-700 text-white px-6 py-3 rounded-lg transition-all duration-200 font-medium shadow-lg hover:shadow-xl"
                 >
-                    ← Kembali
+                    Permintaan Brosur
                 </button>
             </div>
 
         </div>
 
     </div>
+
+    <!-- Brochure Request Form Modal (manual open via button) -->
+    <BrochureRequestFormModal autoOpen={false} />
 </Layout>
+
+<script
+    is:inline
+    type="module"
+    src="https://unpkg.com/@lottiefiles/dotlottie-wc@0.6.2/dist/dotlottie-wc.js"
+></script>
