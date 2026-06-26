@@ -48,26 +48,35 @@ if (!(globalThis as any).blocklistCache || Date.now() - (globalThis as any).bloc
 }
 
 const { data: blocklistData } = (globalThis as any).blocklistCache;
-const rawBlockedSlugs = blocklistData.blockedSlugs || [];
-const blockedSlugs = new Set(
-    rawBlockedSlugs.map((url: string) => {
-        try {
-            if (url.startsWith('http')) {
-                const parsedUrl = new URL(url);
-                return parsedUrl.pathname.replace(/^\/|\/$/g, '');
-            }
-        } catch(e) {}
-        return url.replace(/^\/|\/$/g, '');
-    })
-);
+
+// Normalisasi URL/slug → path bersih (buang protokol+domain, garis miring tepi)
+const normalizeSlug = (url: string) => {
+    try {
+        if (url.startsWith('http')) {
+            return new URL(url).pathname.replace(/^\/|\/$/g, '');
+        }
+    } catch (e) {}
+    return url.replace(/^\/|\/$/g, '');
+};
+
+// AKTIF → overlay "Konten Tidak Tersedia"
+const overlaySlugs = new Set((blocklistData.overlaySlugs || []).map(normalizeSlug));
+const overlayKeywords = blocklistData.overlayKeywords || [];
+// BLOKIR → 404 asli
+const blockedSlugs = new Set((blocklistData.blockedSlugs || []).map(normalizeSlug));
 const blockedKeywords = blocklistData.blockedKeywords || [];
+
+const isOverlaySlug = !!slug && (
+    overlaySlugs.has(slug) ||
+    overlayKeywords.some((keyword: string) => slug.includes(keyword))
+);
 
 const isBlockedSlug = !!slug && (
     blockedSlugs.has(slug) ||
     blockedKeywords.some((keyword: string) => slug.includes(keyword))
 );
 
-// Slug terblokir → 404 asli (status 404, tidak ke-index, tidak bisa diakses)
+// BLOKIR → 404 asli (status 404, tidak ke-index, tidak bisa diakses)
 if (isBlockedSlug) {
     return Astro.rewrite('/404');
 }
@@ -212,10 +221,45 @@ modifiedContent = modifiedContent.replace(/<\/p>/i, `</p>\n${adDiv}`);
 
 
 <LayoutBlog metaTags={metaTags}>
-    <!-- Brochure Request Form Modal - Auto Open -->
-    <BrochureRequestFormModal autoOpen={true} />
+    {isOverlaySlug && (
+        <div class="min-h-[80vh] bg-gray-50 dark:bg-gray-900 flex flex-col items-center justify-center p-4">
+            <div class="max-w-2xl w-full bg-white dark:bg-gray-800 rounded-3xl shadow-xl border border-gray-100 dark:border-gray-700 p-10 md:p-16 text-center">
+                <!-- Icon -->
+                <div class="mx-auto flex items-center justify-center h-24 w-24 rounded-full bg-orange-100 dark:bg-orange-900/30 mb-8">
+                    <svg class="h-12 w-12 text-orange-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"/>
+                    </svg>
+                </div>
 
-    <div class="min-h-screen bg-gray-50 dark:bg-gray-900">
+                <span class="block text-3xl md:text-4xl font-extrabold text-gray-900 dark:text-white mb-4 tracking-tight">Konten Tidak Tersedia</span>
+
+                <span class="block text-lg text-gray-600 dark:text-gray-400 mb-10 max-w-lg mx-auto">
+                    Mohon maaf, konten yang Anda cari saat ini tidak tersedia. Silakan kembali ke halaman utama atau minta brosur informasi lengkap tentang program kami.
+                </span>
+
+                <div class="flex flex-col sm:flex-row items-center justify-center gap-4">
+                    <a href="/" class="w-full sm:w-auto px-8 py-3.5 bg-gray-100 dark:bg-gray-700 text-gray-800 dark:text-white rounded-xl font-bold hover:bg-gray-200 dark:hover:bg-gray-600 transition-all duration-300">
+                        Kembali ke Home
+                    </a>
+
+                    <button
+                        onclick="window.openBrochureFormModal && window.openBrochureFormModal()"
+                        class="w-full sm:w-auto px-8 py-3.5 bg-gradient-to-r from-orange-500 to-orange-600 text-white rounded-xl font-bold hover:from-orange-600 hover:to-orange-700 transition-all duration-300 shadow-lg hover:shadow-xl transform hover:-translate-y-0.5 flex items-center justify-center gap-2"
+                    >
+                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path>
+                        </svg>
+                        Minta Brosur
+                    </button>
+                </div>
+            </div>
+        </div>
+    )}
+
+    <!-- Brochure Request Form Modal - Auto Open -->
+    <BrochureRequestFormModal autoOpen={!isOverlaySlug} />
+
+    <div class={isOverlaySlug ? "sr-only" : "min-h-screen bg-gray-50 dark:bg-gray-900"}>
         <!-- Breadcrumb -->
         <div class="bg-white dark:bg-gray-800 border-b border-gray-200 dark:border-gray-700">
             <div class="max-w-screen-xl mx-auto px-4 py-4">
