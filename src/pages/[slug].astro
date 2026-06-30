@@ -215,7 +215,6 @@ const adDiv = `
 `;
 
 let modifiedContent = fullContent?.content || "";
-modifiedContent = modifiedContent.replace(/<\/p>/i, `</p>\n${adDiv}`);
 
 ---
 
@@ -399,6 +398,9 @@ modifiedContent = modifiedContent.replace(/<\/p>/i, `</p>\n${adDiv}`);
                                 </button>
                             </div>
                         </div>
+
+                        <!-- Ad Card -->
+                        <Fragment set:html={adDiv} />
                     </div>
 
                     <!-- Related Posts -->
