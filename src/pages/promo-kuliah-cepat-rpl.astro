@@ -5,9 +5,6 @@ import Layout from "@layouts/Layout.astro";
 
 import { websiteInfo } from "@globals/info";
 
-// Reuse the same countdown end date logic as the main promo page
-const rplCountdownEndDate = websiteInfo.promo.countdownEndDate;
-
 const metaTags = {
     title: "Promo Kuliah Cepat RPL",
     description:
@@ -903,24 +900,28 @@ const campusLocations = [
     </section>
 </Layout>
 
-<script define:vars={{ rplCountdownEndDate }}>
-    // Parse countdown date (format: "YYYY-MM-DD HH:mm:ss" in WIB/GMT+7)
-    const parseDate = (dateStr) => {
-        if (!dateStr || dateStr.trim() === "") {
-            return new Date().getTime() + 30 * 24 * 60 * 60 * 1000;
-        }
-        const [datePart, timePart] = dateStr.split(" ");
-        const [year, month, day] = datePart.split("-").map(Number);
-        const [hours, minutes, seconds] = timePart.split(":").map(Number);
-        return new Date(
-            Date.UTC(year, month - 1, day, hours - 7, minutes, seconds),
-        ).getTime();
+<script is:inline>
+    // Countdown target = last day of the CURRENT month at 23:59:59 WIB.
+    // Computed in the browser (not at build time) so a static build stays correct
+    // after the month rolls over without needing a rebuild.
+    const getEndOfMonthWIB = () => {
+        const now = new Date();
+        // Current date as seen on the WIB (GMT+7) wall clock.
+        const wib = new Date(now.getTime() + 7 * 60 * 60 * 1000);
+        const year = wib.getUTCFullYear();
+        const month = wib.getUTCMonth(); // 0-indexed
+        // Day 0 of next month = last day of this month, 23:59:59 WIB -> back to UTC.
+        return Date.UTC(year, month + 1, 0, 23 - 7, 59, 59);
     };
 
-    const countdownEnd = parseDate(rplCountdownEndDate);
+    let countdownEnd = getEndOfMonthWIB();
 
     function updateRplCountdown() {
         const now = new Date().getTime();
+        // If we've rolled past the end of the month, recompute for the new month.
+        if (now > countdownEnd) {
+            countdownEnd = getEndOfMonthWIB();
+        }
         const distance = countdownEnd - now;
 
         const daysEl = document.getElementById("rpl-days");

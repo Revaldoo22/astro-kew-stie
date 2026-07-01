@@ -1,20 +1,3 @@
-/**
- * Get the last day of the current month at 23:59:59
- * Automatically calculates the end of month date
- * @returns Date string in format "YYYY-MM-DD HH:mm:ss" (WIB/GMT+7)
- */
-const getEndOfCurrentMonth = (): string => {
-    const now = new Date();
-    // Get the last day of current month
-    const lastDay = new Date(now.getFullYear(), now.getMonth() + 1, 0);
-
-    // Format: YYYY-MM-DD 23:59:59
-    const year = lastDay.getFullYear();
-    const month = String(lastDay.getMonth() + 1).padStart(2, '0');
-    const day = String(lastDay.getDate()).padStart(2, '0');
-
-    return `${year}-${month}-${day} 23:59:59`;
-};
 
 export const websiteInfo = {
     name: "Kuliah Kelas Karyawan",
@@ -71,12 +54,5 @@ export const websiteInfo = {
     // Lihat .docs/GOOGLE_SHEETS_SETUP.md untuk cara setup
     googleSheetsApiUrl: "https://script.google.com/macros/s/AKfycbyAco-NbAvvqBTxi1icvElf6Nw9b78iMhlgI2OUjNrKYLAU5yTgWvfckpylGMU0Npk3xg/exec",
 
-    // Promo Configuration
-    promo: {
-        // Countdown end date - Automatically set to the last day of current month at 23:59:59 WIB
-        // This will dynamically update based on the current month
-        // Example: If current month is February 2026, it will be "2026-02-28 23:59:59"
-        countdownEndDate: getEndOfCurrentMonth(),
-    },
     contactUs: "https://link.stekom.ac.id/ads?text=Halo%20Admin,%20Saya%20ingin%20konsultasi%20terkait%20pendaftaran%20kuliah%20kelas%20karyawan"
 };
