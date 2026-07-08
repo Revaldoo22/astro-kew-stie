@@ -1,6 +1,7 @@
 import { BlogApi } from "@/services/blogApi";
 import type { APIRoute } from "astro";
 import { slugify } from "@/utils/slug";
+import { readSitemapCache, saveSitemapCache } from "@/utils/sitemapCache";
 
 export const GET: APIRoute = async ({ params }) => {
     const projectParam = params.project;
@@ -10,10 +11,23 @@ export const GET: APIRoute = async ({ params }) => {
         return new Response('Not found', { status: 404 });
     }
 
+    const cacheKey = `sitemap-project-${projectParam}`;
+    const baseUrl = "https://kew.stiestekom.ac.id";
+
     const blogApi = new BlogApi();
     const projects = await blogApi.fetchAllProjects();
 
+    // API down: jangan 404 (itu bikin Google buang URL). Sajikan cache bila ada.
     if (!projects || projects.length === 0) {
+        const cached = await readSitemapCache(cacheKey);
+        if (cached) {
+            return new Response(cached, {
+                headers: {
+                    'Content-Type': 'application/xml; charset=utf-8',
+                    'Cache-Control': 'public, max-age=3600',
+                },
+            });
+        }
         return new Response('Not found', { status: 404 });
     }
 
@@ -27,7 +41,19 @@ export const GET: APIRoute = async ({ params }) => {
 
     // Fetch contents for this project
     const contents = await blogApi.fetchContentsByProject(targetProject);
-    const baseUrl = "https://kew.stiestekom.ac.id";
+
+    // Konten kosong (mungkin API contents gagal): sajikan cache bila ada.
+    if (!contents || contents.length === 0) {
+        const cached = await readSitemapCache(cacheKey);
+        if (cached) {
+            return new Response(cached, {
+                headers: {
+                    'Content-Type': 'application/xml; charset=utf-8',
+                    'Cache-Control': 'public, max-age=3600',
+                },
+            });
+        }
+    }
 
     const sitemap = `<?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
@@ -42,6 +68,11 @@ export const GET: APIRoute = async ({ params }) => {
   </url>`).join('')
             : ''}
 </urlset>`;
+
+    // Simpan hanya bila konten berhasil dimuat.
+    if (contents && contents.length > 0) {
+        await saveSitemapCache(cacheKey, sitemap);
+    }
 
     return new Response(sitemap, {
         headers: {

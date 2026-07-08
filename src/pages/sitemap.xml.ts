@@ -2,11 +2,28 @@ import { BlogApi } from "@/services/blogApi";
 import type { APIRoute } from "astro";
 
 import { slugify } from "@/utils/slug";
+import { readSitemapCache, saveSitemapCache } from "@/utils/sitemapCache";
+
+const CACHE_KEY = "sitemap-index";
 
 export const GET: APIRoute = async () => {
   const blogApi = new BlogApi();
   const projects = await blogApi.fetchAllProjects();
   const baseUrl = "https://kew.stiestekom.ac.id";
+
+  // Kalau API gagal/kosong, sajikan cache terakhir agar sitemap tidak kehilangan
+  // daftar project (mencegah "URL tidak ada di Google" saat API down).
+  if (!projects || projects.length === 0) {
+    const cached = await readSitemapCache(CACHE_KEY);
+    if (cached) {
+      return new Response(cached, {
+        headers: {
+          'Content-Type': 'application/xml; charset=utf-8',
+          'Cache-Control': 'public, max-age=3600',
+        },
+      });
+    }
+  }
 
   let projectSitemaps = "";
 
@@ -36,6 +53,11 @@ export const GET: APIRoute = async () => {
   <!-- Project Sitemaps -->
   ${projectSitemaps}
 </sitemapindex>`;
+
+  // Simpan ke cache hanya bila data project benar-benar ada.
+  if (projects && projects.length > 0) {
+    await saveSitemapCache(CACHE_KEY, sitemapIndex);
+  }
 
   return new Response(sitemapIndex, {
     headers: {

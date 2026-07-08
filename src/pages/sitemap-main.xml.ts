@@ -1,5 +1,8 @@
 import { BlogApi } from "@/services/blogApi";
 import type { APIRoute } from "astro";
+import { readSitemapCache, saveSitemapCache } from "@/utils/sitemapCache";
+
+const CACHE_KEY = "sitemap-main";
 
 export const GET: APIRoute = async () => {
     const blogApi = new BlogApi();
@@ -64,6 +67,23 @@ export const GET: APIRoute = async () => {
   </url>`).join('')
             : ''}
 </urlset>`;
+
+    // Kalau kategori gagal di-fetch (API down), sajikan cache lama yang masih
+    // memuat kategori agar tidak hilang dari sitemap.
+    if (categories.length === 0) {
+        const cached = await readSitemapCache(CACHE_KEY);
+        if (cached) {
+            return new Response(cached, {
+                headers: {
+                    'Content-Type': 'application/xml; charset=utf-8',
+                    'Cache-Control': 'public, max-age=3600',
+                },
+            });
+        }
+    } else {
+        // Simpan hanya bila kategori berhasil dimuat.
+        await saveSitemapCache(CACHE_KEY, sitemap);
+    }
 
     // Return XML response
     return new Response(sitemap, {
