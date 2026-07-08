@@ -534,6 +534,7 @@ const programs = [
 </section>
 
 <script is:inline>
+  (function () {
     // Countdown Timer - target = last day of the CURRENT month at 23:59:59 WIB.
     // Computed in the browser (not at build time) so a static build stays correct
     // after the month rolls over without needing a rebuild.
@@ -666,6 +667,7 @@ const programs = [
             window.location.href = trackedLink;
         });
     });
+  })();
 </script>
 
 <style>
