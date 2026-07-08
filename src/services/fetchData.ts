@@ -9,8 +9,15 @@ interface ApiResponse {
   totalPages?: number;
 }
 
+// Batas waktu request ke API supaya route SSR tidak menggantung
+// sampai Cloudflare timeout (error 524) ketika API lambat/hang.
+const FETCH_TIMEOUT_MS = 15000;
+
 class FetchData {
   async fetchData(token: string, endpoint: string): Promise<ApiResponse | "limit" | null> {
+    const controller = new AbortController();
+    const timeout = setTimeout(() => controller.abort(), FETCH_TIMEOUT_MS);
+
     try {
       const baseUrl = 'https://seomaster.stekom.ac.id/api/';
 
@@ -19,6 +26,7 @@ class FetchData {
         headers: {
           "X-API-Key": token,
         },
+        signal: controller.signal,
       });
 
       if (!response.ok) {
@@ -32,8 +40,14 @@ class FetchData {
 
       return data;
     } catch (error) {
-      console.error("Fetch error:", error);
+      if ((error as Error)?.name === "AbortError") {
+        console.error(`Fetch timeout (${FETCH_TIMEOUT_MS}ms): ${endpoint}`);
+      } else {
+        console.error("Fetch error:", error);
+      }
       return null;
+    } finally {
+      clearTimeout(timeout);
     }
   }
 }
