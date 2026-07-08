@@ -1,10 +1,10 @@
 import { defineConfig } from "astro/config";
 import node from "@astrojs/node";
 import tailwindcss from '@tailwindcss/vite';
-import sitemap from "@astrojs/sitemap";
 
 // https://astro.build/config
 export default defineConfig({
+  site: 'https://kew.stiestekom.ac.id',
   output: 'server',
   adapter: node({
     mode: 'middleware'
@@ -17,5 +17,4 @@ export default defineConfig({
   vite: {
     plugins: [tailwindcss()]
   },
-  integrations: [sitemap()],
 });
