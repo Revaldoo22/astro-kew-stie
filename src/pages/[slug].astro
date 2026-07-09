@@ -141,14 +141,17 @@ const adDiv = `
         <!-- Title + Ranking -->
         <div>
           <h3 class="text-2xl md:text-3xl font-extrabold text-[#1a2b4c] leading-tight">
-            Kuliah Kelas Karyawan
+            Kuliah D3, D4, S1, S2
           </h3>
+          <p class="mt-1 text-sm md:text-base font-bold text-[#1a2b4c]/80 uppercase tracking-wide">
+            Kampus Terbaik Jawa Tengah 2026
+          </p>
 
           <div class="inline-block mt-3 bg-[#FEF6D8] border border-[#FBE3A1] rounded-lg px-3 py-2 shadow-sm">
             <p class="text-xs md:text-sm text-[#9C5A14] font-bold leading-relaxed">
               <span class="text-sm mr-1">🏆</span>
-              Universitas Terbaik Peringkat #1 Jawa Tengah dan #9 Nasional 
-              <span class="font-medium opacity-90">(PTS UniRank 2025)</span>
+              Peringkat #1 di Jawa Tengah <span class="font-medium opacity-90">(PTS UniRank)</span>
+              &middot; Peringkat #4 <span class="font-medium opacity-90">(Webometrics Impact Rank)</span>
             </p>
           </div>
         </div>
@@ -157,7 +160,7 @@ const adDiv = `
         <div class="flex items-baseline gap-2 text-gray-700">
           <span class="text-sm font-medium">Kuliah Hanya</span>
           <span class="text-4xl md:text-5xl font-extrabold bg-gradient-to-r from-[#E03125] to-[#FF6B3D] bg-clip-text text-transparent tracking-tight">
-            498rb
+            500rb
           </span>
           <span class="text-sm font-medium">/ Bln</span>
         </div>
@@ -180,11 +183,18 @@ const adDiv = `
               <strong class="text-[#009A60]">GRATIS</strong> Biaya SPI / Uang Pangkal Semua Jurusan
             </span>
           </li>
+
+          <li class="flex items-start gap-2">
+            <svg class="w-5 h-5 text-blue-500 shrink-0 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+            </svg>
+            <span><strong class="text-[#009A60]">CEPAT LULUS</strong> Bisa Tanpa Skripsi</span>
+          </li>
         </ul>
 
         <!-- Info Box -->
         <div class="bg-blue-50 border-l-4 border-blue-500 text-blue-800 text-xs md:text-sm font-medium px-4 py-2 rounded-r-md inline-block">
-          Layanan Akademik Kuliah Full Online Dari Manapun dan Kapanpun
+          Tersedia Layanan Akademik Kuliah Full Online Dari Manapun dan Kapanpun
         </div>
 
       </div>
@@ -511,7 +521,25 @@ let modifiedContent = fullContent?.content || "";
                 </aside>
             </div>
         </div>
+        <!-- Spacer so fixed bottom banner doesn't cover content -->
+        <div class="h-[60px] md:h-[110px]" aria-hidden="true"></div>
     </div>
+
+    <!-- Fixed Bottom Promo Banner (non-closable) -->
+    <a
+        href="https://pmb.stekom.ac.id/promo?utm_source=kew+stie&utm_medium=banner+bottom+artikel"
+        target="_blank"
+        rel="noopener"
+        class="fixed bottom-0 left-1/2 -translate-x-1/2 z-50 block w-full max-w-[880px]"
+    >
+        <img
+            src="/assets/images/promo-bottom-new.gif"
+            alt="Promo Kuliah Kelas Karyawan"
+            width="728"
+            height="90"
+            class="w-full h-auto block shadow-[0_-4px_16px_rgba(0,0,0,0.25)]"
+        />
+    </a>
 
 </LayoutBlog>
 
