@@ -223,6 +223,29 @@ const quickLinks = [
     ) as HTMLButtonElement | null;
 
     if (backToTopButton) {
+      // Lift the button above the fixed bottom promo banner (article pages)
+      const promoBanner = document.querySelector(
+        ".promo-bottom-banner",
+      ) as HTMLElement | null;
+
+      const adjustButtonOffset = function () {
+        if (promoBanner) {
+          const bannerHeight = promoBanner.offsetHeight;
+          backToTopButton.style.bottom = bannerHeight + 16 + "px";
+        }
+      };
+
+      if (promoBanner) {
+        adjustButtonOffset();
+        window.addEventListener("resize", adjustButtonOffset);
+        window.addEventListener("orientationchange", adjustButtonOffset);
+        // Recalculate once the gif finishes loading (height may change)
+        const bannerImg = promoBanner.querySelector("img");
+        if (bannerImg && !bannerImg.complete) {
+          bannerImg.addEventListener("load", adjustButtonOffset);
+        }
+      }
+
       // Show/hide button based on scroll position
       window.addEventListener("scroll", function () {
         if (window.pageYOffset > 300) {
