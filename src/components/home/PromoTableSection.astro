@@ -68,9 +68,10 @@ const programs = [
     {
         name: "S1 Sistem Komputer (S.Kom.)",
         badge: null,
-        status: "Tersedia",
-        statusColor: "green",
-        gratisSpI: true,
+        status: "Penuh",
+        statusColor: "red",
+        gratisSpI: false,
+        isFull: true,
     },
     {
         name: "S1 Sistem Informasi (S.Kom.)",
@@ -331,6 +332,9 @@ const programs = [
                                                     "green"
                                                         ? "bg-[#E6F7EF] text-[#1F9D68]"
                                                         : program.statusColor ===
+                                                            "red"
+                                                          ? "bg-[#F3F4F6] text-[#6B7280] border border-[#D1D5DB]"
+                                                        : program.statusColor ===
                                                               "indigo"
                                                           ? "bg-[#FFE4E6] text-[#E11D48] border border-[#FDA4AF]"
                                                         : "bg-[#FFF4E5] text-[#D97706]"
@@ -342,6 +346,9 @@ const programs = [
                                                         "green"
                                                             ? "bg-[#1F9D68]"
                                                             : program.statusColor ===
+                                                                "red"
+                                                              ? "bg-[#9CA3AF]"
+                                                            : program.statusColor ===
                                                                   "indigo"
                                                               ? "bg-[#E11D48]"
                                                             : "bg-[#F59E0B]"
@@ -351,7 +358,7 @@ const programs = [
                                             </span>
                                         </td>
                                         <td class="px-6 py-5 text-center">
-                                            {program.gratisSpI && (
+                                            {program.gratisSpI ? (
                                                 <div class="inline-flex items-center justify-center w-12 h-12 bg-green-100 dark:bg-green-900/30 rounded-full">
                                                     <svg
                                                         class="w-7 h-7 text-green-600 dark:text-green-400"
@@ -367,34 +374,72 @@ const programs = [
                                                         />
                                                     </svg>
                                                 </div>
+                                            ) : (
+                                                <div class="inline-flex items-center justify-center w-12 h-12 bg-gray-100 dark:bg-gray-700/40 rounded-full">
+                                                    <svg
+                                                        class="w-7 h-7 text-gray-400 dark:text-gray-500"
+                                                        fill="none"
+                                                        stroke="currentColor"
+                                                        viewBox="0 0 24 24"
+                                                    >
+                                                        <path
+                                                            stroke-linecap="round"
+                                                            stroke-linejoin="round"
+                                                            stroke-width="3"
+                                                            d="M6 18L18 6M6 6l12 12"
+                                                        />
+                                                    </svg>
+                                                </div>
                                             )}
                                         </td>
                                         <td class="px-6 py-5 text-center">
-                                            <a
-                                                href={program.registrationLink ??
-                                                    `http://link.stekom.ac.id/ads?text=Halo Admin, Saya ingin mendaftar ${program.name} Dengan Pilihan Biaya Gratis SPI/Uang Pangkal`}
-                                                data-track-generate="1"
-                                                data-track-button="promo-table-daftar-desktop"
-                                                data-track-program={program.name}
-                                                target="_blank"
-                                                rel="noopener noreferrer"
-                                                class="inline-flex items-center gap-2 bg-gradient-to-r from-[#FF8C00] to-[#E67300] hover:from-[#E67300] hover:to-[#FF8C00] text-white px-8 py-3 rounded-full font-bold text-base transition-all duration-300 shadow-lg hover:shadow-2xl hover:shadow-blue-500/50 transform hover:-translate-y-1 hover:scale-105"
-                                            >
-                                                <svg
-                                                    class="w-5 h-5"
-                                                    fill="none"
-                                                    stroke="currentColor"
-                                                    viewBox="0 0 24 24"
+                                            {program.isFull ? (
+                                                <span
+                                                    aria-disabled="true"
+                                                    class="inline-flex items-center gap-2 bg-gray-200 dark:bg-gray-700 text-gray-500 dark:text-gray-400 px-8 py-3 rounded-full font-bold text-base cursor-not-allowed select-none"
                                                 >
-                                                    <path
-                                                        stroke-linecap="round"
-                                                        stroke-linejoin="round"
-                                                        stroke-width="2"
-                                                        d="M13 7l5 5m0 0l-5 5m5-5H6"
-                                                    />
-                                                </svg>
-                                                Daftar
-                                            </a>
+                                                    <svg
+                                                        class="w-5 h-5"
+                                                        fill="none"
+                                                        stroke="currentColor"
+                                                        viewBox="0 0 24 24"
+                                                    >
+                                                        <path
+                                                            stroke-linecap="round"
+                                                            stroke-linejoin="round"
+                                                            stroke-width="2"
+                                                            d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"
+                                                        />
+                                                    </svg>
+                                                    Kuota Penuh
+                                                </span>
+                                            ) : (
+                                                <a
+                                                    href={program.registrationLink ??
+                                                        `http://link.stekom.ac.id/ads?text=Halo Admin, Saya ingin mendaftar ${program.name} Dengan Pilihan Biaya Gratis SPI/Uang Pangkal`}
+                                                    data-track-generate="1"
+                                                    data-track-button="promo-table-daftar-desktop"
+                                                    data-track-program={program.name}
+                                                    target="_blank"
+                                                    rel="noopener noreferrer"
+                                                    class="inline-flex items-center gap-2 bg-gradient-to-r from-[#FF8C00] to-[#E67300] hover:from-[#E67300] hover:to-[#FF8C00] text-white px-8 py-3 rounded-full font-bold text-base transition-all duration-300 shadow-lg hover:shadow-2xl hover:shadow-blue-500/50 transform hover:-translate-y-1 hover:scale-105"
+                                                >
+                                                    <svg
+                                                        class="w-5 h-5"
+                                                        fill="none"
+                                                        stroke="currentColor"
+                                                        viewBox="0 0 24 24"
+                                                    >
+                                                        <path
+                                                            stroke-linecap="round"
+                                                            stroke-linejoin="round"
+                                                            stroke-width="2"
+                                                            d="M13 7l5 5m0 0l-5 5m5-5H6"
+                                                        />
+                                                    </svg>
+                                                    Daftar
+                                                </a>
+                                            )}
                                         </td>
                                     </tr>
                                 ))
@@ -435,6 +480,8 @@ const programs = [
                                         class={`inline-flex items-center gap-2 font-bold px-3 py-1 rounded-full ${
                                             program.statusColor === "green"
                                                 ? "bg-[#E6F7EF] text-[#1F9D68]"
+                                                : program.statusColor === "red"
+                                                  ? "bg-[#F3F4F6] text-[#6B7280] border border-[#D1D5DB]"
                                                 : program.statusColor ===
                                                       "indigo"
                                                   ? "bg-[#FFE4E6] text-[#E11D48] border border-[#FDA4AF]"
@@ -445,6 +492,9 @@ const programs = [
                                             class={`w-2 h-2 rounded-full ${
                                                 program.statusColor === "green"
                                                     ? "bg-[#1F9D68]"
+                                                    : program.statusColor ===
+                                                        "red"
+                                                      ? "bg-[#9CA3AF]"
                                                     : program.statusColor ===
                                                           "indigo"
                                                       ? "bg-[#E11D48]"
@@ -459,7 +509,7 @@ const programs = [
                                 <span class="text-gray-600 dark:text-gray-400 font-semibold">
                                     GRATIS SPI:
                                 </span>
-                                {program.gratisSpI && (
+                                {program.gratisSpI ? (
                                     <div class="inline-flex items-center justify-center w-10 h-10 bg-green-100 dark:bg-green-900/30 rounded-full">
                                         <svg
                                             class="w-6 h-6 text-green-600 dark:text-green-400"
@@ -475,33 +525,71 @@ const programs = [
                                             />
                                         </svg>
                                     </div>
+                                ) : (
+                                    <div class="inline-flex items-center justify-center w-10 h-10 bg-gray-100 dark:bg-gray-700/40 rounded-full">
+                                        <svg
+                                            class="w-6 h-6 text-gray-400 dark:text-gray-500"
+                                            fill="none"
+                                            stroke="currentColor"
+                                            viewBox="0 0 24 24"
+                                        >
+                                            <path
+                                                stroke-linecap="round"
+                                                stroke-linejoin="round"
+                                                stroke-width="3"
+                                                d="M6 18L18 6M6 6l12 12"
+                                            />
+                                        </svg>
+                                    </div>
                                 )}
                             </div>
-                            <a
-                                href={program.registrationLink ??
-                                    `http://link.stekom.ac.id/ads?text=Halo Admin, Saya ingin mendaftar ${program.name} Dengan Pilihan Biaya Gratis SPI/Uang Pangkal`}
-                                data-track-generate="1"
-                                data-track-button="promo-table-daftar-mobile"
-                                data-track-program={program.name}
-                                target="_blank"
-                                rel="noopener noreferrer"
-                                class="flex items-center justify-center gap-2 w-full bg-gradient-to-r from-[#FF8C00] to-[#E67300] hover:from-[#E67300] hover:to-[#FF8C00] text-white px-6 py-4 rounded-full font-bold text-base transition-all duration-300 shadow-lg hover:shadow-2xl hover:shadow-blue-500/50 transform hover:-translate-y-1"
-                            >
-                                <svg
-                                    class="w-5 h-5"
-                                    fill="none"
-                                    stroke="currentColor"
-                                    viewBox="0 0 24 24"
+                            {program.isFull ? (
+                                <span
+                                    aria-disabled="true"
+                                    class="flex items-center justify-center gap-2 w-full bg-gray-200 dark:bg-gray-700 text-gray-500 dark:text-gray-400 px-6 py-4 rounded-full font-bold text-base cursor-not-allowed select-none"
                                 >
-                                    <path
-                                        stroke-linecap="round"
-                                        stroke-linejoin="round"
-                                        stroke-width="2"
-                                        d="M13 7l5 5m0 0l-5 5m5-5H6"
-                                    />
-                                </svg>
-                                Daftar Sekarang
-                            </a>
+                                    <svg
+                                        class="w-5 h-5"
+                                        fill="none"
+                                        stroke="currentColor"
+                                        viewBox="0 0 24 24"
+                                    >
+                                        <path
+                                            stroke-linecap="round"
+                                            stroke-linejoin="round"
+                                            stroke-width="2"
+                                            d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"
+                                        />
+                                    </svg>
+                                    Kuota Penuh
+                                </span>
+                            ) : (
+                                <a
+                                    href={program.registrationLink ??
+                                        `http://link.stekom.ac.id/ads?text=Halo Admin, Saya ingin mendaftar ${program.name} Dengan Pilihan Biaya Gratis SPI/Uang Pangkal`}
+                                    data-track-generate="1"
+                                    data-track-button="promo-table-daftar-mobile"
+                                    data-track-program={program.name}
+                                    target="_blank"
+                                    rel="noopener noreferrer"
+                                    class="flex items-center justify-center gap-2 w-full bg-gradient-to-r from-[#FF8C00] to-[#E67300] hover:from-[#E67300] hover:to-[#FF8C00] text-white px-6 py-4 rounded-full font-bold text-base transition-all duration-300 shadow-lg hover:shadow-2xl hover:shadow-blue-500/50 transform hover:-translate-y-1"
+                                >
+                                    <svg
+                                        class="w-5 h-5"
+                                        fill="none"
+                                        stroke="currentColor"
+                                        viewBox="0 0 24 24"
+                                    >
+                                        <path
+                                            stroke-linecap="round"
+                                            stroke-linejoin="round"
+                                            stroke-width="2"
+                                            d="M13 7l5 5m0 0l-5 5m5-5H6"
+                                        />
+                                    </svg>
+                                    Daftar Sekarang
+                                </a>
+                            )}
                         </div>
                     ))
                 }
