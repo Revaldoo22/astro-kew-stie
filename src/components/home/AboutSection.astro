@@ -51,7 +51,47 @@ const parseRankingItem = (item: string) => {
     rankNumber: Number(match[2]),
   };
 };
-const getInitialQuotaData = () => {
+const YEAR_START = "2026-01-01";
+const INITIAL_CAPACITY = 3500;
+const REFILL_THRESHOLD = 100;
+const REFILL_AMOUNT = 200;
+const FALLBACK_REGISTERED = 31;
+
+const PMB_CAMABA_COUNT_API = "https://pmb.stekom.ac.id/api/pmb/list-data-camaba-count";
+const PMB_BEARER_TOKEN =
+  import.meta.env.PMB_API_BEARER_TOKEN ??
+  "8|aL0DhDhcgqh4P7uQNa3sz1ylBzdaQzTIhCuHaUYV9073c0e9";
+
+const getTodayJakarta = (): string => {
+  const formatter = new Intl.DateTimeFormat("en-CA", {
+    year: "numeric",
+    month: "2-digit",
+    day: "2-digit",
+    timeZone: "Asia/Jakarta",
+  });
+
+  const parts = formatter.formatToParts(new Date());
+  const year = parts.find((part) => part.type === "year")?.value;
+  const month = parts.find((part) => part.type === "month")?.value;
+  const day = parts.find((part) => part.type === "day")?.value;
+
+  if (!year || !month || !day) {
+    const now = new Date();
+    return `${now.getFullYear()}-${String(now.getMonth() + 1).padStart(2, "0")}-${String(now.getDate()).padStart(2, "0")}`;
+  }
+
+  return `${year}-${month}-${day}`;
+};
+
+const resolveCapacity = (registered: number): number => {
+  let capacity = INITIAL_CAPACITY;
+  while (capacity - registered <= REFILL_THRESHOLD) {
+    capacity += REFILL_AMOUNT;
+  }
+  return capacity;
+};
+
+const getInitialQuotaData = async () => {
   const updateDate = new Intl.DateTimeFormat("id-ID", {
     day: "2-digit",
     month: "long",
@@ -61,39 +101,47 @@ const getInitialQuotaData = () => {
     .format(new Date())
     .toUpperCase();
 
-  const CAPACITY = 500;
-  const BONUS_QUOTA = 500;
-  const BASE_REGISTERED = 5;
-  const DAILY_INCREMENT = 3;
+  let registered = FALLBACK_REGISTERED;
+  try {
+    const response = await fetch(PMB_CAMABA_COUNT_API, {
+      method: "POST",
+      headers: {
+        Accept: "application/json",
+        Authorization: `Bearer ${PMB_BEARER_TOKEN}`,
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        date_start: YEAR_START,
+        date_end: getTodayJakarta(),
+      }),
+    });
 
-  const parts = new Intl.DateTimeFormat("en-US", {
-    timeZone: "Asia/Jakarta",
-    hour12: false,
-    hourCycle: "h23",
-    day: "numeric",
-    hour: "numeric",
-  }).formatToParts(new Date());
+    if (response.ok) {
+      const json = await response.json();
+      const totalPendaftar = json.meta?.statistics?.total_pendaftar;
 
-  const dayPart = parts.find((p) => p.type === "day")?.value;
-  const hourPart = parts.find((p) => p.type === "hour")?.value;
+      if (typeof totalPendaftar === "number" && Number.isFinite(totalPendaftar)) {
+        registered = totalPendaftar;
+      } else if (Array.isArray(json.data)) {
+        registered = json.data.length;
+      }
+    }
+  } catch (error) {
+    console.error("Failed to fetch PMB camaba count in AboutSection:", error);
+  }
 
-  const day = dayPart ? Number(dayPart) : 1;
-  const hour = hourPart ? Number(hourPart) : 0;
-
-  const dayIndex = hour >= 8 ? day : day - 1;
-  const registered = BASE_REGISTERED + Math.max(0, dayIndex) * DAILY_INCREMENT;
-  const available = Math.max(CAPACITY - registered + BONUS_QUOTA, 0);
+  const capacity = resolveCapacity(registered);
+  const available = Math.max(capacity - registered, 0);
 
   return {
     updateDate,
     registered,
-    capacity: CAPACITY,
-    bonusQuota: BONUS_QUOTA,
+    capacity,
     available,
   };
 };
 
-const initialQuotaData = getInitialQuotaData();
+const initialQuotaData = await getInitialQuotaData();
 ---
 
 <!-- Brochure Request Form Modal - placed in modals slot to avoid z-index issues -->
@@ -102,13 +150,24 @@ const initialQuotaData = getInitialQuotaData();
 <section class="py-16 bg-gray-50 dark:bg-gray-900">
   <div class="max-w-screen-xl mx-auto px-4">
     <div class="text-center mb-12">
-      <h2 class="text-3xl md:text-4xl lg:text-5xl font-bold mb-4">
+      <h2 class="text-3xl md:text-4xl lg:text-5xl font-bold mb-2">
         <span class="text-gray-900 dark:text-white">Kelas Karyawan</span>
         <span
           class="bg-gradient-to-r from-[#FF8C00] to-[#E67300] bg-clip-text text-transparent"
           >Kampus Terbaik</span
         >
       </h2>
+      <p class="text-sm sm:text-base font-semibold uppercase tracking-[0.1em] text-gray-500 dark:text-gray-400 mb-4">
+        T.A. 2026/2027
+      </p>
+      <p class="mt-3 text-base sm:text-lg lg:text-xl font-bold text-gray-700 dark:text-gray-300">
+        Sudah ada
+        <span
+          id="total-registered-counter"
+          class="text-[#E67300] dark:text-blue-300"
+        >{new Intl.NumberFormat("id-ID").format(initialQuotaData.registered)}</span>
+        Total Pendaftar
+      </p>
     </div>
 
     <!-- YouTube Video Section -->
@@ -174,6 +233,9 @@ const initialQuotaData = getInitialQuotaData();
             class="mt-1 h-2.5 w-2.5 rounded-full bg-emerald-500 animate-pulse"
           ></span>
         </div>
+        <p class="text-[10px] sm:text-xs lg:text-[0.7rem] font-semibold uppercase tracking-wide leading-tight text-gray-400 dark:text-gray-500">
+          T.A. 2026/2027
+        </p>
         <p
           id="sticky-quota-update-date"
           class="mt-1.5 text-xs sm:text-sm lg:text-[0.83rem] font-semibold leading-tight text-gray-500 dark:text-gray-400"
@@ -184,7 +246,7 @@ const initialQuotaData = getInitialQuotaData();
           id="sticky-quota-progress"
           class="mt-1.5 text-xs sm:text-sm lg:text-[0.83rem] font-bold leading-tight text-[#E67300] dark:text-blue-300"
         >
-          {new Intl.NumberFormat("id-ID").format(initialQuotaData.registered)} / {new Intl.NumberFormat("id-ID").format(initialQuotaData.capacity)} (+{new Intl.NumberFormat("id-ID").format(initialQuotaData.bonusQuota)})
+          {new Intl.NumberFormat("id-ID").format(initialQuotaData.registered)} / {new Intl.NumberFormat("id-ID").format(initialQuotaData.capacity)}
         </p>
         <p
           id="sticky-quota-available"
@@ -248,19 +310,23 @@ const initialQuotaData = getInitialQuotaData();
 
           const data = await response.json();
           const nextRegistered = Number(data.registered) || 0;
-          const nextCapacity = Number(data.capacity) || 500;
-          const nextBonusQuota = Number(data.bonusQuota) || 500;
+          const nextCapacity = Number(data.capacity) || 3500;
           const nextAvailable = Number(data.available) || 0;
 
           stickyDate.textContent = data.updateDate;
           stickyProgress.textContent = `${formatIdNumber(
             nextRegistered,
-          )} / ${formatIdNumber(nextCapacity)} (+${formatIdNumber(
-            nextBonusQuota,
-          )})`;
+          )} / ${formatIdNumber(nextCapacity)}`;
           stickyAvailable.textContent = `Tersedia ${formatIdNumber(
             nextAvailable,
           )}`;
+
+          const totalRegisteredEl = document.getElementById(
+            "total-registered-counter",
+          );
+          if (totalRegisteredEl) {
+            totalRegisteredEl.textContent = formatIdNumber(nextRegistered);
+          }
         } catch (error) {
           console.error("Failed to load quota data:", error);
         }

@@ -16,12 +16,13 @@ const PMB_BEARER_TOKEN =
     import.meta.env.PMB_API_BEARER_TOKEN ??
     "8|aL0DhDhcgqh4P7uQNa3sz1ylBzdaQzTIhCuHaUYV9073c0e9";
 
-const CAPACITY = 500;
-const BONUS_QUOTA = 500;
-const DAILY_INCREMENT = 15;
-const FALLBACK_BASE = 31;
+const YEAR_START = "2026-01-01";
+const INITIAL_CAPACITY = 3500;
+const REFILL_THRESHOLD = 100;
+const REFILL_AMOUNT = 200;
+const FALLBACK_REGISTERED = 31;
 
-const getStartOfCurrentMonthJakarta = (): string => {
+const getTodayJakarta = (): string => {
     const formatter = new Intl.DateTimeFormat("en-CA", {
         year: "numeric",
         month: "2-digit",
@@ -32,12 +33,24 @@ const getStartOfCurrentMonthJakarta = (): string => {
     const parts = formatter.formatToParts(new Date());
     const year = parts.find((part) => part.type === "year")?.value;
     const month = parts.find((part) => part.type === "month")?.value;
+    const day = parts.find((part) => part.type === "day")?.value;
 
-    if (!year || !month) {
-        return `${new Date().getFullYear()}-${String(new Date().getMonth() + 1).padStart(2, "0")}-01`;
+    if (!year || !month || !day) {
+        const now = new Date();
+        return `${now.getFullYear()}-${String(now.getMonth() + 1).padStart(2, "0")}-${String(now.getDate()).padStart(2, "0")}`;
     }
 
-    return `${year}-${month}-01`;
+    return `${year}-${month}-${day}`;
+};
+
+// Capacity starts at INITIAL_CAPACITY and grows by REFILL_AMOUNT every time
+// the remaining slots would otherwise drop to/below REFILL_THRESHOLD.
+const resolveCapacity = (registered: number): number => {
+    let capacity = INITIAL_CAPACITY;
+    while (capacity - registered <= REFILL_THRESHOLD) {
+        capacity += REFILL_AMOUNT;
+    }
+    return capacity;
 };
 
 export const GET: APIRoute = async () => {
@@ -50,8 +63,8 @@ export const GET: APIRoute = async () => {
         .format(new Date())
         .toUpperCase();
 
-    // Fetch real registered count from PMB API
-    let apiRegistered = FALLBACK_BASE;
+    // Fetch real registered count from API (year-to-date: Jan 1 -> today)
+    let registered = FALLBACK_REGISTERED;
     try {
         const response = await fetch(PMB_CAMABA_COUNT_API, {
             method: "POST",
@@ -61,7 +74,8 @@ export const GET: APIRoute = async () => {
                 "Content-Type": "application/json",
             },
             body: JSON.stringify({
-                date_start: getStartOfCurrentMonthJakarta(),
+                date_start: YEAR_START,
+                date_end: getTodayJakarta(),
             }),
         });
 
@@ -70,42 +84,22 @@ export const GET: APIRoute = async () => {
             const totalPendaftar = json.meta?.statistics?.total_pendaftar;
 
             if (typeof totalPendaftar === "number" && Number.isFinite(totalPendaftar)) {
-                apiRegistered = totalPendaftar;
+                registered = totalPendaftar;
             } else if (Array.isArray(json.data)) {
-                apiRegistered = json.data.length;
+                registered = json.data.length;
             }
         }
     } catch (error) {
         console.error("Failed to fetch PMB camaba count:", error);
     }
 
-    const parts = new Intl.DateTimeFormat("en-US", {
-        timeZone: "Asia/Jakarta",
-        hour12: false,
-        hourCycle: "h23",
-        day: "numeric",
-        hour: "numeric",
-    }).formatToParts(new Date());
-
-    const dayPart = parts.find((p) => p.type === "day")?.value;
-    const hourPart = parts.find((p) => p.type === "hour")?.value;
-
-    const day = dayPart ? Number(dayPart) : 1;
-    const hour = hourPart ? Number(hourPart) : 0;
-
-    // Check if 08:00 AM of today has passed in Jakarta
-    const dayIndex = hour >= 8 ? day : day - 1;
-
-    // Total registered = real API count + dynamic simulated daily increment
-    const registered = apiRegistered + Math.max(0, dayIndex) * DAILY_INCREMENT;
-
-    const available = Math.max(CAPACITY - registered + BONUS_QUOTA, 0);
+    const capacity = resolveCapacity(registered);
+    const available = Math.max(capacity - registered, 0);
 
     const data = {
         updateDate,
         registered,
-        capacity: CAPACITY,
-        bonusQuota: BONUS_QUOTA,
+        capacity,
         available,
     };
 
